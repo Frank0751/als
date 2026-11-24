@@ -52,3 +52,6 @@ prompt
 server.log
 # Skills directory
 /skills/
+# database (recreate with: bun run db:push && bun scripts/seed.ts)
+db/custom.db
+db/*.db-journal
