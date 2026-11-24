@@ -1,0 +1,224 @@
+// ALS Online Store & Training Platform — Prisma schema
+// Aquatic Link Solutions (Akuse, Eastern Region, Ghana) — built per KB-2026-012
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Fingerlings and marketplace items share one table; `kind` separates them.
+model Product {
+  id             String          @id @default(cuid())
+  kind           String // "FINGERLING" | "MARKET"
+  name           String
+  category       String // Fingerlings: size class. Market: Nets, Harvesting, Feed & accessories, Water & aeration, Transport & packaging, Safety
+  description    String
+  spec           String? // stocking/spec text for fingerlings
+  price          Float // per unit price in GHS (per fingerling for fingerlings)
+  unit           String // "fingerling" | "each" | "pack" | "set" ...
+  stock          Int             @default(0)
+  imageUrl       String?
+  priceTiers     String? // JSON: [{ "minQty": 1000, "price": 1.10, "label": "1,000+" }]
+  featured       Boolean         @default(false)
+  active         Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  reviews        Review[]
+  notifyRequests NotifyRequest[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  name      String
+  location  String
+  rating    Int // 1..5
+  comment   String
+  verified  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+// Dates ALS opens for collection / delivery of live fish and goods.
+model CollectionDate {
+  id       String  @id @default(cuid())
+  date     String  @unique // ISO "2026-12-04"
+  isOpen   Boolean @default(true)
+  capacity Int     @default(25)
+  booked   Int     @default(0)
+  note     String?
+}
+
+model DeliveryArea {
+  id   String @id @default(cuid())
+  name String @unique
+  fee  Float
+}
+
+model TrainingCourse {
+  id           String            @id @default(cuid())
+  title        String
+  type         String // "ON_FARM" | "SEMINAR" | "WORKSHOP" | "ONLINE"
+  description  String
+  fee          Float
+  durationText String
+  covers       String // JSON array of what it covers
+  imageUrl     String?
+  active       Boolean           @default(true)
+  sessions     TrainingSession[]
+}
+
+model TrainingSession {
+  id       String    @id @default(cuid())
+  courseId String
+  course   TrainingCourse  @relation(fields: [courseId], references: [id])
+  date     String // ISO date
+  timeText String
+  location String
+  seats    Int
+  booked   Int       @default(0)
+  bookings Booking[]
+}
+
+model Booking {
+  id           String          @id @default(cuid())
+  reference    String          @unique
+  sessionId    String
+  session      TrainingSession @relation(fields: [sessionId], references: [id])
+  customerName String
+  phone        String
+  email        String?
+  seats        Int
+  total        Float
+  status       String          @default("PENDING_PAYMENT") // PENDING_PAYMENT | CONFIRMED | CANCELLED
+  createdAt    DateTime        @default(now())
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  customerName    String
+  customerPhone   String
+  customerEmail   String?
+  customerCity    String?
+  fulfilment      String // "PICKUP" | "DELIVERY"
+  areaName        String?
+  areaFee         Float       @default(0)
+  deliveryDate    String? // chosen from ALS-open dates
+  items           String // JSON snapshot of lines
+  subtotal        Float
+  total           Float
+  status          String      @default("RECEIVED") // RECEIVED | PAYMENT_CONFIRMED | PREPARING | READY_OUT | COMPLETED | CANCELLED
+  paymentMethod   String? // MOMO | BANK | USD
+  paymentRef      String?
+  receiptCode     String?     @unique
+  receiptIssuedAt DateTime?
+  whatsappSent    Boolean     @default(false)
+  notes           String?
+  isTest          Boolean     @default(false)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  events          OrderEvent[]
+  proofs          ProofFile[]
+}
+
+model OrderEvent {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id])
+  status    String
+  note      String?
+  actor     String?
+  createdAt DateTime @default(now())
+}
+
+model ProofFile {
+  id          String   @id @default(cuid())
+  orderNumber String
+  order       Order    @relation(fields: [orderNumber], references: [orderNumber])
+  name        String
+  dataUrl     String
+  uploadedAt  DateTime @default(now())
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  phone     String   @unique
+  name      String
+  email     String?
+  city      String?
+  address   String?
+  pinHash   String
+  createdAt DateTime @default(now())
+}
+
+model Staff {
+  id             String    @id @default(cuid())
+  username       String    @unique
+  name           String
+  role           String // OWNER | MANAGER | STAFF
+  passwordHash   String
+  token          String?
+  tokenExpiresAt DateTime?
+  active         Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actor     String
+  action    String
+  detail    String?
+  createdAt DateTime @default(now())
+}
+
+model NotifyRequest {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  name      String
+  phone     String
+  createdAt DateTime @default(now())
+}
+
+model QuoteRequest {
+  id        String   @id @default(cuid())
+  name      String
+  org       String?
+  phone     String
+  email     String?
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  subject   String
+  message   String
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// Simple editable content store (the ALS content dashboard writes here)
+model SiteContent {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
+
+// Simulated outbound email log (order stage emails, receipts, course links)
+model EmailLog {
+  id        String   @id @default(cuid())
+  toEmail   String
+  subject   String
+  body      String
+  kind      String // ORDER_STAGE | RECEIPT | BOOKING | ONLINE_COURSE
+  createdAt DateTime @default(now())
+}
