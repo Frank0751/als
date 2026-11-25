@@ -5,7 +5,7 @@ import type { BookingDTO } from "@/lib/als/types";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/admin/trainees — bookings per session for the trainee lists
+// GET /api/admin/trainees, bookings per session for the trainee lists
 export async function GET(req: NextRequest) {
   try {
     await requireStaff(req.headers.get("x-staff-token"), "STAFF");

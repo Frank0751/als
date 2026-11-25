@@ -1,6 +1,6 @@
 "use client";
 
-// Route-level error boundary — ALS branded recovery screen.
+// Route-level error boundary, ALS branded recovery screen.
 // A refresh almost always fixes this (stale cached chunks after an update).
 
 import { useEffect } from "react";

@@ -10,7 +10,7 @@ function guard(body: Record<string, unknown>) {
     throw new HttpError(400, "Submission blocked."); // honeypot
 }
 
-// POST /api/notify — "Notify me" for out-of-stock products
+// POST /api/notify, "Notify me" for out-of-stock products
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as { productId: string; name: string; phone: string; website?: string };

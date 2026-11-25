@@ -5,7 +5,7 @@ import type { AuditDTO } from "@/lib/als/types";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/admin/audit — who changed what
+// GET /api/admin/audit, who changed what
 export async function GET(req: NextRequest) {
   try {
     await requireStaff(req.headers.get("x-staff-token"), "MANAGER");

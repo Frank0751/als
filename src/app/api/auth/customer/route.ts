@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 function digits(s: string) { return s.replace(/[^0-9]/g, ""); }
 
-// POST /api/auth/customer — register or login with phone + 4-digit PIN
+// POST /api/auth/customer, register or login with phone + 4-digit PIN
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as {
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
     if (body.mode === "register") {
       if (!body.name?.trim()) throw new HttpError(400, "Please enter your name.");
-      if (existing) throw new HttpError(409, "An account with this phone number already exists — please sign in.");
+      if (existing) throw new HttpError(409, "An account with this phone number already exists, please sign in.");
       const c = await db.customer.create({
         data: {
           phone,
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     }
 
     // login
-    if (!existing) throw new HttpError(404, "No account with this phone number yet — tap “New here? Create an account”.");
+    if (!existing) throw new HttpError(404, "No account with this phone number yet, tap “New here? Create an account”.");
     if (!verifySecret(body.pin, existing.pinHash)) throw new HttpError(401, "Wrong PIN. Please try again.");
     return NextResponse.json({
       customer: { id: existing.id, name: existing.name, phone: existing.phone, email: existing.email, city: existing.city, address: existing.address },
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// GET /api/auth/customer?token=... — profile + order history (x-customer-token header)
+// GET /api/auth/customer?token=..., profile + order history (x-customer-token header)
 export async function GET(req: NextRequest) {
   try {
     const token = req.headers.get("x-customer-token");
@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
     if (!token || !phone) throw new HttpError(401, "Please sign in.");
     const c = await db.customer.findUnique({ where: { phone } });
     if (!c || customerToken(c.pinHash, c.phone) !== token) throw new HttpError(401, "Please sign in again.");
-    // phones may be stored with spaces/dashes — match on digits
+    // phones may be stored with spaces/dashes, match on digits
     const candidates = await db.order.findMany({
       orderBy: { createdAt: "desc" },
       include: { events: { orderBy: { createdAt: "asc" } }, proofs: { orderBy: { uploadedAt: "desc" } } },

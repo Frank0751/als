@@ -1,6 +1,6 @@
 "use client";
 
-// Collection dates — ALS opens dates so live fish are never sold before they are ready
+// Collection dates, ALS opens dates so live fish are never sold before they are ready
 
 import { useCallback, useEffect, useState } from "react";
 import { useStaff } from "@/lib/als/store";

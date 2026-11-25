@@ -1,6 +1,6 @@
 "use client";
 
-// Track — follow each stage by order number and phone number
+// Track, follow each stage by order number and phone number
 
 import { useCallback, useEffect, useState } from "react";
 import type { OrderDTO } from "@/lib/als/types";
@@ -105,7 +105,7 @@ export default function TrackView({ params }: { params: Record<string, string> }
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:py-12">
       <h1 className="text-2xl font-bold">Track your order</h1>
-      <p className="mt-1 text-sm text-muted-foreground">Every ALS order has a number. Enter it with your phone number to see exactly where things stand — and download any past receipt.</p>
+      <p className="mt-1 text-sm text-muted-foreground">Every ALS order has a number. Enter it with your phone number to see exactly where things stand, and download any past receipt.</p>
 
       {!order && (
         <Card className="mt-6">
@@ -156,14 +156,14 @@ export default function TrackView({ params }: { params: Record<string, string> }
               <div className="mt-3 space-y-1 text-sm">
                 <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>{ghs(order.subtotal)}</span></div>
                 <div className="flex justify-between text-muted-foreground">
-                  <span>{order.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery — ${order.areaName}`}</span><span>{order.areaFee ? ghs(order.areaFee) : "GHS 0.00"}</span>
+                  <span>{order.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery, ${order.areaName}`}</span><span>{order.areaFee ? ghs(order.areaFee) : "GHS 0.00"}</span>
                 </div>
                 <div className="flex justify-between text-base font-extrabold"><span>Total</span><span>{ghs(order.total)}</span></div>
               </div>
               <div className="mt-4 grid gap-2 text-sm text-muted-foreground">
                 <p className="flex items-center gap-2">
                   {order.fulfilment === "PICKUP" ? <Store className="h-4 w-4 text-teal-700" aria-hidden="true" /> : <Truck className="h-4 w-4 text-teal-700" aria-hidden="true" />}
-                  {order.fulfilment === "PICKUP" ? `Pickup on ${fmtDate(order.deliveryDate)} — ALS farm gate, Akuse` : `Delivery on ${fmtDate(order.deliveryDate)} — ${order.areaName}`}
+                  {order.fulfilment === "PICKUP" ? `Pickup on ${fmtDate(order.deliveryDate)}, ALS farm gate, Akuse` : `Delivery on ${fmtDate(order.deliveryDate)}, ${order.areaName}`}
                 </p>
                 {order.proofs.length > 0 && <p className="flex items-center gap-2"><PackageOpen className="h-4 w-4 text-teal-700" aria-hidden="true" /> Payment proof uploaded ({order.proofs.length} file{order.proofs.length > 1 ? "s" : ""}){order.paymentMethod ? ` · ${order.paymentMethod}` : ""}</p>}
               </div>

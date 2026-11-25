@@ -1,6 +1,6 @@
 "use client";
 
-// Training — courses, ALS booking calendar with open dates and seats left
+// Training, courses, ALS booking calendar with open dates and seats left
 
 import { useState } from "react";
 import { useCatalog } from "../catalog-context";
@@ -38,7 +38,7 @@ function CourseCard({ course }: { course: CourseDTO }) {
     if (!session) return;
     const left = seatsLeft(session);
     if (left <= 0) {
-      toast({ title: "That date is full", description: "Pick another open date — ALS closes dates automatically when they are full.", variant: "destructive" });
+      toast({ title: "That date is full", description: "Pick another open date, ALS closes dates automatically when they are full.", variant: "destructive" });
       return;
     }
     add({
@@ -55,7 +55,7 @@ function CourseCard({ course }: { course: CourseDTO }) {
     });
     setSession(null);
     setConfirming(false);
-    toast({ title: "Added to cart", description: `${course.title} — ${fmtDate(session.date)}` });
+    toast({ title: "Added to cart", description: `${course.title}, ${fmtDate(session.date)}` });
   };
 
   return (
@@ -78,7 +78,7 @@ function CourseCard({ course }: { course: CourseDTO }) {
         </div>
 
         <div className="mt-4 rounded-xl border bg-stone-50 p-3">
-          <p className="flex items-center gap-2 text-sm font-semibold"><CalendarDays className="h-4 w-4 text-teal-700" aria-hidden="true" /> Booking calendar — pick an open date</p>
+          <p className="flex items-center gap-2 text-sm font-semibold"><CalendarDays className="h-4 w-4 text-teal-700" aria-hidden="true" /> Booking calendar, pick an open date</p>
           {course.sessions.length === 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">New dates are being planned. Ask ALS on WhatsApp.</p>
           ) : (
@@ -96,7 +96,7 @@ function CourseCard({ course }: { course: CourseDTO }) {
                     <span className="font-semibold">{fmtDate(s.date)}</span>
                     <span className="text-xs text-muted-foreground">{s.timeText}</span>
                     {full ? (
-                      <Badge variant="outline" className="border-stone-300 text-stone-400">Full — closed</Badge>
+                      <Badge variant="outline" className="border-stone-300 text-stone-400">Full, closed</Badge>
                     ) : (
                       <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-800"><Users className="mr-1 h-3 w-3" aria-hidden="true" />{left} seat{left === 1 ? "" : "s"} left</Badge>
                     )}
@@ -127,7 +127,7 @@ function CourseCard({ course }: { course: CourseDTO }) {
               {course.type === "ONLINE" && (
                 <p className="flex items-center gap-2 text-teal-800"><Wifi className="h-4 w-4" aria-hidden="true" /> Joining link and materials arrive by email once ALS confirms payment.</p>
               )}
-              <p className="flex items-center gap-2"><Users className="h-4 w-4 text-teal-700" aria-hidden="true" /> {seatsLeft(session)} seat(s) left — dates close automatically when full.</p>
+              <p className="flex items-center gap-2"><Users className="h-4 w-4 text-teal-700" aria-hidden="true" /> {seatsLeft(session)} seat(s) left, dates close automatically when full.</p>
               <p className="pt-1 text-lg font-extrabold text-teal-800">{ghs(course.fee)}</p>
             </div>
           )}
@@ -136,7 +136,7 @@ function CourseCard({ course }: { course: CourseDTO }) {
               <Button className="w-full rounded-full" onClick={() => setConfirming(true)}>Add booking to cart</Button>
             ) : (
               <div className="flex w-full flex-col gap-2">
-                <Button onClick={book} className="w-full rounded-full">Confirm — add to cart</Button>
+                <Button onClick={book} className="w-full rounded-full">Confirm, add to cart</Button>
                 <Button variant="ghost" onClick={() => setConfirming(false)}>Back</Button>
               </div>
             )}
@@ -155,7 +155,7 @@ export default function TrainingView() {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
       <SectionTitle
         eyebrow="Train with ALS · Akuse & online"
-        title="Anybody can train with ALS — booking is easy for a complete beginner"
+        title="Anybody can train with ALS, booking is easy for a complete beginner"
         sub="On-farm practical training, seminars, workshops and live online courses. Book online and confirm on WhatsApp. Your receipt doubles as an admission slip with a code ALS checks at the gate."
       />
       <div className="grid gap-5 lg:grid-cols-2">
@@ -163,7 +163,7 @@ export default function TrainingView() {
       </div>
       <div className="mt-8 rounded-2xl border bg-white p-6 text-center">
         <p className="font-bold">Training a group or cooperative?</p>
-        <p className="mt-1 text-sm text-muted-foreground">ALS runs private sessions for groups of 8 or more — ask us for a date that suits you.</p>
+        <p className="mt-1 text-sm text-muted-foreground">ALS runs private sessions for groups of 8 or more, ask us for a date that suits you.</p>
         <Button variant="outline" className="mt-4 rounded-full" onClick={() => navigate("contact")}>Ask about group training</Button>
       </div>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-// Stock & prices — manage stock, prices, visibility; see what is running low
+// Stock & prices, manage stock, prices, visibility; see what is running low
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProductDTO } from "@/lib/als/types";
@@ -139,7 +139,7 @@ export default function ProductsTab() {
           </div>
         </div>
       ))}
-      <p className="text-xs text-muted-foreground">Quantity-discount tiers for fingerlings change with batch pricing — ask ALS management before editing tiers; stock and prices can be updated here at any time.</p>
+      <p className="text-xs text-muted-foreground">Quantity-discount tiers for fingerlings change with batch pricing, ask ALS management before editing tiers; stock and prices can be updated here at any time.</p>
     </div>
   );
 }

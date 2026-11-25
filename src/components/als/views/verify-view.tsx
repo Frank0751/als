@@ -1,6 +1,6 @@
 "use client";
 
-// Verify receipt — public page so an ALS receipt cannot be faked
+// Verify receipt, public page so an ALS receipt cannot be faked
 
 import { useEffect, useState } from "react";
 import { useRoute } from "@/lib/als/store";
@@ -87,7 +87,7 @@ export default function VerifyView({ code: initialCode }: { code: string }) {
         )}
 
         <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
-          ALS issues receipts only after confirming payment in its dashboard. If someone shows you a receipt without a code, or a code that fails here, do not treat it as proof of payment — report it to ALS on WhatsApp.
+          ALS issues receipts only after confirming payment in its dashboard. If someone shows you a receipt without a code, or a code that fails here, do not treat it as proof of payment, report it to ALS on WhatsApp.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <Button variant="outline" className="rounded-full" onClick={() => navigate("contact")}>Report a fake receipt</Button>

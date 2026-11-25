@@ -14,13 +14,13 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const DOWS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function fmtDate(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return ", ";
   const d = new Date(iso.length === 10 ? `${iso}T12:00:00` : iso);
   return `${DOWS[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 }
 
 export function fmtDateTime(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return ", ";
   const d = new Date(iso);
   const h = d.getHours();
   const mm = d.getMinutes().toString().padStart(2, "0");

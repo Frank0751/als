@@ -1,6 +1,6 @@
 "use client";
 
-// ALS Dashboard — one place to run the whole business
+// ALS Dashboard, one place to run the whole business
 
 import { useCallback, useEffect, useState } from "react";
 import { useStaff, useRoute, type StaffDTO } from "@/lib/als/store";
@@ -78,7 +78,7 @@ function LoginScreen() {
           <div><Label htmlFor="d-pass">Password</Label><Input id="d-pass" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" onKeyDown={(e) => e.key === "Enter" && void submit()} /></div>
           <Button onClick={submit} disabled={busy || !username || !password} className="rounded-full">{busy ? "Signing in…" : "Sign in"}</Button>
           <p className="rounded-lg bg-stone-50 p-2.5 text-[11px] leading-relaxed text-muted-foreground">
-            Demo logins — owner: <b>abigail</b>, manager: <b>naa</b>, staff: <b>kojo</b> · password <b>als2026</b>. Every change is recorded against your name.
+            Demo logins, owner: <b>abigail</b>, manager: <b>naa</b>, staff: <b>kojo</b> · password <b>als2026</b>. Every change is recorded against your name.
           </p>
         </div>
       </div>
@@ -113,7 +113,7 @@ export default function DashboardView() {
         <div>
           <h1 className="text-2xl font-bold">ALS dashboard</h1>
           <p className="text-sm text-muted-foreground">
-            Signed in as <b>{staff.name}</b> ({staff.role.toLowerCase()}) — every change you make is logged.
+            Signed in as <b>{staff.name}</b> ({staff.role.toLowerCase()}), every change you make is logged.
           </p>
         </div>
         <div className="flex gap-2">

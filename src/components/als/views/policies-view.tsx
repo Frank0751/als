@@ -1,6 +1,6 @@
 "use client";
 
-// Policies — privacy, terms of sale, refund policy (drafted for ALS)
+// Policies, privacy, terms of sale, refund policy (drafted for ALS)
 
 import { useCatalog } from "../catalog-context";
 import { SectionTitle } from "../ui-bits";

@@ -1,6 +1,6 @@
 "use client";
 
-// Contact — secure form with spam protection + WhatsApp + location
+// Contact, secure form with spam protection + WhatsApp + location
 
 import { useState } from "react";
 import { useCatalog } from "../catalog-context";
@@ -43,20 +43,20 @@ export default function ContactView() {
       <SectionTitle
         eyebrow="Contact ALS"
         title="Talk to the farm, not a call centre"
-        sub="WhatsApp is fastest. Or send the form below — ALS replies within one working day."
+        sub="WhatsApp is fastest. Or send the form below, ALS replies within one working day."
       />
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-3">
           {wa1 && (
             <a href={waLink(wa1, "Hello Aquatic Link Solutions!")} target="_blank" rel="noreferrer" className="block rounded-xl border bg-white p-4 transition-colors hover:border-teal-600">
               <p className="flex items-center gap-2 font-bold"><MessageCircle className="h-4 w-4 text-teal-700" aria-hidden="true" /> WhatsApp line 1</p>
-              <p className="mt-1 text-sm text-muted-foreground">{wa1} — orders and general questions</p>
+              <p className="mt-1 text-sm text-muted-foreground">{wa1}, orders and general questions</p>
             </a>
           )}
           {wa2 && (
             <a href={waLink(wa2, "Hello Aquatic Link Solutions!")} target="_blank" rel="noreferrer" className="block rounded-xl border bg-white p-4 transition-colors hover:border-teal-600">
               <p className="flex items-center gap-2 font-bold"><MessageCircle className="h-4 w-4 text-teal-700" aria-hidden="true" /> WhatsApp line 2</p>
-              <p className="mt-1 text-sm text-muted-foreground">{wa2} — training and farm visits</p>
+              <p className="mt-1 text-sm text-muted-foreground">{wa2}, training and farm visits</p>
             </a>
           )}
           <div className="rounded-xl border bg-white p-4">
@@ -75,7 +75,7 @@ export default function ContactView() {
         </div>
 
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="flex items-center gap-2 font-bold"><Send className="h-4 w-4 text-teal-700" aria-hidden="true" /> Send a message</h2>
+          <h2 className="flex items-center justify-center gap-2 font-bold"><Send className="h-4 w-4 text-teal-700" aria-hidden="true" /> Send a message</h2>
           <div className="mt-4 grid gap-3">
             <div><Label htmlFor="ct-name">Your name</Label><Input id="ct-name" value={form.name} onChange={(e) => set("name", e.target.value)} /></div>
             <div className="grid gap-3 sm:grid-cols-2">

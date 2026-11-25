@@ -1,6 +1,6 @@
 "use client";
 
-// Order confirmation — send on WhatsApp, pay, upload proof
+// Order confirmation, send on WhatsApp, pay, upload proof
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { OrderDTO } from "@/lib/als/types";
@@ -55,7 +55,7 @@ export default function ConfirmView({ orderNumber, initialPhone = "" }: { orderN
     const lines: string[] = [`Hello Aquatic Link Solutions! Here is my order:`, ``];
     lines.push(`ORDER ${order.orderNumber}`);
     order.items.forEach((i, n) => {
-      lines.push(`${n + 1}. ${i.name}${i.variant ? ` (${i.variant})` : ""} — ${i.qty.toLocaleString()} ${i.unit}${i.qty === 1 ? "" : "s"} × ${ghs(i.unitPrice)} = ${ghs(i.lineTotal)}`);
+      lines.push(`${n + 1}. ${i.name}${i.variant ? ` (${i.variant})` : ""}, ${i.qty.toLocaleString()} ${i.unit}${i.qty === 1 ? "" : "s"} × ${ghs(i.unitPrice)} = ${ghs(i.lineTotal)}`);
     });
     lines.push(``);
     lines.push(`${order.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery to ${order.areaName}`} on ${fmtDate(order.deliveryDate)}`);
@@ -75,7 +75,7 @@ export default function ConfirmView({ orderNumber, initialPhone = "" }: { orderN
     try {
       await api("/api/orders", { method: "PATCH", body: { orderNumber: order.orderNumber, phone, action: "mark_whatsapp_sent" } });
       setSentMark(true);
-      toast({ title: "Marked as sent", description: "ALS can see your order in the dashboard either way — it was saved the moment it was created." });
+      toast({ title: "Marked as sent", description: "ALS can see your order in the dashboard either way, it was saved the moment it was created." });
     } catch {
       /* silent */
     }
@@ -156,13 +156,13 @@ export default function ConfirmView({ orderNumber, initialPhone = "" }: { orderN
       {/* step 1: WhatsApp */}
       <Card className="mt-6 border-2 border-emerald-500">
         <CardContent className="p-5">
-          <h2 className="flex items-center gap-2 font-bold"><Send className="h-5 w-5 text-emerald-600" aria-hidden="true" /> Step 1 — Send the order on WhatsApp</h2>
-          <p className="mt-1 text-sm text-muted-foreground">The full order is already typed for ALS — items, quantities, prices, total, date and your details. One tap sends it.</p>
+          <h2 className="flex items-center justify-center gap-2 font-bold"><Send className="h-5 w-5 text-emerald-600" aria-hidden="true" /> Step 1: Send the order on WhatsApp</h2>
+          <p className="mt-1 text-sm text-muted-foreground">The full order is already typed for ALS, items, quantities, prices, total, date and your details. One tap sends it.</p>
           <a href={waLink(catalog?.content["contact.whatsapp_orders"] ?? "+233200000000", waText)} target="_blank" rel="noreferrer" className="mt-4 block">
             <Button size="lg" className="wa-green w-full rounded-full text-white">Open WhatsApp with my order</Button>
           </a>
           <button onClick={markSent} className="mt-2 w-full text-center text-xs font-medium text-teal-700 hover:underline">
-            {sentMark || order.whatsappSent ? "✓ Marked as sent on WhatsApp" : "I have sent it — mark as sent"}
+            {sentMark || order.whatsappSent ? "✓ Marked as sent on WhatsApp" : "I have sent it, mark as sent"}
           </button>
           <details className="mt-3">
             <summary className="cursor-pointer text-xs font-medium text-muted-foreground">See the message that will be sent</summary>
@@ -174,7 +174,7 @@ export default function ConfirmView({ orderNumber, initialPhone = "" }: { orderN
       {/* step 2: pay */}
       <Card className="mt-4">
         <CardContent className="p-5">
-          <h2 className="flex items-center gap-2 font-bold"><Coins className="h-5 w-5 text-teal-700" aria-hidden="true" /> Step 2 — Pay ALS directly</h2>
+          <h2 className="flex items-center justify-center gap-2 font-bold"><Coins className="h-5 w-5 text-teal-700" aria-hidden="true" /> Step 2: Pay ALS directly</h2>
           <p className="mt-1 text-sm text-muted-foreground">Pay <b className="text-foreground">{ghs(order.total)}</b> into ALS&rsquo;s own accounts. Money never passes through anyone else. Quote your order number {order.orderNumber} as reference.</p>
           <div className="mt-4 space-y-3 text-sm">
             <div className="rounded-lg border bg-amber-50 p-3">
@@ -192,7 +192,7 @@ export default function ConfirmView({ orderNumber, initialPhone = "" }: { orderN
           </div>
 
           <Separator className="my-4" />
-          <h3 className="flex items-center gap-2 text-sm font-bold"><UploadCloud className="h-4 w-4 text-teal-700" aria-hidden="true" /> Upload your payment proof</h3>
+          <h3 className="flex items-center justify-center gap-2 text-sm font-bold"><UploadCloud className="h-4 w-4 text-teal-700" aria-hidden="true" /> Upload your payment proof</h3>
           <p className="mt-1 text-xs text-muted-foreground">Screenshot or photo of your MoMo/bank confirmation. Only ALS staff can see it, and only ALS staff can mark an order as paid.</p>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             <div>
@@ -238,7 +238,7 @@ export default function ConfirmView({ orderNumber, initialPhone = "" }: { orderN
             <li className="flex gap-2"><span className="font-bold text-teal-700">2.</span> You get an email at every stage, and you can track the order any time with the order number and your phone number.</li>
             <li className="flex gap-2"><span className="font-bold text-teal-700">3.</span> {order.fulfilment === "PICKUP" ? `Collect on ${fmtDate(order.deliveryDate)} at the ALS farm gate, Akuse.` : `We deliver on ${fmtDate(order.deliveryDate)} to ${order.areaName}.`}</li>
             {order.items.some((i) => i.kind === "TRAINING") && (
-              <li className="flex gap-2"><span className="font-bold text-teal-700">4.</span> Your receipt doubles as an admission slip — show the code at the gate. Online course participants receive their joining link by email.</li>
+              <li className="flex gap-2"><span className="font-bold text-teal-700">4.</span> Your receipt doubles as an admission slip, show the code at the gate. Online course participants receive their joining link by email.</li>
             )}
           </ol>
           <div className="mt-4 flex flex-wrap gap-3">

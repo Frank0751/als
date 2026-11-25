@@ -1,6 +1,6 @@
 "use client";
 
-// Content & areas — ALS edits page text, FAQs, policies, contact info and delivery fees itself
+// Content & areas, ALS edits page text, FAQs, policies, contact info and delivery fees itself
 
 import { useCallback, useEffect, useState } from "react";
 import { useStaff } from "@/lib/als/store";

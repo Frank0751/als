@@ -5,7 +5,7 @@ import type { StaffDTO } from "@/lib/als/types";
 
 export const dynamic = "force-dynamic";
 
-// POST /api/auth/admin — staff sign-in, returns a 12-hour token
+// POST /api/auth/admin, staff sign-in, returns a 12-hour token
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as { username: string; password: string };

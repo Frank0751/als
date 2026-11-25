@@ -1,6 +1,6 @@
 "use client";
 
-// Receipt — branded, with QR verification code, printable as PDF, shareable
+// Receipt, branded, with QR verification code, printable as PDF, shareable
 
 import { useCallback, useEffect, useState } from "react";
 import type { OrderDTO } from "@/lib/als/types";
@@ -66,7 +66,7 @@ function ReceiptDoc({ order, qrDataUrl }: { order: OrderDTO; qrDataUrl: string |
               <tr key={n}>
                 <td className="py-2">
                   <p className="font-semibold">{i.name}</p>
-                  {i.variant && i.variant !== "—" && <p className="text-xs text-muted-foreground">{i.variant}</p>}
+                  {i.variant && i.variant !== ", " && <p className="text-xs text-muted-foreground">{i.variant}</p>}
                 </td>
                 <td className="py-2 text-center">{i.qty.toLocaleString()} {i.unit}</td>
                 <td className="py-2 text-right">{ghs(i.unitPrice)}</td>
@@ -80,7 +80,7 @@ function ReceiptDoc({ order, qrDataUrl }: { order: OrderDTO; qrDataUrl: string |
               <td className="py-1.5 text-right">{ghs(order.subtotal)}</td>
             </tr>
             <tr>
-              <td colSpan={3} className="py-1.5 text-right text-muted-foreground">{order.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery — ${order.areaName}`}</td>
+              <td colSpan={3} className="py-1.5 text-right text-muted-foreground">{order.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery, ${order.areaName}`}</td>
               <td className="py-1.5 text-right">{order.areaFee ? ghs(order.areaFee) : "GHS 0.00"}</td>
             </tr>
             <tr>
@@ -93,7 +93,7 @@ function ReceiptDoc({ order, qrDataUrl }: { order: OrderDTO; qrDataUrl: string |
         <div className="mt-4 rounded-lg bg-teal-50 p-3 text-xs leading-relaxed text-teal-900">
           <p className="flex items-center gap-1.5 font-bold"><ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" /> Verify this receipt</p>
           <p className="mt-1">
-            Anyone can check this receipt on our website using the “Verify receipt” page and the code <b className="font-mono">{order.receiptCode}</b> — so a receipt cannot be faked.
+            Anyone can check this receipt on our website using the “Verify receipt” page and the code <b className="font-mono">{order.receiptCode}</b>, so a receipt cannot be faked.
           </p>
         </div>
 
@@ -104,7 +104,7 @@ function ReceiptDoc({ order, qrDataUrl }: { order: OrderDTO; qrDataUrl: string |
         )}
 
         <p className="mt-4 text-center text-[11px] text-muted-foreground">
-          Thank you for farming with Aquatic Link Solutions — quality tilapia fingerlings, sustainable fish farming. This receipt was produced by the ALS platform.
+          Thank you for farming with Aquatic Link Solutions, quality tilapia fingerlings, sustainable fish farming. This receipt was produced by the ALS platform.
         </p>
       </div>
     </div>
@@ -179,7 +179,7 @@ export default function ReceiptView({ orderNumber, initialPhone = "" }: { orderN
     );
   }
 
-  const shareText = `Aquatic Link Solutions receipt ${order.orderNumber} (${ghs(order.total)}) — verify with code ${order.receiptCode} on our site.`;
+  const shareText = `Aquatic Link Solutions receipt ${order.orderNumber} (${ghs(order.total)}), verify with code ${order.receiptCode} on our site.`;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:py-12">

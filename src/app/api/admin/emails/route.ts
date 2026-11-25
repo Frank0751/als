@@ -5,7 +5,7 @@ import type { EmailDTO } from "@/lib/als/types";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/admin/emails — the outbound order-email log
+// GET /api/admin/emails, the outbound order-email log
 export async function GET(req: NextRequest) {
   try {
     await requireStaff(req.headers.get("x-staff-token"), "STAFF");

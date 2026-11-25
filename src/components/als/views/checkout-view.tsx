@@ -1,6 +1,6 @@
 "use client";
 
-// Checkout — contact, delivery or farm pickup, ALS-open date, review, then "Send order on WhatsApp"
+// Checkout, contact, delivery or farm pickup, ALS-open date, review, then "Send order on WhatsApp"
 
 import { useMemo, useState } from "react";
 import { useCart, useCheckout, useCustomer, navigate, itemsToOrderItems } from "@/lib/als/store";
@@ -88,7 +88,7 @@ export default function CheckoutView() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
       <h1 className="text-2xl font-bold">Checkout</h1>
-      <p className="mt-1 text-sm text-muted-foreground">One order, one WhatsApp message — every detail filled in for ALS.</p>
+      <p className="mt-1 text-sm text-muted-foreground">One order, one WhatsApp message, every detail filled in for ALS.</p>
 
       {/* 1. contact */}
       <Card className="mt-6">
@@ -97,7 +97,7 @@ export default function CheckoutView() {
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div><Label htmlFor="c-name">Full name</Label><Input id="c-name" value={draft.name} onChange={(e) => set({ name: e.target.value })} placeholder="e.g. Akosua Mensah" /></div>
             <div><Label htmlFor="c-phone">Phone / WhatsApp</Label><Input id="c-phone" inputMode="tel" value={draft.phone} onChange={(e) => set({ phone: e.target.value })} placeholder="e.g. 020 123 4567" /></div>
-            <div><Label htmlFor="c-email">Email (optional — order updates are emailed here)</Label><Input id="c-email" type="email" value={draft.email} onChange={(e) => set({ email: e.target.value })} /></div>
+            <div><Label htmlFor="c-email">Email (optional, order updates are emailed here)</Label><Input id="c-email" type="email" value={draft.email} onChange={(e) => set({ email: e.target.value })} /></div>
             <div><Label htmlFor="c-city">Town / city (optional)</Label><Input id="c-city" value={draft.city} onChange={(e) => set({ city: e.target.value })} /></div>
           </div>
         </CardContent>
@@ -115,7 +115,7 @@ export default function CheckoutView() {
               <RadioGroupItem value="PICKUP" id="pick-pickup" />
               <span>
                 <span className="flex items-center gap-1.5 font-semibold"><Store className="h-4 w-4 text-teal-700" aria-hidden="true" /> Farm pickup</span>
-                <span className="mt-1 block text-xs text-muted-foreground">Collect at the ALS farm gate in Akuse — no delivery fee.</span>
+                <span className="mt-1 block text-xs text-muted-foreground">Collect at the ALS farm gate in Akuse, no delivery fee.</span>
               </span>
             </Label>
             <Label
@@ -137,7 +137,7 @@ export default function CheckoutView() {
                 <SelectTrigger id="c-area" className="mt-1"><SelectValue placeholder="Choose your area" /></SelectTrigger>
                 <SelectContent>
                   {catalog?.deliveryAreas.map((a) => (
-                    <SelectItem key={a.id} value={a.name}>{a.name} — {ghs(a.fee)}</SelectItem>
+                    <SelectItem key={a.id} value={a.name}>{a.name}, {ghs(a.fee)}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -145,7 +145,7 @@ export default function CheckoutView() {
           )}
 
           <div className="mt-4">
-            <Label htmlFor="c-date">Collection / delivery date — only dates ALS has opened</Label>
+            <Label htmlFor="c-date">Collection / delivery date, only dates ALS has opened</Label>
             <div className="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-label="Open collection dates">
               {catalog?.collectionDates.map((d) => (
                 <button
@@ -163,7 +163,7 @@ export default function CheckoutView() {
                 </button>
               ))}
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">Live fish are never sold before they are ready — that is why ALS opens dates in advance.</p>
+            <p className="mt-2 text-xs text-muted-foreground">Live fish are never sold before they are ready, that is why ALS opens dates in advance.</p>
           </div>
         </CardContent>
       </Card>
@@ -189,7 +189,7 @@ export default function CheckoutView() {
           <Separator className="my-3" />
           <div className="space-y-1.5 text-sm">
             <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{ghs(subtotal)}</span></div>
-            <div className="flex justify-between"><span className="text-muted-foreground">{draft.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery — ${draft.areaName || "choose area"}`}</span><span>{areaFee ? ghs(areaFee) : "GHS 0.00"}</span></div>
+            <div className="flex justify-between"><span className="text-muted-foreground">{draft.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery, ${draft.areaName || "choose area"}`}</span><span>{areaFee ? ghs(areaFee) : "GHS 0.00"}</span></div>
             <div className="flex justify-between text-lg font-extrabold"><span>Total</span><span className="text-teal-800">{ghs(total)}</span></div>
           </div>
           <div className="mt-4">
@@ -202,10 +202,10 @@ export default function CheckoutView() {
       <div className="mt-6 rounded-2xl border-2 border-teal-600 bg-teal-50 p-5">
         <p className="flex items-center gap-2 font-bold"><Send className="h-5 w-5 text-teal-700" aria-hidden="true" /> Send this order to ALS on WhatsApp</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          Tapping the button saves your order, then opens WhatsApp with the full order typed in — order number, items, sizes, quantities, prices, total, date, and your name and phone. One tap and ALS has it.
+          Tapping the button saves your order, then opens WhatsApp with the full order typed in, order number, items, sizes, quantities, prices, total, date, and your name and phone. One tap and ALS has it.
         </p>
         <Button size="lg" className="mt-4 w-full rounded-full" disabled={!valid || busy} onClick={sendOrder}>
-          {busy ? "Placing your order…" : `Send order on WhatsApp — ${ghs(total)}`}
+          {busy ? "Placing your order…" : `Send order on WhatsApp, ${ghs(total)}`}
         </Button>
         {!valid && <p className="mt-2 text-xs text-red-600">Fill in your name, phone, area (if delivery) and an open date above.</p>}
       </div>

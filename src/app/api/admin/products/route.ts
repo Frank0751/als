@@ -5,7 +5,7 @@ import type { PriceTier } from "@/lib/als/types";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/admin/products — full catalogue incl. inactive
+// GET /api/admin/products, full catalogue incl. inactive
 export async function GET(req: NextRequest) {
   try {
     await requireStaff(req.headers.get("x-staff-token"), "STAFF");
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// PATCH /api/admin/products — update stock, price, active, featured
+// PATCH /api/admin/products, update stock, price, active, featured
 export async function PATCH(req: NextRequest) {
   try {
     const staff = await requireStaff(req.headers.get("x-staff-token"), "MANAGER");
@@ -45,7 +45,7 @@ export async function PATCH(req: NextRequest) {
     if (body.active !== undefined) data.active = !!body.active;
     if (body.featured !== undefined) data.featured = !!body.featured;
     await db.product.update({ where: { id: body.id }, data });
-    await audit(staff.name, "PRODUCT_UPDATE", `${p.name} — ${Object.entries(data).map(([k, v]) => `${k}=${v}`).join(", ")}`);
+    await audit(staff.name, "PRODUCT_UPDATE", `${p.name}, ${Object.entries(data).map(([k, v]) => `${k}=${v}`).join(", ")}`);
     return NextResponse.json({ ok: true });
   } catch (e) {
     return NextResponse.json(errorResponse(e), { status: errorResponse(e).status });

@@ -91,14 +91,11 @@ export function StatusBadge({ status, className }: { status: string; className?:
   );
 }
 
-export function SectionTitle({ eyebrow, title, sub }: { eyebrow?: string; title: string; sub?: string }) {
+export function SectionTitle({ title, sub }: { eyebrow?: string; title: string; sub?: string }) {
   return (
-    <div className="mb-6">
-      {eyebrow && (
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-teal-700 mb-1.5">{eyebrow}</p>
-      )}
+    <div className="mb-6 text-center">
       <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{title}</h2>
-      {sub && <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-2xl">{sub}</p>}
+      {sub && <p className="mx-auto mt-2 max-w-2xl text-sm sm:text-base text-muted-foreground">{sub}</p>}
     </div>
   );
 }

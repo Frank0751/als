@@ -5,7 +5,7 @@ import type { StaffDTO } from "@/lib/als/types";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/admin/staff — staff list (OWNER)
+// GET /api/admin/staff, staff list (OWNER)
 export async function GET(req: NextRequest) {
   try {
     await requireStaff(req.headers.get("x-staff-token"), "OWNER");
@@ -20,13 +20,13 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// POST /api/admin/staff — add a staff login (OWNER)
+// POST /api/admin/staff, add a staff login (OWNER)
 export async function POST(req: NextRequest) {
   try {
     const me = await requireStaff(req.headers.get("x-staff-token"), "OWNER");
     const body = (await req.json()) as { username: string; name: string; role: string; password: string };
     const username = body.username?.trim().toLowerCase();
-    if (!username || !/^[a-z0-9_.-]{3,20}$/.test(username)) throw new HttpError(400, "Username: 3–20 letters, numbers, dots or dashes.");
+    if (!username || !/^[a-z0-9_.-]{3,20}$/.test(username)) throw new HttpError(400, "Username: 3-20 letters, numbers, dots or dashes.");
     if (!body.name?.trim()) throw new HttpError(400, "Enter the staff member's name.");
     if (!["OWNER", "MANAGER", "STAFF"].includes(body.role ?? "")) throw new HttpError(400, "Pick a role.");
     if (!body.password || body.password.length < 8) throw new HttpError(400, "Password must be at least 8 characters.");
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PATCH /api/admin/staff — change role / reset password / activate (OWNER)
+// PATCH /api/admin/staff, change role / reset password / activate (OWNER)
 export async function PATCH(req: NextRequest) {
   try {
     const me = await requireStaff(req.headers.get("x-staff-token"), "OWNER");
@@ -70,7 +70,7 @@ export async function PATCH(req: NextRequest) {
       }
     }
     await db.staff.update({ where: { id: body.id }, data });
-    await audit(me.name, "STAFF_UPDATE", `@${s.username} — ${Object.keys(data).join(", ")}`);
+    await audit(me.name, "STAFF_UPDATE", `@${s.username}, ${Object.keys(data).join(", ")}`);
     return NextResponse.json({ ok: true });
   } catch (e) {
     return NextResponse.json(errorResponse(e), { status: errorResponse(e).status });

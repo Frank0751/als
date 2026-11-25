@@ -4,7 +4,7 @@ import { errorResponse, HttpError } from "@/lib/als/auth";
 
 export const dynamic = "force-dynamic";
 
-// POST /api/contact — secure contact form with spam protection
+// POST /api/contact, secure contact form with spam protection
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as {

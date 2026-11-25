@@ -1,6 +1,6 @@
 "use client";
 
-// Cart — fingerlings, marketplace items and training bookings in one basket
+// Cart, fingerlings, marketplace items and training bookings in one basket
 
 import { useCart, navigate, useCheckout, useCustomer } from "@/lib/als/store";
 import { ProductImage } from "../ui-bits";
@@ -21,7 +21,7 @@ export default function CartView() {
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <ShoppingBag className="mx-auto h-12 w-12 text-teal-700" aria-hidden="true" />
         <h1 className="mt-4 text-xl font-bold">Your cart is empty</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Add fingerlings, equipment or training — no account needed to order.</p>
+        <p className="mt-2 text-sm text-muted-foreground">Add fingerlings, equipment or training, no account needed to order.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Button className="rounded-full" onClick={() => navigate("fingerlings")}>Fingerlings</Button>
           <Button variant="outline" className="rounded-full" onClick={() => navigate("market")}>Marketplace</Button>
@@ -99,7 +99,7 @@ export default function CartView() {
         <Button size="lg" variant="outline" className="rounded-full" onClick={() => navigate("fingerlings")}>Keep shopping</Button>
       </div>
       {customer && (
-        <p className="mt-4 text-xs text-teal-700">Signed in as {customer.name} — your details will be filled in at checkout.</p>
+        <p className="mt-4 text-xs text-teal-700">Signed in as {customer.name}, your details will be filled in at checkout.</p>
       )}
       {draft.fulfilment === "DELIVERY" && <span className="hidden" />}
     </div>

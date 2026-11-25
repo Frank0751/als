@@ -1,6 +1,6 @@
 "use client";
 
-// Staff logins — roles decide what each person can change (OWNER only)
+// Staff logins, roles decide what each person can change (OWNER only)
 
 import { useCallback, useEffect, useState } from "react";
 import { useStaff } from "@/lib/als/store";

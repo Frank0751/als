@@ -4,7 +4,7 @@ import { errorResponse, HttpError } from "@/lib/als/auth";
 
 export const dynamic = "force-dynamic";
 
-// POST /api/quote — request a quote for very large fingerling orders
+// POST /api/quote, request a quote for very large fingerling orders
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as {

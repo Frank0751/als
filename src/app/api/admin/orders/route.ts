@@ -35,7 +35,7 @@ function serialize(o: OrderRow): OrderDTO {
   };
 }
 
-// GET /api/admin/orders — everything on the ALS orders screen
+// GET /api/admin/orders, everything on the ALS orders screen
 export async function GET(req: NextRequest) {
   try {
     await requireStaff(req.headers.get("x-staff-token"), "STAFF");

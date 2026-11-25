@@ -1,6 +1,6 @@
 "use client";
 
-// ALS app shell — header, footer, WhatsApp button, route switching (single-page store)
+// ALS app shell, header, footer, WhatsApp button, route switching (single-page store)
 
 import { useEffect, useState } from "react";
 import { useRoute, useCart, useCustomer } from "@/lib/als/store";
@@ -53,7 +53,7 @@ function Header() {
         <button
           onClick={() => navigate("home")}
           className="flex items-center"
-          aria-label="Aquatic Link Solutions — go to home"
+          aria-label="Aquatic Link Solutions, go to home"
         >
           <Logo />
         </button>
@@ -200,7 +200,7 @@ function Footer() {
         </div>
       </div>
       <div className="border-t border-teal-900 py-4 text-center text-xs text-teal-200/70">
-        © {new Date().getFullYear()} Aquatic Link Solutions (ALS), Akuse, Eastern Region, Ghana — sustainable fish farming since 2009.
+        © {new Date().getFullYear()} Aquatic Link Solutions (ALS), Akuse, Eastern Region, Ghana, sustainable fish farming since 2009.
       </div>
     </footer>
   );

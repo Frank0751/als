@@ -1,6 +1,6 @@
 "use client";
 
-// Account — optional: order history, saved details, one-tap reorder
+// Account, optional: order history, saved details, one-tap reorder
 
 import { useCallback, useEffect, useState } from "react";
 import type { OrderDTO } from "@/lib/als/types";
@@ -67,7 +67,7 @@ export default function AccountView() {
   const reorder = (o: OrderDTO) => {
     let added = 0;
     for (const i of o.items) {
-      if (i.kind === "TRAINING") continue; // sessions may be gone — skip
+      if (i.kind === "TRAINING") continue; // sessions may be gone, skip
       cart.add({
         kind: i.kind as "FINGERLING" | "MARKET",
         refId: i.refId,
@@ -81,7 +81,7 @@ export default function AccountView() {
     }
     toast({
       title: "Reorder started",
-      description: added > 0 ? `${added} item(s) added to your cart — check quantities, then send the order on WhatsApp.` : "No reorderable items in that order.",
+      description: added > 0 ? `${added} item(s) added to your cart, check quantities, then send the order on WhatsApp.` : "No reorderable items in that order.",
     });
     if (added > 0) navigate("cart");
   };
@@ -94,7 +94,7 @@ export default function AccountView() {
             <span className="flex h-11 w-11 items-center justify-center rounded-full bg-teal-700 text-white"><UserRound className="h-6 w-6" aria-hidden="true" /></span>
             <div>
               <h1 className="text-xl font-bold">{mode === "login" ? "Sign in" : "Create an account"}</h1>
-              <p className="text-xs text-muted-foreground">Optional — you never need an account to order.</p>
+              <p className="text-xs text-muted-foreground">Optional, you never need an account to order.</p>
             </div>
           </div>
 
@@ -142,7 +142,7 @@ export default function AccountView() {
       {orders === null ? (
         <p className="mt-2 text-sm text-muted-foreground">Loading your orders…</p>
       ) : orders.length === 0 ? (
-        <p className="mt-2 text-sm text-muted-foreground">No orders yet — your orders appear here the moment you send them.</p>
+        <p className="mt-2 text-sm text-muted-foreground">No orders yet, your orders appear here the moment you send them.</p>
       ) : (
         <div className="mt-3 space-y-3">
           {orders.map((o) => (
@@ -151,7 +151,7 @@ export default function AccountView() {
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
                     <p className="font-bold">{o.orderNumber}</p>
-                    <p className="text-xs text-muted-foreground">{fmtDateTime(o.createdAt)} · {o.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery — ${o.areaName}`} {o.deliveryDate ? `· ${fmtDate(o.deliveryDate)}` : ""}</p>
+                    <p className="text-xs text-muted-foreground">{fmtDateTime(o.createdAt)} · {o.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery, ${o.areaName}`} {o.deliveryDate ? `· ${fmtDate(o.deliveryDate)}` : ""}</p>
                   </div>
                   <div className="text-right">
                     <p className="font-extrabold text-teal-800">{ghs(o.total)}</p>

@@ -4,7 +4,7 @@ import { errorResponse, HttpError } from "@/lib/als/auth";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/receipts/[code] — public receipt verification
+// GET /api/receipts/[code], public receipt verification
 export async function GET(
   _req: NextRequest,
   ctx: { params: Promise<{ code: string }> }

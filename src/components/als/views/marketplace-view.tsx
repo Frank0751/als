@@ -1,6 +1,6 @@
 "use client";
 
-// Marketplace — categories, search, filters, product pages, verified reviews, "Notify me"
+// Marketplace, categories, search, filters, product pages, verified reviews, "Notify me"
 
 import { useMemo, useState } from "react";
 import { useCatalog } from "../catalog-context";
@@ -40,7 +40,7 @@ function NotifyDialog({ product, open, setOpen }: { product: ProductDTO; open: b
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>Notify me — {product.name}</DialogTitle>
+          <DialogTitle>Notify me, {product.name}</DialogTitle>
           <DialogDescription>ALS will message you on WhatsApp the moment this item is back in stock.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-3">
@@ -61,7 +61,7 @@ function ProductDialog({ product, reviews, open, setOpen }: { product: ProductDT
   const { content } = useCatalog();
   const out = product.stock <= 0;
 
-  const shareText = `${product.name} — ${ghs(product.price)} at Aquatic Link Solutions (Akuse). Order fingerlings, equipment and training online.`;
+  const shareText = `${product.name}, ${ghs(product.price)} at Aquatic Link Solutions (Akuse). Order fingerlings, equipment and training online.`;
   const shareUrl = typeof window !== "undefined" ? window.location.origin : "";
 
   const addNow = () => {
@@ -70,7 +70,7 @@ function ProductDialog({ product, reviews, open, setOpen }: { product: ProductDT
       toast({ title: "Not enough stock", description: `Only ${product.stock} left right now.`, variant: "destructive" });
       return;
     }
-    add({ kind: "MARKET", refId: product.id, name: product.name, variant: "—", qty, unit: product.unit, unitPrice: product.price, maxQty: product.stock });
+    add({ kind: "MARKET", refId: product.id, name: product.name, variant: ", ", qty, unit: product.unit, unitPrice: product.price, maxQty: product.stock });
     toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
     setOpen(false);
   };
@@ -125,7 +125,7 @@ function ProductDialog({ product, reviews, open, setOpen }: { product: ProductDT
                         <span className="text-[11px] font-semibold text-emerald-700">✓ Verified buyer</span>
                       </div>
                       <p className="mt-1.5 text-sm leading-relaxed">{r.comment}</p>
-                      <p className="mt-1 text-xs font-semibold text-muted-foreground">{r.name} — {r.location}</p>
+                      <p className="mt-1 text-xs font-semibold text-muted-foreground">{r.name}, {r.location}</p>
                     </div>
                   ))}
                 </div>
@@ -181,7 +181,7 @@ export default function MarketplaceView() {
           <SelectContent>
             <SelectItem value="all">Any price</SelectItem>
             <SelectItem value="under200">Under GHS 200</SelectItem>
-            <SelectItem value="200to600">GHS 200 – 600</SelectItem>
+            <SelectItem value="200to600">GHS 200 - 600</SelectItem>
             <SelectItem value="over600">Over GHS 600</SelectItem>
           </SelectContent>
         </Select>
@@ -238,7 +238,7 @@ export default function MarketplaceView() {
 
       <div className="mt-10 rounded-2xl border bg-teal-50 p-6 text-center">
         <p className="font-bold">Can&rsquo;t find what you need?</p>
-        <p className="mt-1 text-sm text-muted-foreground">ALS sources equipment for farmers on request — ask us on WhatsApp or the contact page.</p>
+        <p className="mt-1 text-sm text-muted-foreground">ALS sources equipment for farmers on request, ask us on WhatsApp or the contact page.</p>
         <Button variant="outline" className="mt-4 rounded-full" onClick={() => navigate("contact")}>Ask ALS</Button>
       </div>
     </div>

@@ -5,7 +5,7 @@ import type { OrderItemDTO, ReportsDTO } from "@/lib/als/types";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/admin/reports — sales by day, method and product
+// GET /api/admin/reports, sales by day, method and product
 export async function GET(req: NextRequest) {
   try {
     await requireStaff(req.headers.get("x-staff-token"), "STAFF");

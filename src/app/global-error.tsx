@@ -1,6 +1,6 @@
 "use client";
 
-// Global error boundary — replaces Next's bare "Application error" screen.
+// Global error boundary, replaces Next's bare "Application error" screen.
 // Must render its own <html>/<body>; runs even when the root layout fails.
 
 export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
@@ -48,7 +48,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
             !
           </div>
           <h1 style={{ fontSize: 18, fontWeight: 600, margin: "0 0 8px" }}>
-            Aquatic Link Solutions — something went wrong
+            Aquatic Link Solutions, something went wrong
           </h1>
           <p style={{ fontSize: 14, color: "#6b6a62", margin: "0 0 24px", lineHeight: 1.5 }}>
             The app could not load, usually because your browser is holding files from a previous version.

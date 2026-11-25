@@ -4,7 +4,7 @@ import { errorResponse, HttpError, requireStaff } from "@/lib/als/auth";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/admin/proof/[id] — serve an uploaded payment proof (staff only)
+// GET /api/admin/proof/[id], serve an uploaded payment proof (staff only)
 export async function GET(
   req: NextRequest,
   ctx: { params: Promise<{ id: string }> }

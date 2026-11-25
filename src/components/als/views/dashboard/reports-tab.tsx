@@ -1,6 +1,6 @@
 "use client";
 
-// Sales reports — day, week, month, by product and payment method; exportable
+// Sales reports, day, week, month, by product and payment method; exportable
 
 import { useCallback, useEffect, useState } from "react";
 import { useStaff } from "@/lib/als/store";

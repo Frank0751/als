@@ -40,7 +40,7 @@ async function nextOrderNumber(): Promise<string> {
   }
 }
 
-// POST /api/orders — create an order (the "Send order on WhatsApp" moment)
+// POST /api/orders, create an order (the "Send order on WhatsApp" moment)
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as IncomingOrder;
@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
           kind: raw.kind,
           refId: p.id,
           name: p.name,
-          variant: raw.kind === "FINGERLING" ? (tiers ? `${qty.toLocaleString()} pcs @ GHS ${unitPrice.toFixed(2)}` : "") : "—",
+          variant: raw.kind === "FINGERLING" ? (tiers ? `${qty.toLocaleString()} pcs @ GHS ${unitPrice.toFixed(2)}` : "") : ", ",
           qty,
           unit: p.unit,
           unitPrice,
@@ -175,8 +175,8 @@ export async function POST(req: NextRequest) {
       await db.emailLog.create({
         data: {
           toEmail: body.email.trim(),
-          subject: `Order ${orderNumber} received — Aquatic Link Solutions`,
-          body: `Dear ${body.name.trim()},\n\nWe have your order ${orderNumber} for GHS ${total.toFixed(2)}.\n\nNext step: pay by MoMo or bank transfer and upload your payment proof on your order page. ALS will confirm your payment and issue your branded receipt.\n\nTrack your order any time with order number ${orderNumber} and your phone number.\n\n— Aquatic Link Solutions, Akuse`,
+          subject: `Order ${orderNumber} received, Aquatic Link Solutions`,
+          body: `Dear ${body.name.trim()},\n\nWe have your order ${orderNumber} for GHS ${total.toFixed(2)}.\n\nNext step: pay by MoMo or bank transfer and upload your payment proof on your order page. ALS will confirm your payment and issue your branded receipt.\n\nTrack your order any time with order number ${orderNumber} and your phone number.\n\n,  Aquatic Link Solutions, Akuse`,
           kind: "ORDER_STAGE",
         },
       });
@@ -184,8 +184,8 @@ export async function POST(req: NextRequest) {
     await db.emailLog.create({
       data: {
         toEmail: "orders@aquaticlinkgh.com",
-        subject: `New order ${orderNumber} — ${body.name.trim()} (GHS ${total.toFixed(2)})`,
-        body: `New order ${orderNumber} created on the platform and sent on WhatsApp.\nCustomer: ${body.name.trim()} — ${body.phone.trim()}\nFulfilment: ${body.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery to ${areaName}`} on ${body.deliveryDate}\nTotal: GHS ${total.toFixed(2)}`,
+        subject: `New order ${orderNumber}, ${body.name.trim()} (GHS ${total.toFixed(2)})`,
+        body: `New order ${orderNumber} created on the platform and sent on WhatsApp.\nCustomer: ${body.name.trim()}, ${body.phone.trim()}\nFulfilment: ${body.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery to ${areaName}`} on ${body.deliveryDate}\nTotal: GHS ${total.toFixed(2)}`,
         kind: "ORDER_STAGE",
       },
     });
@@ -230,7 +230,7 @@ function serializeOrder(o: {
   };
 }
 
-// GET /api/orders?number=ALS-2026-0001&phone=024... — track an order
+// GET /api/orders?number=ALS-2026-0001&phone=024..., track an order
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -263,7 +263,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// PATCH /api/orders — upload payment proof / mark WhatsApp sent
+// PATCH /api/orders, upload payment proof / mark WhatsApp sent
 export async function PATCH(req: NextRequest) {
   try {
     const body = (await req.json()) as {
@@ -285,7 +285,7 @@ export async function PATCH(req: NextRequest) {
       if (body.proof) {
         if (!body.proof.dataUrl.startsWith("data:image/") && !body.proof.dataUrl.startsWith("data:application/pdf"))
           throw new HttpError(400, "Upload an image (JPG/PNG) of your payment proof.");
-        if (body.proof.dataUrl.length > 2_400_000) throw new HttpError(400, "Image too large — please upload a smaller photo (max ~1.5 MB).");
+        if (body.proof.dataUrl.length > 2_400_000) throw new HttpError(400, "Image too large, please upload a smaller photo (max ~1.5 MB).");
         await db.proofFile.create({
           data: { orderNumber: order.orderNumber, name: body.proof.name || "payment-proof", dataUrl: body.proof.dataUrl },
         });

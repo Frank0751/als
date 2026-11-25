@@ -1,6 +1,6 @@
 "use client";
 
-// Fingerlings shop — sizes, quantity pricing, live stock, ALS-open dates, quote requests
+// Fingerlings shop, sizes, quantity pricing, live stock, ALS-open dates, quote requests
 
 import { useMemo, useState } from "react";
 import { useCatalog } from "../catalog-context";
@@ -114,7 +114,7 @@ function FingerlingCard({ p, nextDate }: { p: ProductDTO; nextDate?: string }) {
             <Button variant="outline" className="rounded-full" onClick={addNow}>Add what&rsquo;s in stock</Button>
           )}
         </div>
-        {inCart && <p className="mt-2 text-center text-xs font-medium text-teal-700">In your cart — review at checkout</p>}
+        {inCart && <p className="mt-2 text-center text-xs font-medium text-teal-700">In your cart, review at checkout</p>}
       </CardContent>
     </Card>
   );
@@ -149,14 +149,14 @@ function QuoteDialog() {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Request a quote</DialogTitle>
-          <DialogDescription>For very large farm orders — stocking a new pond block or cage battery. ALS replies within one working day.</DialogDescription>
+          <DialogDescription>For very large farm orders, stocking a new pond block or cage battery. ALS replies within one working day.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-3">
           <div><Label htmlFor="q-name">Your name</Label><Input id="q-name" value={form.name} onChange={(e) => set("name", e.target.value)} /></div>
           <div><Label htmlFor="q-org">Farm / organisation (optional)</Label><Input id="q-org" value={form.org} onChange={(e) => set("org", e.target.value)} /></div>
           <div><Label htmlFor="q-phone">Phone / WhatsApp</Label><Input id="q-phone" inputMode="tel" value={form.phone} onChange={(e) => set("phone", e.target.value)} /></div>
           <div><Label htmlFor="q-email">Email (optional)</Label><Input id="q-email" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} /></div>
-          <div><Label htmlFor="q-msg">What do you need?</Label><Textarea id="q-msg" rows={4} placeholder="e.g. 40,000 fingerlings of 10–15 g for cages near Atimpoku, delivered in November" value={form.message} onChange={(e) => set("message", e.target.value)} /></div>
+          <div><Label htmlFor="q-msg">What do you need?</Label><Textarea id="q-msg" rows={4} placeholder="e.g. 40,000 fingerlings of 10-15 g for cages near Atimpoku, delivered in November" value={form.message} onChange={(e) => set("message", e.target.value)} /></div>
           <input type="text" name="website" value="" readOnly hidden aria-hidden="true" tabIndex={-1} autoComplete="off" />
         </div>
         <DialogFooter>
@@ -178,7 +178,7 @@ export default function FingerlingsView() {
       <SectionTitle
         eyebrow="From the ALS hatchery · Akuse"
         title="Tilapia fingerlings"
-        sub="Tilapia fingerlings are young fish that have developed beyond the fry stage — ready to stock into fish ponds and cage farming systems, and raised by farmers until they reach market size. All sizes are graded at our hatchery and sold in oxygen-bagged lots."
+        sub="Tilapia fingerlings are young fish that have developed beyond the fry stage, ready to stock into fish ponds and cage farming systems, and raised by farmers until they reach market size. All sizes are graded at our hatchery and sold in oxygen-bagged lots."
       />
 
       <div className="mb-6 grid gap-3 sm:grid-cols-2">
@@ -203,7 +203,7 @@ export default function FingerlingsView() {
           <div className="text-sm">
             <p className="font-semibold">Every order travels with our care guide</p>
             <p className="mt-1 text-muted-foreground">
-              A short, plain-language guide for the first 7 days after stocking — to cut early losses and repeat questions. Ask us anything on WhatsApp before or after you buy.
+              A short, plain-language guide for the first 7 days after stocking, to cut early losses and repeat questions. Ask us anything on WhatsApp before or after you buy.
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-// Order emails — every email the platform sent, at every stage (simulated store of outbound mail)
+// Order emails, every email the platform sent, at every stage (simulated store of outbound mail)
 
 import { useCallback, useEffect, useState } from "react";
 import { useStaff } from "@/lib/als/store";

@@ -1,6 +1,6 @@
 "use client";
 
-// Orders & payments — every order on one screen, one-click updates, payment confirmation
+// Orders & payments, every order on one screen, one-click updates, payment confirmation
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { AdminOrdersDTO, OrderDTO, OrderItemDTO } from "@/lib/als/types";
@@ -95,7 +95,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
 
       <div className="space-y-4 text-sm">
         <div className="grid gap-2 rounded-lg border bg-stone-50 p-3 sm:grid-cols-2">
-          <p><span className="text-muted-foreground">Fulfilment:</span> <b>{order.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery — ${order.areaName}`}</b></p>
+          <p><span className="text-muted-foreground">Fulfilment:</span> <b>{order.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery, ${order.areaName}`}</b></p>
           <p><span className="text-muted-foreground">Date:</span> <b>{fmtDate(order.deliveryDate)}</b></p>
           <p><span className="text-muted-foreground">Subtotal:</span> <b>{ghs(order.subtotal)}</b> <span className="text-muted-foreground">+ fee {ghs(order.areaFee)}</span></p>
           <p><span className="text-muted-foreground">WhatsApp sent:</span> <b>{order.whatsappSent ? "yes" : "not marked"}</b></p>
@@ -128,7 +128,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
         {order.proofs.length > 0 ? (
           <ProofImage proofId={order.proofs[0]!.id} token={token} />
         ) : order.status === "RECEIVED" ? (
-          <p className="flex items-center gap-2 rounded-lg bg-amber-50 p-2.5 text-xs text-amber-800"><FileQuestion className="h-4 w-4 shrink-0" aria-hidden="true" /> No payment proof uploaded yet — ask the customer to upload it on their order page.</p>
+          <p className="flex items-center gap-2 rounded-lg bg-amber-50 p-2.5 text-xs text-amber-800"><FileQuestion className="h-4 w-4 shrink-0" aria-hidden="true" /> No payment proof uploaded yet, ask the customer to upload it on their order page.</p>
         ) : null}
 
         {/* payment confirmation */}
@@ -153,7 +153,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
               </div>
             </div>
             <Button className="mt-3 w-full rounded-full" disabled={busy} onClick={() => act("confirm_payment", { paymentMethod: method, paymentRef: ref })}>
-              {busy ? "Working…" : `Confirm payment & issue receipt — ${ghs(order.total)}`}
+              {busy ? "Working…" : `Confirm payment & issue receipt, ${ghs(order.total)}`}
             </Button>
             <p className="mt-1 text-[11px] text-muted-foreground">Only ALS staff can mark an order as paid. This issues the branded receipt and emails the customer.</p>
           </div>
@@ -162,7 +162,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
         {/* stage buttons */}
         {next && (
           <Button className="w-full rounded-full" disabled={busy} onClick={() => act("set_status", { status: next.status })}>
-            <next.icon className="h-4 w-4" aria-hidden="true" /> {next.label} — notify customer
+            <next.icon className="h-4 w-4" aria-hidden="true" /> {next.label}, notify customer
           </Button>
         )}
 
@@ -172,7 +172,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
           <ol className="mt-1.5 space-y-1.5">
             {order.events.map((e) => (
               <li key={e.id} className="rounded-lg border bg-stone-50 p-2.5 text-xs">
-                <p><b>{statusLabel(e.status)}</b>{e.actor ? ` — ${e.actor}` : ""} <span className="text-muted-foreground">· {fmtDateTime(e.createdAt)}</span></p>
+                <p><b>{statusLabel(e.status)}</b>{e.actor ? `, ${e.actor}` : ""} <span className="text-muted-foreground">· {fmtDateTime(e.createdAt)}</span></p>
                 {e.note && <p className="mt-0.5 text-muted-foreground">{e.note}</p>}
               </li>
             ))}
@@ -325,7 +325,7 @@ export default function OrdersTab() {
                 <p className="text-xs text-muted-foreground">{fmtDateTime(m.createdAt)}</p>
               </div>
               <p className="mt-1.5 leading-relaxed text-muted-foreground">{m.message}</p>
-              <p className="mt-1 text-xs text-muted-foreground">— {m.name} · {m.email ?? ""}{m.phone ? ` · ${m.phone}` : ""}</p>
+              <p className="mt-1 text-xs text-muted-foreground">,  {m.name} · {m.email ?? ""}{m.phone ? ` · ${m.phone}` : ""}</p>
             </CardContent></Card>
           ))}
           {data.inbox.length === 0 && <p className="py-6 text-center text-sm text-muted-foreground">Inbox is empty.</p>}

@@ -5,7 +5,7 @@ import type { DeliveryAreaDTO } from "@/lib/als/types";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/admin/settings — content map + delivery areas
+// GET /api/admin/settings, content map + delivery areas
 export async function GET(req: NextRequest) {
   try {
     await requireStaff(req.headers.get("x-staff-token"), "MANAGER");
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// POST /api/admin/settings — save content keys and delivery areas
+// POST /api/admin/settings, save content keys and delivery areas
 export async function POST(req: NextRequest) {
   try {
     const staff = await requireStaff(req.headers.get("x-staff-token"), "MANAGER");
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// DELETE /api/admin/settings?area=name — remove a delivery area
+// DELETE /api/admin/settings?area=name, remove a delivery area
 export async function DELETE(req: NextRequest) {
   try {
     const staff = await requireStaff(req.headers.get("x-staff-token"), "MANAGER");

@@ -6,7 +6,7 @@ import type { OrderItemDTO } from "@/lib/als/types";
 
 export const dynamic = "force-dynamic";
 
-// PATCH /api/admin/orders/[orderNumber] — status updates, payment confirmation, cancellation
+// PATCH /api/admin/orders/[orderNumber], status updates, payment confirmation, cancellation
 export async function PATCH(
   req: NextRequest,
   ctx: { params: Promise<{ orderNumber: string }> }
@@ -49,8 +49,8 @@ export async function PATCH(
         await db.emailLog.create({
           data: {
             toEmail: order.customerEmail,
-            subject: `Payment confirmed — receipt for ${order.orderNumber} — Aquatic Link Solutions`,
-            body: `Dear ${order.customerName},\n\nYour payment for order ${order.orderNumber} (GHS ${order.total.toFixed(2)}, ${method}) has been confirmed by ALS.\n\nYour branded receipt is ready on your order page. Receipt verification code: ${code}\nAnyone can check this code on the “Verify receipt” page of our website.\n\n${order.fulfilment === "PICKUP" ? `Collection date: ${order.deliveryDate ?? "—"} at the ALS farm gate, Akuse.` : `Delivery date: ${order.deliveryDate ?? "—"} to ${order.areaName ?? "your area"}.`}\n\nThank you for farming with ALS.\nAquatic Link Solutions — Akuse, Eastern Region`,
+            subject: `Payment confirmed, receipt for ${order.orderNumber}, Aquatic Link Solutions`,
+            body: `Dear ${order.customerName},\n\nYour payment for order ${order.orderNumber} (GHS ${order.total.toFixed(2)}, ${method}) has been confirmed by ALS.\n\nYour branded receipt is ready on your order page. Receipt verification code: ${code}\nAnyone can check this code on the “Verify receipt” page of our website.\n\n${order.fulfilment === "PICKUP" ? `Collection date: ${order.deliveryDate ?? ", "} at the ALS farm gate, Akuse.` : `Delivery date: ${order.deliveryDate ?? ", "} to ${order.areaName ?? "your area"}.`}\n\nThank you for farming with ALS.\nAquatic Link Solutions, Akuse, Eastern Region`,
             kind: "RECEIPT",
           },
         });
@@ -64,14 +64,14 @@ export async function PATCH(
           await db.emailLog.create({
             data: {
               toEmail: b.email,
-              subject: `Your joining link — ${s.course.title} — Aquatic Link Solutions`,
-              body: `Dear ${b.customerName},\n\nYour payment is confirmed and your seat for “${s.course.title}” (${s.date}, ${s.timeText}) is booked.\n\nJoining link: https://meet.aquaticlinkgh.com/${s.id.slice(-8)}\nCourse materials are attached to this email. See you online!\n\n— ALS Training Team`,
+              subject: `Your joining link, ${s.course.title}, Aquatic Link Solutions`,
+              body: `Dear ${b.customerName},\n\nYour payment is confirmed and your seat for “${s.course.title}” (${s.date}, ${s.timeText}) is booked.\n\nJoining link: https://meet.aquaticlinkgh.com/${s.id.slice(-8)}\nCourse materials are attached to this email. See you online!\n\n,  ALS Training Team`,
               kind: "ONLINE_COURSE",
             },
           });
         }
       }
-      await audit(staff.name, "PAYMENT_CONFIRMED", `${order.orderNumber} — ${method}`);
+      await audit(staff.name, "PAYMENT_CONFIRMED", `${order.orderNumber}, ${method}`);
       return NextResponse.json({ ok: true, receiptCode: code });
     }
 
@@ -93,8 +93,8 @@ export async function PATCH(
         await db.emailLog.create({
           data: {
             toEmail: order.customerEmail,
-            subject: `Order ${order.orderNumber}: ${statusLabel(status)} — Aquatic Link Solutions`,
-            body: `Dear ${order.customerName},\n\n${stageNote[status]}\n\nTrack your order any time with order number ${order.orderNumber} and your phone number.\n\n— Aquatic Link Solutions, Akuse`,
+            subject: `Order ${order.orderNumber}: ${statusLabel(status)}, Aquatic Link Solutions`,
+            body: `Dear ${order.customerName},\n\n${stageNote[status]}\n\nTrack your order any time with order number ${order.orderNumber} and your phone number.\n\n,  Aquatic Link Solutions, Akuse`,
             kind: "ORDER_STAGE",
           },
         });

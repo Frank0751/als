@@ -1,6 +1,6 @@
 "use client";
 
-// Who changed what — the audit trail (MANAGER+)
+// Who changed what, the audit trail (MANAGER+)
 
 import { useCallback, useEffect, useState } from "react";
 import { useStaff } from "@/lib/als/store";

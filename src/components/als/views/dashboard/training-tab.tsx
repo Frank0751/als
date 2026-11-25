@@ -1,6 +1,6 @@
 "use client";
 
-// Training calendar + trainee lists — sessions, seats, payment status, printable lists
+// Training calendar + trainee lists, sessions, seats, payment status, printable lists
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useStaff } from "@/lib/als/store";
@@ -69,7 +69,7 @@ export default function TrainingTab() {
   const { token } = useStaff();
   const [data, setData] = useState<AdminTrainingDTO | null>(null);
   const [addFor, setAddFor] = useState<CourseDTO | null>(null);
-  const [form, setForm] = useState({ date: "", timeText: "9:00 AM – 3:30 PM each day", location: "ALS Farm, Akuse", seats: "15" });
+  const [form, setForm] = useState({ date: "", timeText: "9:00 AM - 3:30 PM each day", location: "ALS Farm, Akuse", seats: "15" });
   const [listFor, setListFor] = useState<{ course: CourseDTO; session: SessionLite } | null>(null);
 
   const load = useCallback(async () => {
@@ -93,9 +93,9 @@ export default function TrainingTab() {
         token,
         body: { courseId: addFor.id, date: form.date, timeText: form.timeText, location: form.location, seats: Number(form.seats) },
       });
-      toast({ title: "Session added", description: `${addFor.title} — ${form.date} is now open for booking.` });
+      toast({ title: "Session added", description: `${addFor.title}, ${form.date} is now open for booking.` });
       setAddFor(null);
-      setForm({ date: "", timeText: "9:00 AM – 3:30 PM each day", location: "ALS Farm, Akuse", seats: "15" });
+      setForm({ date: "", timeText: "9:00 AM - 3:30 PM each day", location: "ALS Farm, Akuse", seats: "15" });
       void load();
     } catch (e) {
       toast({ title: "Could not add session", description: e instanceof Error ? e.message : "", variant: "destructive" });
@@ -151,7 +151,7 @@ export default function TrainingTab() {
                 <div key={s.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border bg-stone-50 p-3 text-sm">
                   <span className="font-semibold">{fmtDate(s.date)}</span>
                   <span className="text-xs text-muted-foreground">{s.timeText} · {s.location}</span>
-                  <span className="text-xs">{s.booked}/{s.seats} booked{full ? " — full" : ""}</span>
+                  <span className="text-xs">{s.booked}/{s.seats} booked{full ? ", full" : ""}</span>
                   {bs.length > 0 && (
                     <button className="text-xs font-semibold text-teal-700 hover:underline" onClick={() => setListFor({ course: c, session: s })}>
                       Trainee list ({bs.length}) · print
@@ -172,7 +172,7 @@ export default function TrainingTab() {
                 </div>
               );
             })}
-            {c.sessions.length === 0 && <p className="text-sm text-muted-foreground">No upcoming sessions — add one.</p>}
+            {c.sessions.length === 0 && <p className="text-sm text-muted-foreground">No upcoming sessions, add one.</p>}
           </div>
         </div>
       ))}
@@ -211,7 +211,7 @@ export default function TrainingTab() {
       {/* add session dialog */}
       <Dialog open={!!addFor} onOpenChange={(v) => !v && setAddFor(null)}>
         <DialogContent className="sm:max-w-sm">
-          <DialogHeader><DialogTitle>Add session — {addFor?.title}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Add session, {addFor?.title}</DialogTitle></DialogHeader>
           <div className="grid gap-3">
             <div><Label htmlFor="s-date">Date</Label><Input id="s-date" type="date" value={form.date} onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))} /></div>
             <div><Label htmlFor="s-time">Time</Label><Input id="s-time" value={form.timeText} onChange={(e) => setForm((f) => ({ ...f, timeText: e.target.value }))} /></div>
@@ -222,7 +222,7 @@ export default function TrainingTab() {
                 <SelectContent>
                   <SelectItem value="ALS Farm, Akuse">ALS Farm, Akuse</SelectItem>
                   <SelectItem value="ALS Training Centre, Akuse">ALS Training Centre, Akuse</SelectItem>
-                  <SelectItem value="Live online — link sent by email">Live online — link sent by email</SelectItem>
+                  <SelectItem value="Live online, link sent by email">Live online, link sent by email</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -236,7 +236,7 @@ export default function TrainingTab() {
       <Dialog open={!!listFor} onOpenChange={(v) => !v && setListFor(null)}>
         <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader className="no-print">
-            <DialogTitle>Trainee list — print and take it to the gate</DialogTitle>
+            <DialogTitle>Trainee list, print and take it to the gate</DialogTitle>
           </DialogHeader>
           {listFor && <TraineeList courseTitle={listFor.course.title} session={listFor.session} bookings={bookingsFor.get(listFor.session.id) ?? []} />}
           <div className="no-print">

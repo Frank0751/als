@@ -4,7 +4,7 @@ import { audit, errorResponse, HttpError, requireStaff } from "@/lib/als/auth";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/admin/calendar — collection dates
+// GET /api/admin/calendar, collection dates
 export async function GET(req: NextRequest) {
   try {
     await requireStaff(req.headers.get("x-staff-token"), "STAFF");
@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// POST /api/admin/calendar — open a new date
+// POST /api/admin/calendar, open a new date
 export async function POST(req: NextRequest) {
   try {
     const staff = await requireStaff(req.headers.get("x-staff-token"), "MANAGER");
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PATCH /api/admin/calendar — toggle / capacity
+// PATCH /api/admin/calendar, toggle / capacity
 export async function PATCH(req: NextRequest) {
   try {
     const staff = await requireStaff(req.headers.get("x-staff-token"), "MANAGER");
@@ -43,7 +43,7 @@ export async function PATCH(req: NextRequest) {
     if (body.isOpen !== undefined) data.isOpen = !!body.isOpen;
     if (body.capacity !== undefined) data.capacity = Math.max(1, Math.floor(Number(body.capacity)));
     await db.collectionDate.update({ where: { id: body.id }, data });
-    await audit(staff.name, "CALENDAR_UPDATE", `${d.date} — ${Object.entries(data).map(([k, v]) => `${k}=${v}`).join(", ")}`);
+    await audit(staff.name, "CALENDAR_UPDATE", `${d.date}, ${Object.entries(data).map(([k, v]) => `${k}=${v}`).join(", ")}`);
     return NextResponse.json({ ok: true });
   } catch (e) {
     return NextResponse.json(errorResponse(e), { status: errorResponse(e).status });

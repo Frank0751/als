@@ -1,6 +1,6 @@
 "use client";
 
-// Catalog context — loaded once, shared across the storefront, with reload support
+// Catalog context, loaded once, shared across the storefront, with reload support
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import type { CatalogDTO } from "@/lib/als/types";

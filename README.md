@@ -1,22 +1,22 @@
-# ALS — Aquatic Link Solutions (Online Store & Training Platform)
+# ALS, Aquatic Link Solutions (Online Store & Training Platform)
 
-E-commerce platform, training-booking site and internal ALS dashboard for **Aquatic Link Solutions (ALS)** — a tilapia hatchery and cage farm in **Akuse, Eastern Region, Ghana**. ALS produces and sells quality tilapia fingerlings, runs grow-out production in cage systems on the Volta River, and promotes sustainable fish farming across Ghana's aquaculture sector.
+E-commerce platform, training-booking site and internal ALS dashboard for **Aquatic Link Solutions (ALS)**, a tilapia hatchery and cage farm in **Akuse, Eastern Region, Ghana**. ALS produces and sells quality tilapia fingerlings, runs grow-out production in cage systems on the Volta River, and promotes sustainable fish farming across Ghana's aquaculture sector.
 
 Built per proposal **KB-2026-012** (KoomBei).
 
 ## What's inside
 
 ### Storefront (mobile-first, single-page app)
-- **Home** — hero, how-it-works, featured fingerlings, marketplace preview, farm story, training teaser, verified reviews
-- **Fingerlings shop** — live stock by size, quantity-tier pricing, ALS-open collection/delivery dates, quote requests for bulk orders
-- **Marketplace** — nets, hapas, aerators, water-test kits, feeders and more; categories, search, price filters, product pages with verified reviews and "notify me" on restock
-- **Training** — courses with booking calendar, seats left, auto-close when full
-- **Cart + checkout** — farm pickup or delivery (fees by area), ALS-open dates
-- **WhatsApp ordering** — one tap sends the full order (items, quantities, tier prices, total, chosen date, contact) to ALS on WhatsApp
-- **Payments** — MoMo / bank / USD instructions, payment-proof upload on the order page
-- **Receipts** — branded receipt with QR verification code, printable / shareable
-- **Order tracking** — by order number + phone, with stage emails and optional customer accounts for reorder
-- **Content pages** — Our Farm, Impact, FAQs, Contact, privacy/terms/refund policies (incl. live-fish rules)
+- **Home**, hero, how-it-works, featured fingerlings, marketplace preview, farm story, training teaser, verified reviews
+- **Fingerlings shop**, live stock by size, quantity-tier pricing, ALS-open collection/delivery dates, quote requests for bulk orders
+- **Marketplace**, nets, hapas, aerators, water-test kits, feeders and more; categories, search, price filters, product pages with verified reviews and "notify me" on restock
+- **Training**, courses with booking calendar, seats left, auto-close when full
+- **Cart + checkout**, farm pickup or delivery (fees by area), ALS-open dates
+- **WhatsApp ordering**, one tap sends the full order (items, quantities, tier prices, total, chosen date, contact) to ALS on WhatsApp
+- **Payments**, MoMo / bank / USD instructions, payment-proof upload on the order page
+- **Receipts**, branded receipt with QR verification code, printable / shareable
+- **Order tracking**, by order number + phone, with stage emails and optional customer accounts for reorder
+- **Content pages**, Our Farm, Impact, FAQs, Contact, privacy/terms/refund policies (incl. live-fish rules)
 
 ### ALS Dashboard (role-gated: OWNER / MANAGER / STAFF, fully audited)
 - Orders with stage filters and one-click status updates

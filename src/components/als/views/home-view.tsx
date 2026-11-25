@@ -1,6 +1,6 @@
 "use client";
 
-// Home — the ALS storefront front page
+// Home, the ALS storefront front page
 
 import { useCatalog } from "../catalog-context";
 import { useRoute } from "@/lib/als/store";
@@ -46,7 +46,7 @@ export default function HomeView() {
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
           <Badge className="bg-orange-500 text-white hover:bg-orange-500">Over 17 years of aquaculture · Akuse, Eastern Region</Badge>
           <h1 className="mt-4 max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
-            {content("home.hero_title") || "Quality tilapia fingerlings, equipment and training — straight from our hatchery in Akuse"}
+            {content("home.hero_title") || "Quality tilapia fingerlings, equipment and training, straight from our hatchery in Akuse"}
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-teal-50/90 sm:text-lg">
             {content("home.hero_sub")}
@@ -63,7 +63,7 @@ export default function HomeView() {
             {[
               { k: "17+", v: "years farming fish" },
               { k: "70%", v: "women customers" },
-              { k: nextDate ? new Date(nextDate.date).getDate() + " " + new Date(nextDate.date).toLocaleString("en", { month: "short" }) : "—", v: "next collection date" },
+              { k: nextDate ? new Date(nextDate.date).getDate() + " " + new Date(nextDate.date).toLocaleString("en", { month: "short" }) : ", ", v: "next collection date" },
             ].map((s) => (
               <div key={s.v} className="rounded-xl border border-white/20 bg-white/10 px-3 py-3 backdrop-blur-sm">
                 <dt className="text-2xl font-extrabold">{s.k}</dt>
@@ -99,7 +99,7 @@ export default function HomeView() {
           <div className="flex items-end justify-between gap-4">
             <SectionTitle
               eyebrow="Our primary business"
-              title="Tilapia fingerlings — live availability"
+              title="Tilapia fingerlings, live availability"
               sub="Young fish raised past the fry stage, graded at our hatchery in Akuse and ready for stocking in ponds and cage systems on the Volta River."
             />
             <Button variant="outline" className="hidden shrink-0 rounded-full sm:inline-flex" onClick={() => navigate("fingerlings")}>
@@ -138,7 +138,7 @@ export default function HomeView() {
         <SectionTitle
           eyebrow="Marketplace"
           title="Nets, harvesting gear, feed accessories, aeration and safety"
-          sub="The equipment fish farmers actually need — tested on our own ponds and cages."
+          sub="The equipment fish farmers actually need, tested on our own ponds and cages."
         />
         <div className="flex flex-wrap gap-2">
           {categories.map((c) => (
@@ -197,7 +197,7 @@ export default function HomeView() {
       {/* training */}
       <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
         <div className="flex items-end justify-between gap-4">
-          <SectionTitle eyebrow="Training" title="Anybody can learn to farm fish with ALS" sub="On-farm practicals, seminars, workshops and live online courses — book an open date and your receipt is your admission slip." />
+          <SectionTitle eyebrow="Training" title="Anybody can learn to farm fish with ALS" sub="On-farm practicals, seminars, workshops and live online courses, book an open date and your receipt is your admission slip." />
           <Button variant="outline" className="hidden shrink-0 rounded-full sm:inline-flex" onClick={() => navigate("training")}>All courses <ArrowRight className="h-4 w-4" aria-hidden="true" /></Button>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -227,7 +227,7 @@ export default function HomeView() {
               <Card key={r.id} className="p-5">
                 <Stars rating={r.rating} />
                 <p className="mt-3 text-sm leading-relaxed">&ldquo;{r.comment}&rdquo;</p>
-                <p className="mt-3 text-xs font-semibold text-muted-foreground">{r.name} — {r.location}</p>
+                <p className="mt-3 text-xs font-semibold text-muted-foreground">{r.name}, {r.location}</p>
               </Card>
             ))}
           </div>
@@ -240,7 +240,7 @@ export default function HomeView() {
           <Award className="mx-auto h-8 w-8 text-amber-400" aria-hidden="true" />
           <h2 className="mt-3 text-2xl font-bold text-white sm:text-3xl">For 17 years, customers have trusted ALS enough to recommend it.</h2>
           <p className="mx-auto mt-3 max-w-2xl text-teal-100/85">
-            Now that trust is online: real photos, clear prices, live stock, receipts you can verify and orders you can track — from Akuse to Oslo.
+            Now that trust is online: real photos, clear prices, live stock, receipts you can verify and orders you can track, from Akuse to Oslo.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Button size="lg" className="h-12 rounded-full bg-orange-600 px-6 text-base hover:bg-orange-700" onClick={() => navigate("fingerlings")}>
