@@ -55,3 +55,10 @@ server.log
 # database (recreate with: bun run db:push && bun scripts/seed.ts)
 db/custom.db
 db/*.db-journal
+
+# sandbox artifacts (not part of the app)
+/upload/
+/download/
+/.zscripts/
+/examples/
+/mini-services/
