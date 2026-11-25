@@ -1,19 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Ubuntu, Ubuntu_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const ubuntuSans = Ubuntu({
+// Self-hosted Ubuntu fonts: the build must not depend on fetching
+// from Google Fonts at build time (deployment environments may be offline).
+const ubuntuSans = localFont({
   variable: "--font-ubuntu",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
+  src: [
+    { path: "../fonts/ubuntu-300.woff2", weight: "300", style: "normal" },
+    { path: "../fonts/ubuntu-400.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/ubuntu-500.woff2", weight: "500", style: "normal" },
+    { path: "../fonts/ubuntu-700.woff2", weight: "700", style: "normal" },
+  ],
   display: "swap",
 });
 
-const ubuntuMono = Ubuntu_Mono({
+const ubuntuMono = localFont({
   variable: "--font-ubuntu-mono",
-  subsets: ["latin"],
-  weight: ["400", "700"],
+  src: [
+    { path: "../fonts/ubuntu-mono-400.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/ubuntu-mono-700.woff2", weight: "700", style: "normal" },
+  ],
   display: "swap",
 });
 
@@ -51,10 +59,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${ubuntuSans.variable} ${ubuntuMono.variable} antialiased bg-background text-foreground`}
-      >
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${ubuntuSans.variable} ${ubuntuMono.variable}`}
+    >
+      <body className="antialiased bg-background text-foreground">
         {children}
         <Toaster />
       </body>
