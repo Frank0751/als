@@ -52,8 +52,8 @@ prompt
 server.log
 # Skills directory
 /skills/
-# database (recreate with: bun run db:push && bun scripts/seed.ts)
-db/custom.db
+# database journal files only; the seeded database itself is committed so
+# deployments start with demo data (recreate with: bun run db:push && bun scripts/seed.ts)
 db/*.db-journal
 
 # sandbox artifacts (not part of the app)
