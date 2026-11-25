@@ -137,20 +137,20 @@ export default function TrainingTab() {
   return (
     <div className="space-y-6">
       {data.courses.map((c) => (
-        <div key={c.id} className="rounded-xl border bg-white p-4">
+        <div key={c.id} className="rounded border bg-white p-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h2 className="font-bold">{c.title}</h2>
               <p className="text-xs text-muted-foreground">{ghs(c.fee)} per seat · {c.durationText}</p>
             </div>
-            <Button size="sm" variant="outline" className="rounded-full" onClick={() => setAddFor(c)}>+ Add session</Button>
+            <Button size="sm" variant="outline" className="rounded" onClick={() => setAddFor(c)}>+ Add session</Button>
           </div>
           <div className="mt-3 space-y-2">
             {c.sessions.map((s) => {
               const bs = bookingsFor.get(s.id) ?? [];
               const full = s.seats - s.booked <= 0;
               return (
-                <div key={s.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border bg-stone-50 p-3 text-sm">
+                <div key={s.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded border bg-stone-50 p-3 text-sm">
                   <span className="font-semibold">{fmtDate(s.date)}</span>
                   <span className="text-xs text-muted-foreground">{s.timeText} · {s.location}</span>
                   <span className="text-xs">{s.booked}/{s.seats} booked{full ? ", full" : ""}</span>
@@ -181,7 +181,7 @@ export default function TrainingTab() {
 
       <div>
         <h2 className="mb-2 font-bold">All bookings</h2>
-        <div className="overflow-x-auto rounded-xl border bg-white">
+        <div className="overflow-x-auto rounded border bg-white">
           <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b bg-stone-50 text-left text-xs uppercase tracking-wide text-muted-foreground">
@@ -229,7 +229,7 @@ export default function TrainingTab() {
               </Select>
             </div>
             <div><Label htmlFor="s-seats">Seats</Label><Input id="s-seats" inputMode="numeric" value={form.seats} onChange={(e) => setForm((f) => ({ ...f, seats: e.target.value }))} /></div>
-            <Button onClick={addSession} disabled={!form.date} className="rounded-full">Add session</Button>
+            <Button onClick={addSession} disabled={!form.date} className="rounded">Add session</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -242,7 +242,7 @@ export default function TrainingTab() {
           </DialogHeader>
           {listFor && <TraineeList courseTitle={listFor.course.title} session={listFor.session} bookings={bookingsFor.get(listFor.session.id) ?? []} />}
           <div className="no-print">
-            <Button className="w-full rounded-full" onClick={() => window.print()}>
+            <Button className="w-full rounded" onClick={() => window.print()}>
               <Printer className="h-4 w-4" aria-hidden="true" /> Print trainee list
             </Button>
           </div>

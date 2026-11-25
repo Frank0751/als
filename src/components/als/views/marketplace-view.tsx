@@ -48,7 +48,7 @@ function NotifyDialog({ product, open, setOpen }: { product: ProductDTO; open: b
           <div><Label htmlFor="n-phone">Phone / WhatsApp</Label><Input id="n-phone" inputMode="tel" value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} /></div>
           <input type="text" name="website" readOnly hidden aria-hidden="true" tabIndex={-1} autoComplete="off" />
         </div>
-        <DialogFooter><Button onClick={submit} disabled={busy} className="w-full rounded-full sm:w-auto">{busy ? "Saving…" : "Notify me"}</Button></DialogFooter>
+        <DialogFooter><Button onClick={submit} disabled={busy} className="w-full rounded sm:w-auto">{busy ? "Saving…" : "Notify me"}</Button></DialogFooter>
       </DialogContent>
     </Dialog>
   );
@@ -71,7 +71,7 @@ function ProductDialog({ product, reviews, open, setOpen }: { product: ProductDT
       return;
     }
     add({ kind: "MARKET", refId: product.id, name: product.name, variant: ", ", qty, unit: product.unit, unitPrice: product.price, maxQty: product.stock });
-    toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
+    toast({ title: "Added to request list", description: `${qty} × ${product.name}` });
     setOpen(false);
   };
 
@@ -85,10 +85,10 @@ function ProductDialog({ product, reviews, open, setOpen }: { product: ProductDT
           </DialogHeader>
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
-              <ProductImage src={product.imageUrl} alt={product.name} kind={product.kind} className="aspect-square w-full rounded-xl border object-cover" />
+              <ProductImage src={product.imageUrl} alt={product.name} kind={product.kind} className="aspect-square w-full rounded border object-cover" />
               <div className="mt-3 flex items-center gap-2 text-xs">
                 <button
-                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 hover:bg-stone-50"
+                  className="inline-flex items-center gap-1 rounded border px-2.5 py-1 hover:bg-stone-50"
                   onClick={() => {
                     const url = `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`;
                     window.open(url, "_blank");
@@ -105,11 +105,11 @@ function ProductDialog({ product, reviews, open, setOpen }: { product: ProductDT
               {!out && (
                 <div className="mt-4 flex items-center gap-2">
                   <Input type="number" min={1} max={product.stock} value={qty} onChange={(e) => setQty(Math.max(1, Math.min(product.stock, Math.floor(Number(e.target.value) || 1))))} className="w-24" aria-label="Quantity" />
-                  <Button className="flex-1 rounded-full" onClick={addNow}>Add to cart</Button>
+                  <Button className="flex-1 rounded" onClick={addNow}>Add to request list</Button>
                 </div>
               )}
               {out && (
-                <Button className="mt-4 w-full rounded-full" variant="outline" onClick={() => setNotifyOpen(true)}>
+                <Button className="mt-4 w-full rounded" variant="outline" onClick={() => setNotifyOpen(true)}>
                   <Bell className="h-4 w-4" aria-hidden="true" /> Notify me when back in stock
                 </Button>
               )}
@@ -119,7 +119,7 @@ function ProductDialog({ product, reviews, open, setOpen }: { product: ProductDT
                 {reviews.length === 0 && <p className="mt-2 text-sm text-muted-foreground">No reviews yet for this item.</p>}
                 <div className="mt-3 space-y-3">
                   {reviews.slice(0, 4).map((r) => (
-                    <div key={r.id} className="rounded-lg border bg-stone-50 p-3">
+                    <div key={r.id} className="rounded border bg-stone-50 p-3">
                       <div className="flex items-center justify-between">
                         <Stars rating={r.rating} />
                         <span className="text-[11px] font-semibold text-emerald-700">✓ Verified buyer</span>
@@ -164,7 +164,6 @@ export default function MarketplaceView() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
       <SectionTitle
-        eyebrow="Marketplace"
         title="Nets, harvesting, feed accessories, aeration & safety"
         sub="Search by name or filter by category and price. Out-of-stock items show “Notify me”, so ALS knows what customers want."
       />
@@ -192,7 +191,7 @@ export default function MarketplaceView() {
           <button
             key={c}
             onClick={() => setCategory(c)}
-            className={`shrink-0 rounded-full border px-4 py-2.5 text-sm font-medium transition-colors ${category === c ? "border-teal-700 bg-teal-700 text-white" : "bg-white text-stone-700 hover:border-teal-600"}`}
+            className={`shrink-0 rounded border px-4 py-2.5 text-sm font-medium transition-colors ${category === c ? "border-teal-700 bg-teal-700 text-white" : "bg-white text-stone-700 hover:border-teal-600"}`}
           >
             {c}
           </button>
@@ -236,10 +235,10 @@ export default function MarketplaceView() {
         <ProductDialog product={selected} reviews={reviewsFor(selected.id)} open={!!selected} setOpen={(v) => !v && setSelected(null)} />
       )}
 
-      <div className="mt-10 rounded-2xl border bg-teal-50 p-6 text-center">
+      <div className="mt-10 rounded border bg-teal-50 p-6 text-center">
         <p className="font-bold">Can&rsquo;t find what you need?</p>
         <p className="mt-1 text-sm text-muted-foreground">ALS sources equipment for farmers on request, ask us on WhatsApp or the contact page.</p>
-        <Button variant="outline" className="mt-4 rounded-full" onClick={() => navigate("contact")}>Ask ALS</Button>
+        <Button variant="outline" className="mt-4 rounded" onClick={() => navigate("contact")}>Ask ALS</Button>
       </div>
     </div>
   );

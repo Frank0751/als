@@ -65,7 +65,7 @@ export default function StaffTab() {
         Owners can do everything. Managers cannot change staff logins or page content. Staff logins can confirm payments and update order stages only. Every change is recorded in “Who changed what”.
       </p>
 
-      <div className="overflow-x-auto rounded-xl border bg-white">
+      <div className="overflow-x-auto rounded border bg-white">
         <table className="w-full min-w-[640px] text-sm">
           <thead>
             <tr className="border-b bg-stone-50 text-left text-xs uppercase tracking-wide text-muted-foreground">
@@ -100,7 +100,7 @@ export default function StaffTab() {
                     <div className="mt-1.5 flex items-center justify-end gap-1.5">
                       <Input type="password" value={newPass} onChange={(e) => setNewPass(e.target.value)} placeholder="New password (8+)" className="h-8 w-40" />
                       <button
-                        className="rounded-full bg-teal-700 px-2.5 py-1 text-xs font-semibold text-white"
+                        className="rounded bg-teal-700 px-2.5 py-1 text-xs font-semibold text-white"
                         onClick={() => { void patch(s.id, { password: newPass }); setResetFor(null); }}
                       >
                         Save
@@ -114,7 +114,7 @@ export default function StaffTab() {
         </table>
       </div>
 
-      <div className="rounded-xl border bg-white p-4">
+      <div className="rounded border bg-white p-4">
         <h2 className="font-bold">Add a staff login</h2>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <div><Label htmlFor="st-user">Username</Label><Input id="st-user" value={form.username} onChange={(e) => setForm((f) => ({ ...f, username: e.target.value }))} /></div>
@@ -132,7 +132,7 @@ export default function StaffTab() {
           </div>
           <div><Label htmlFor="st-pass">Password (8+ characters)</Label><Input id="st-pass" type="password" value={form.password} onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))} /></div>
         </div>
-        <Button onClick={add} disabled={!form.username || !form.name || !form.password} className="mt-3 rounded-full">Add staff</Button>
+        <Button onClick={add} disabled={!form.username || !form.name || !form.password} className="mt-3 rounded">Add staff</Button>
       </div>
     </div>
   );

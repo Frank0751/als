@@ -10,11 +10,11 @@ export function Logo({ size = 34, withText = true, light = false }: { size?: num
   return (
     <span className="inline-flex items-center gap-2 select-none">
       <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
-        <rect width="64" height="64" rx="14" fill="#0f766e" />
+        <rect width="64" height="64" rx="4" fill="#0F3D3E" />
         <path d="M14 32c6-9 15-14 24-14 3 0 6 .5 9 1.5L44 26c5 1.5 8 4.5 9 6-1 1.5-4 4.5-9 6l3 6.5c-3 1-6 1.5-9 1.5-9 0-18-5-24-14z" fill="#ffffff" />
-        <circle cx="21.5" cy="30" r="2" fill="#0f766e" />
-        <path d="M47 17.5 54 12l-1.5 9" fill="#f59e0b" />
-        <path d="M47 46.5 54 52l-1.5-9" fill="#f59e0b" />
+        <circle cx="21.5" cy="30" r="2" fill="#0F3D3E" />
+        <path d="M47 17.5 54 12l-1.5 9" fill="#D4912A" />
+        <path d="M47 46.5 54 52l-1.5-9" fill="#D4912A" />
       </svg>
       {withText && (
         <span className="whitespace-nowrap leading-tight">
@@ -81,7 +81,7 @@ export function StatusBadge({ status, className }: { status: string; className?:
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap",
+        "inline-flex items-center rounded border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap",
         statusColor(status),
         className
       )}
@@ -91,7 +91,7 @@ export function StatusBadge({ status, className }: { status: string; className?:
   );
 }
 
-export function SectionTitle({ title, sub }: { eyebrow?: string; title: string; sub?: string }) {
+export function SectionTitle({ title, sub }: { title: string; sub?: string }) {
   return (
     <div className="mb-6 text-center">
       <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{title}</h2>
@@ -111,11 +111,11 @@ export function Spinner({ label }: { label?: string }) {
 
 export function StockPill({ stock, unit }: { stock: number; unit: string }) {
   if (stock <= 0)
-    return <span className="inline-flex items-center rounded-full bg-red-50 border border-red-200 px-2.5 py-0.5 text-xs font-semibold text-red-700">Out of stock</span>;
+    return <span className="inline-flex items-center rounded bg-red-50 border border-red-200 px-2.5 py-0.5 text-xs font-semibold text-red-700">Out of stock</span>;
   if (stock < 20)
-    return <span className="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2.5 py-0.5 text-xs font-semibold text-amber-800">Only {stock} left</span>;
+    return <span className="inline-flex items-center rounded bg-amber-50 border border-amber-200 px-2.5 py-0.5 text-xs font-semibold text-amber-800">Only {stock} left</span>;
   return (
-    <span className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">
+    <span className="inline-flex items-center rounded bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">
       {stock.toLocaleString()} in stock
     </span>
   );

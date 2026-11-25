@@ -1,170 +1,108 @@
 "use client";
 
-// Training, courses, ALS booking calendar with open dates and seats left
+// Training: the free programme, who it is for, formats, how it works, apply CTA
+// (CLAUDE.md section 3, 5. Training is free, no prices anywhere in training.)
 
-import { useState } from "react";
 import { useCatalog } from "../catalog-context";
-import { useCart, navigate } from "@/lib/als/store";
-import type { CourseDTO, SessionDTO } from "@/lib/als/types";
+import { useRoute } from "@/lib/als/store";
 import { ProductImage, SectionTitle } from "../ui-bits";
-import { fmtDate, ghs } from "@/lib/als/format";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { toast } from "@/hooks/use-toast";
-import { CalendarDays, Clock3, MapPin, Users, Wifi } from "lucide-react";
 
 function typeLabel(t: string): string {
   switch (t) {
     case "ON_FARM": return "On-farm practical";
     case "SEMINAR": return "Seminar";
     case "WORKSHOP": return "Workshop";
-    case "ONLINE": return "Live online";
+    case "ONLINE": return "Online video modules";
     default: return t;
   }
 }
 
-function seatsLeft(s: SessionDTO) {
-  return Math.max(0, s.seats - s.booked);
-}
-
-function CourseCard({ course }: { course: CourseDTO }) {
-  const add = useCart((s) => s.add);
-  const [session, setSession] = useState<SessionDTO | null>(null);
-  const [confirming, setConfirming] = useState(false);
-
-  const book = () => {
-    if (!session) return;
-    const left = seatsLeft(session);
-    if (left <= 0) {
-      toast({ title: "That date is full", description: "Pick another open date, ALS closes dates automatically when they are full.", variant: "destructive" });
-      return;
-    }
-    add({
-      kind: "TRAINING",
-      refId: course.id,
-      name: course.title,
-      variant: `${session.date} · ${session.timeText}`,
-      qty: 1,
-      unit: "seat",
-      unitPrice: course.fee,
-      sessionId: session.id,
-      date: session.date,
-      maxQty: left,
-    });
-    setSession(null);
-    setConfirming(false);
-    toast({ title: "Added to cart", description: `${course.title}, ${fmtDate(session.date)}` });
-  };
-
-  return (
-    <Card className="flex flex-col overflow-hidden pt-0">
-      <div className="relative">
-        <ProductImage src={course.imageUrl} alt={course.title} kind="TRAINING" className="h-44 w-full" />
-        <span className="absolute left-3 top-3"><Badge className="bg-teal-700 text-white hover:bg-teal-700">{typeLabel(course.type)}</Badge></span>
-      </div>
-      <CardContent className="flex flex-1 flex-col p-5">
-        <h3 className="text-lg font-bold leading-snug">{course.title}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">{course.durationText}</p>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{course.description}</p>
-        <div className="mt-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">What it covers</p>
-          <ul className="mt-2 space-y-1.5 text-sm">
-            {course.covers.map((c) => (
-              <li key={c} className="flex gap-2"><span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-600" aria-hidden="true" />{c}</li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="mt-4 rounded-xl border bg-stone-50 p-3">
-          <p className="flex items-center gap-2 text-sm font-semibold"><CalendarDays className="h-4 w-4 text-teal-700" aria-hidden="true" /> Booking calendar, pick an open date</p>
-          {course.sessions.length === 0 ? (
-            <p className="mt-2 text-sm text-muted-foreground">New dates are being planned. Ask ALS on WhatsApp.</p>
-          ) : (
-            <div className="mt-2 grid gap-2">
-              {course.sessions.map((s) => {
-                const left = seatsLeft(s);
-                const full = left <= 0;
-                return (
-                  <button
-                    key={s.id}
-                    disabled={full}
-                    onClick={() => setSession(s)}
-                    className={`flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${full ? "cursor-not-allowed border-stone-200 bg-stone-100 text-stone-400" : "border-teal-200 bg-white hover:border-teal-600"}`}
-                  >
-                    <span className="font-semibold">{fmtDate(s.date)}</span>
-                    <span className="text-xs text-muted-foreground">{s.timeText}</span>
-                    {full ? (
-                      <Badge variant="outline" className="border-stone-300 text-stone-400">Full, closed</Badge>
-                    ) : (
-                      <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-800"><Users className="mr-1 h-3 w-3" aria-hidden="true" />{left} seat{left === 1 ? "" : "s"} left</Badge>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        <div className="mt-4 flex items-center justify-between">
-          <p className="text-lg font-extrabold text-teal-800">{ghs(course.fee)}<span className="text-xs font-medium text-muted-foreground"> /seat</span></p>
-          <span className="text-xs text-muted-foreground">Receipt = admission slip</span>
-        </div>
-      </CardContent>
-
-      <Dialog open={!!session} onOpenChange={(v) => !v && setSession(null)}>
-        <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Book your seat</DialogTitle>
-            <DialogDescription>{course.title}</DialogDescription>
-          </DialogHeader>
-          {session && (
-            <div className="space-y-2 text-sm">
-              <p className="flex items-center gap-2"><CalendarDays className="h-4 w-4 text-teal-700" aria-hidden="true" /> {fmtDate(session.date)}</p>
-              <p className="flex items-center gap-2"><Clock3 className="h-4 w-4 text-teal-700" aria-hidden="true" /> {session.timeText}</p>
-              <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-teal-700" aria-hidden="true" /> {session.location}</p>
-              {course.type === "ONLINE" && (
-                <p className="flex items-center gap-2 text-teal-800"><Wifi className="h-4 w-4" aria-hidden="true" /> Joining link and materials arrive by email once ALS confirms payment.</p>
-              )}
-              <p className="flex items-center gap-2"><Users className="h-4 w-4 text-teal-700" aria-hidden="true" /> {seatsLeft(session)} seat(s) left, dates close automatically when full.</p>
-              <p className="pt-1 text-lg font-extrabold text-teal-800">{ghs(course.fee)}</p>
-            </div>
-          )}
-          <DialogFooter>
-            {!confirming ? (
-              <Button className="w-full rounded-full" onClick={() => setConfirming(true)}>Add booking to cart</Button>
-            ) : (
-              <div className="flex w-full flex-col gap-2">
-                <Button onClick={book} className="w-full rounded-full">Confirm, add to cart</Button>
-                <Button variant="ghost" onClick={() => setConfirming(false)}>Back</Button>
-              </div>
-            )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </Card>
-  );
-}
+const STEPS = [
+  ["Apply, free", "Open Apply to train and fill in the short form. Training costs nothing, and there are no prices to check."],
+  ["ALS reviews", "Our team reviews every application and replies by phone or WhatsApp. Applications carry a reference so nothing gets lost."],
+  ["Get accepted", "Accepted trainees join on-farm training at Akuse, or are signed up for the online video programme if travel is hard."],
+  ["Learn and practise", "On the farm you handle fish, water and feed with our team. Online, video modules open in order, each with a written summary, downloadable notes and captions."],
+];
 
 export default function TrainingView() {
   const { catalog } = useCatalog();
+  const { navigate } = useRoute();
   if (!catalog) return null;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
-      <SectionTitle
-        eyebrow="Train with ALS · Akuse & online"
-        title="Anybody can train with ALS, booking is easy for a complete beginner"
-        sub="On-farm practical training, seminars, workshops and live online courses. Book online and confirm on WhatsApp. Your receipt doubles as an admission slip with a code ALS checks at the gate."
-      />
-      <div className="grid gap-5 lg:grid-cols-2">
-        {catalog.courses.map((c) => <CourseCard key={c.id} course={c} />)}
-      </div>
-      <div className="mt-8 rounded-2xl border bg-white p-6 text-center">
-        <p className="font-bold">Training a group or cooperative?</p>
-        <p className="mt-1 text-sm text-muted-foreground">ALS runs private sessions for groups of 8 or more, ask us for a date that suits you.</p>
-        <Button variant="outline" className="mt-4 rounded-full" onClick={() => navigate("contact")}>Ask about group training</Button>
+    <div>
+      <section className="relative">
+        <img src="/images/training.png" alt="Farmers practising fish handling at an ALS training session" className="h-56 w-full object-cover sm:h-72" />
+        <div className="absolute inset-0 bg-gradient-to-t from-teal-950/85 to-teal-950/20" />
+        <div className="absolute inset-0 mx-auto flex max-w-6xl flex-col justify-end px-4 pb-5 text-center">
+          <h1 className="text-2xl font-bold text-white sm:text-4xl">Training with ALS</h1>
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-3xl px-4 py-10 sm:py-14">
+        <SectionTitle
+          title="Free fish farming training, for anyone ready to learn"
+          sub="ALS trains people in fish farming with a focus on women and persons with disabilities, and the programme is open to everyone. Training is free, on the farm at Akuse or at home through structured online video modules."
+        />
+
+        <SectionTitle title="How it works" />
+        <ol className="space-y-4">
+          {STEPS.map(([t, d], i) => (
+            <li key={t} className="grid grid-cols-[2rem_1fr] gap-3 rounded border bg-[#FDFCF8] p-4">
+              <span className="tnum font-serif text-xl font-bold text-amber-500" aria-hidden="true">{i + 1}</span>
+              <div>
+                <h3 className="text-left font-semibold">{t}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{d}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-8 text-center">
+          <Button size="lg" className="min-h-11 rounded bg-amber-500 px-8 text-base font-semibold text-stone-900 hover:bg-amber-600" onClick={() => navigate("apply")}>
+            Apply to train
+          </Button>
+          <p className="mt-2 text-xs text-muted-foreground">Takes about three minutes. You get an application reference straight away.</p>
+        </div>
+
+        <SectionTitle title="What the programme covers" />
+        <div className="space-y-5">
+          {catalog.courses.map((c) => (
+            <div key={c.id} className="grid gap-4 rounded border bg-[#FDFCF8] p-4 sm:grid-cols-5">
+              <ProductImage src={c.imageUrl} alt={c.title} kind="TRAINING" className="h-36 w-full rounded object-cover sm:col-span-2 sm:h-full" />
+              <div className="sm:col-span-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge className="bg-teal-800 text-white hover:bg-teal-800">{typeLabel(c.type)}</Badge>
+                  <span className="text-xs text-muted-foreground">{c.durationText}</span>
+                </div>
+                <h3 className="mt-2 text-left text-lg font-semibold leading-snug">{c.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{c.description}</p>
+                <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+                  {c.covers.map((x) => <li key={x}>· {x}</li>)}
+                </ul>
+                <p className="mt-2 text-sm font-semibold text-teal-800">Free of charge</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 rounded border bg-[#FDFCF8] p-5 text-center">
+          <h3 className="text-lg font-semibold">Learning online</h3>
+          <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
+            The online programme is built for low-cost Android phones and slow data: videos show their size, notes can be read without the video, and every video carries captions. Accepted online trainees receive their sign-in details from ALS after review.
+          </p>
+        </div>
+
+        <div className="mt-6 rounded border bg-[#FDFCF8] p-5 text-center">
+          <p className="font-semibold">Training a group or cooperative?</p>
+          <p className="mt-1 text-sm text-muted-foreground">ALS runs sessions for groups. Mention your group in the application, or contact us directly.</p>
+          <div className="mt-4 flex flex-wrap justify-center gap-3">
+            <Button variant="outline" className="rounded border-teal-800 text-teal-800 hover:bg-teal-50" onClick={() => navigate("apply")}>Apply as an individual</Button>
+            <Button variant="outline" className="rounded border-teal-800 text-teal-800 hover:bg-teal-50" onClick={() => navigate("contact")}>Contact ALS</Button>
+          </div>
+        </div>
       </div>
     </div>
   );

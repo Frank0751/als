@@ -30,7 +30,7 @@ export default function AuditTab() {
   if (!rows) return <p className="text-sm text-muted-foreground">Loading audit log…</p>;
 
   return (
-    <div className="overflow-x-auto rounded-xl border bg-white">
+    <div className="overflow-x-auto rounded border bg-white">
       <table className="w-full min-w-[560px] text-sm">
         <thead>
           <tr className="border-b bg-stone-50 text-left text-xs uppercase tracking-wide text-muted-foreground">
@@ -45,7 +45,7 @@ export default function AuditTab() {
             <tr key={r.id} className="hover:bg-teal-50/40">
               <td className="whitespace-nowrap px-3 py-2.5 text-xs text-muted-foreground">{fmtDateTime(r.createdAt)}</td>
               <td className="px-3 py-2.5 font-semibold">{r.actor}</td>
-              <td className="px-3 py-2.5"><span className="rounded-full bg-stone-100 px-2 py-0.5 text-xs font-semibold">{r.action}</span></td>
+              <td className="px-3 py-2.5"><span className="rounded bg-stone-100 px-2 py-0.5 text-xs font-semibold">{r.action}</span></td>
               <td className="px-3 py-2.5 text-xs text-muted-foreground">{r.detail}</td>
             </tr>
           ))}

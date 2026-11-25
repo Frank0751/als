@@ -1,6 +1,7 @@
 "use client";
 
-// ALS app shell, header, footer, WhatsApp button, route switching (single-page store)
+// ALS app shell: header, footer, WhatsApp button, view switching.
+// Navigation follows CLAUDE.md section 3: short top menu, secondary pages in the footer.
 
 import { useEffect, useState } from "react";
 import { useRoute, useCart, useCustomer } from "@/lib/als/store";
@@ -10,34 +11,37 @@ import { Logo, Spinner } from "./ui-bits";
 import { waLink } from "@/lib/als/format";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Home, Fish, ShoppingBag, GraduationCap, PackageSearch, Menu, X,
-  ClipboardList, BadgeCheck, User, Info, HelpCircle, Phone, ShieldCheck,
-} from "lucide-react";
+import { Menu, X, ShoppingBag, PackageSearch } from "lucide-react";
 import HomeView from "./views/home-view";
+import AboutView from "./views/about-view";
+import OperationsView from "./views/operations-view";
 import FingerlingsView from "./views/fingerlings-view";
 import MarketplaceView from "./views/marketplace-view";
 import TrainingView from "./views/training-view";
-import CartView from "./views/cart-view";
-import CheckoutView from "./views/checkout-view";
+import ApplyView from "./views/apply-view";
+import ImpactView from "./views/impact-view";
+import PartnerView from "./views/partner-view";
+import RequestListView from "./views/cart-view";
+import RequestDetailsView from "./views/checkout-view";
 import ConfirmView from "./views/confirm-view";
 import TrackView from "./views/track-view";
 import ReceiptView from "./views/receipt-view";
 import VerifyView from "./views/verify-view";
 import AccountView from "./views/account-view";
-import FarmView from "./views/farm-view";
 import FaqsView from "./views/faqs-view";
 import ContactView from "./views/contact-view";
 import PoliciesView from "./views/policies-view";
 import DashboardView from "./views/dashboard-view";
 
 const NAV = [
-  { view: "fingerlings", label: "Fingerlings", icon: Fish },
-  { view: "market", label: "Marketplace", icon: ShoppingBag },
-  { view: "training", label: "Training", icon: GraduationCap },
-  { view: "farm", label: "Our Farm", icon: Info },
-  { view: "faqs", label: "FAQs", icon: HelpCircle },
-  { view: "contact", label: "Contact", icon: Phone },
+  { view: "about", label: "About" },
+  { view: "operations", label: "Operations" },
+  { view: "fingerlings", label: "Fingerlings" },
+  { view: "market", label: "Marketplace" },
+  { view: "training", label: "Training" },
+  { view: "impact", label: "Impact" },
+  { view: "partner", label: "Partner with Us" },
+  { view: "contact", label: "Contact" },
 ];
 
 function Header() {
@@ -45,10 +49,9 @@ function Header() {
   const cart = useCart();
   const [open, setOpen] = useState(false);
   const count = cart.items.reduce((s, i) => s + i.qty, 0);
-  const dash = view === "dash";
 
   return (
-    <header className="no-print sticky top-0 z-40 border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
+    <header className="no-print sticky top-0 z-40 border-b bg-[#F4F0E6]/95 backdrop-blur supports-[backdrop-filter]:bg-[#F4F0E6]/85">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
         <button
           onClick={() => navigate("home")}
@@ -58,14 +61,14 @@ function Header() {
           <Logo />
         </button>
 
-        <nav className="ml-6 hidden items-center gap-1 lg:flex" aria-label="Main">
+        <nav className="ml-4 hidden items-center gap-0.5 lg:flex" aria-label="Main">
           {NAV.map((n) => (
             <button
               key={n.view}
               onClick={() => navigate(n.view)}
               className={cn(
-                "rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap transition-colors",
-                view === n.view ? "bg-teal-700 text-white" : "text-stone-600 hover:bg-teal-50 hover:text-teal-800"
+                "rounded px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors",
+                view === n.view ? "bg-teal-800 text-white" : "text-stone-600 hover:bg-teal-50 hover:text-teal-800"
               )}
             >
               {n.label}
@@ -74,52 +77,25 @@ function Header() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
-          <button
-            onClick={() => navigate("track")}
-            className={cn(
-              "hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap sm:inline-flex",
-              view === "track" ? "bg-teal-700 text-white" : "text-stone-600 hover:bg-teal-50 hover:text-teal-800"
-            )}
-          >
-            <ClipboardList className="h-4 w-4" aria-hidden="true" /> Track order
-          </button>
-          <button
-            onClick={() => navigate("verify")}
-            className={cn(
-              "hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap md:inline-flex",
-              view === "verify" ? "bg-teal-700 text-white" : "text-stone-600 hover:bg-teal-50 hover:text-teal-800"
-            )}
-          >
-            <BadgeCheck className="h-4 w-4" aria-hidden="true" /> Verify receipt
-          </button>
-          <button
-            onClick={() => navigate("account")}
-            className={cn(
-              "hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium sm:inline-flex",
-              view === "account" ? "bg-teal-700 text-white" : "text-stone-600 hover:bg-teal-50 hover:text-teal-800"
-            )}
-            aria-label="My account"
-          >
-            <User className="h-4 w-4" aria-hidden="true" />
-          </button>
           <Button
             onClick={() => navigate("cart")}
-            className="relative h-10 rounded-full px-4"
-            aria-label={`Cart, ${count} item(s)`}
+            variant="outline"
+            className="relative h-10 rounded border-teal-800 px-3 text-teal-800 hover:bg-teal-50"
+            aria-label={`Request list, ${count} item(s)`}
           >
             <ShoppingBag className="h-4 w-4" aria-hidden="true" />
-            <span className="hidden sm:inline">Cart</span>
+            <span className="hidden sm:inline">Request list</span>
             {count > 0 && (
-              <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-600 px-1 text-[11px] font-bold text-white">
+              <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded bg-amber-500 px-1 text-[11px] font-bold text-stone-900">
                 {count > 999 ? "999+" : count}
               </span>
             )}
           </Button>
           <button
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-stone-700 hover:bg-teal-50 lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded text-stone-700 hover:bg-teal-50 lg:hidden"
             onClick={() => setOpen(!open)}
             aria-expanded={open}
-            aria-label="Open menu"
+            aria-label={open ? "Close menu" : "Open menu"}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -127,22 +103,27 @@ function Header() {
       </div>
 
       {open && (
-        <nav className="border-t bg-white px-4 pb-4 pt-2 lg:hidden" aria-label="Mobile">
-          {[{ view: "home", label: "Home", icon: Home }, ...NAV, { view: "track", label: "Track order", icon: ClipboardList }, { view: "verify", label: "Verify receipt", icon: BadgeCheck }, { view: "account", label: "My account", icon: User }].map((n) => (
+        <nav className="border-t bg-[#F4F0E6] px-4 pb-4 pt-2 lg:hidden" aria-label="Mobile">
+          {NAV.map((n) => (
             <button
               key={n.view}
               onClick={() => { navigate(n.view); setOpen(false); }}
               className={cn(
-                "flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm font-medium",
-                view === n.view ? "bg-teal-50 text-teal-800" : "text-stone-700"
+                "flex min-h-11 w-full items-center rounded px-3 py-3 text-left text-sm font-medium",
+                view === n.view ? "bg-teal-800 text-white" : "text-stone-700"
               )}
             >
-              <n.icon className="h-4 w-4 text-teal-700" aria-hidden="true" /> {n.label}
+              {n.label}
             </button>
           ))}
+          <button
+            onClick={() => { navigate("apply"); setOpen(false); }}
+            className="mt-2 flex min-h-11 w-full items-center rounded bg-amber-500 px-3 py-3 text-left text-sm font-semibold text-stone-900"
+          >
+            Apply to train, free
+          </button>
         </nav>
       )}
-      {dash && null}
     </header>
   );
 }
@@ -155,52 +136,64 @@ function Footer() {
   const email = content("contact.email");
   const location = content("contact.location");
 
+  const col = "text-left text-sm font-semibold uppercase tracking-wider text-teal-200";
+  const link = "hover:text-white hover:underline";
+  const item = "text-left hover:text-white hover:underline";
+
   return (
     <footer className="mt-auto border-t bg-teal-950 text-teal-50">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <Logo light />
           <p className="mt-3 text-sm leading-relaxed text-teal-100/80">
-            Quality tilapia fingerlings from our hatchery in Akuse, and grow-out in cage systems on the Volta River. Over 17 years in aquaculture.
+            Aquatic Link Solutions produces quality tilapia fingerlings in Akuse and raises market-size tilapia in cages on the Volta River. We train farmers, with a focus on women and persons with disabilities.
           </p>
           <p className="mt-3 text-sm font-medium text-teal-100">{location}</p>
+          <p className="mt-1 text-sm text-teal-100/80">P.O. Box Akosombo</p>
         </div>
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-teal-200">Shop</h3>
+          <h3 className={col}>Explore</h3>
           <ul className="mt-3 space-y-2 text-sm">
-            <li><button onClick={() => navigate("fingerlings")} className="hover:text-white hover:underline">Fingerlings</button></li>
-            <li><button onClick={() => navigate("market")} className="hover:text-white hover:underline">Marketplace</button></li>
-            <li><button onClick={() => navigate("training")} className="hover:text-white hover:underline">Training</button></li>
-            <li><button onClick={() => navigate("cart")} className="hover:text-white hover:underline">Your cart</button></li>
+            <li><button onClick={() => navigate("about")} className={item}>About ALS</button></li>
+            <li><button onClick={() => navigate("operations")} className={item}>Our operations</button></li>
+            <li><button onClick={() => navigate("fingerlings")} className={item}>Fingerlings</button></li>
+            <li><button onClick={() => navigate("market")} className={item}>Marketplace</button></li>
+            <li><button onClick={() => navigate("impact")} className={item}>Impact</button></li>
           </ul>
         </div>
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-teal-200">Customer care</h3>
+          <h3 className={col}>Get involved</h3>
           <ul className="mt-3 space-y-2 text-sm">
-            <li><button onClick={() => navigate("track")} className="hover:text-white hover:underline">Track your order</button></li>
-            <li><button onClick={() => navigate("verify")} className="hover:text-white hover:underline">Verify a receipt</button></li>
-            <li><button onClick={() => navigate("faqs")} className="hover:text-white hover:underline">FAQs</button></li>
-            <li><button onClick={() => navigate("policies")} className="hover:text-white hover:underline">Policies</button></li>
-            <li><button onClick={() => navigate("account")} className="hover:text-white hover:underline">My account</button></li>
+            <li><button onClick={() => navigate("partner")} className={item}>Partner and invest</button></li>
+            <li><button onClick={() => navigate("apply")} className={item}>Apply to train, free</button></li>
+            <li><button onClick={() => navigate("training")} className={item}>Training programme</button></li>
+            <li><button onClick={() => navigate("faqs")} className={item}>FAQs</button></li>
+            <li><button onClick={() => navigate("contact")} className={item}>Contact</button></li>
           </ul>
         </div>
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-teal-200">Talk to us</h3>
+          <h3 className={col}>Support and legal</h3>
           <ul className="mt-3 space-y-2 text-sm">
-            {wa1 && <li><a href={waLink(wa1, "Hello Aquatic Link Solutions!")} target="_blank" rel="noreferrer" className="hover:text-white hover:underline">WhatsApp 1: {wa1}</a></li>}
-            {wa2 && <li><a href={waLink(wa2, "Hello Aquatic Link Solutions!")} target="_blank" rel="noreferrer" className="hover:text-white hover:underline">WhatsApp 2: {wa2}</a></li>}
-            {email && <li><a href={`mailto:${email}`} className="hover:text-white hover:underline">{email}</a></li>}
-            <li><button onClick={() => navigate("contact")} className="hover:text-white hover:underline">Contact page</button></li>
+            <li><button onClick={() => navigate("track")} className={item}>Track a request</button></li>
+            <li><button onClick={() => navigate("verify")} className={item}>Verify a receipt</button></li>
+            <li><button onClick={() => navigate("account")} className={item}>My account</button></li>
+            <li><button onClick={() => navigate("policies", { tab: "accessibility" })} className={item}>Accessibility statement</button></li>
+            <li><button onClick={() => navigate("policies", { tab: "privacy" })} className={item}>Privacy and terms</button></li>
+            <li><button onClick={() => navigate("dash")} className={item}>Staff portal</button></li>
           </ul>
-          <div className="mt-4 flex gap-2 text-xs">
-            <button onClick={() => navigate("dash")} className="rounded border border-teal-700 px-2 py-1 text-teal-200 hover:bg-teal-900" aria-label="ALS staff dashboard">
-              Staff dashboard
-            </button>
-          </div>
         </div>
       </div>
-      <div className="border-t border-teal-900 py-4 text-center text-xs text-teal-200/70">
-        © {new Date().getFullYear()} Aquatic Link Solutions (ALS), Akuse, Eastern Region, Ghana, sustainable fish farming since 2009.
+      <div className="border-t border-teal-900 px-4 py-6">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 text-sm">
+          <ul className="flex flex-wrap gap-x-5 gap-y-2">
+            {wa1 && <li><a href={waLink(wa1, "Hello Aquatic Link Solutions!")} target="_blank" rel="noreferrer" className={link}>WhatsApp {wa1}</a></li>}
+            {wa2 && <li><a href={waLink(wa2, "Hello Aquatic Link Solutions!")} target="_blank" rel="noreferrer" className={link}>WhatsApp {wa2}</a></li>}
+            {email && <li><a href={`mailto:${email}`} className={link}>{email}</a></li>}
+          </ul>
+          <p className="text-xs text-teal-200/70">
+            © {new Date().getFullYear()} Aquatic Link Solutions (ALS), Akuse, Eastern Region, Ghana
+          </p>
+        </div>
       </div>
     </footer>
   );
@@ -229,32 +222,37 @@ function ViewSwitch() {
   const { view, params } = useRoute();
   const { catalog, error } = useCatalog();
 
-  if (!catalog && !error) return <Spinner label="Loading the ALS store…" />;
+  if (!catalog && !error) return <Spinner label="Loading Aquatic Link Solutions…" />;
   if (error && !catalog)
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
-        <PackageSearch className="mx-auto h-10 w-10 text-teal-700" aria-hidden="true" />
-        <p className="mt-4 font-semibold">The store could not load.</p>
+        <PackageSearch className="mx-auto h-10 w-10 text-teal-800" aria-hidden="true" />
+        <p className="mt-4 font-semibold">The site could not load.</p>
         <p className="mt-1 text-sm text-muted-foreground">{error}</p>
       </div>
     );
 
   switch (view) {
+    case "home": return <HomeView />;
+    case "about": return <AboutView />;
+    case "operations":
+    case "farm": return <OperationsView />;
     case "fingerlings": return <FingerlingsView />;
     case "market": return <MarketplaceView />;
     case "training": return <TrainingView />;
-    case "cart": return <CartView />;
-    case "checkout": return <CheckoutView />;
+    case "apply": return <ApplyView />;
+    case "impact": return <ImpactView />;
+    case "partner": return <PartnerView />;
+    case "cart": return <RequestListView />;
+    case "checkout": return <RequestDetailsView />;
     case "confirm": return <ConfirmView orderNumber={params.order ?? ""} initialPhone={params.phone ?? ""} />;
     case "track": return <TrackView params={params} />;
     case "receipt": return <ReceiptView orderNumber={params.order ?? ""} initialPhone={params.phone ?? ""} />;
     case "verify": return <VerifyView code={params.code ?? ""} />;
     case "account": return <AccountView />;
-    case "farm": return <FarmView />;
-    case "impact": return <FarmView impact />;
     case "faqs": return <FaqsView />;
     case "contact": return <ContactView />;
-    case "policies": return <PoliciesView />;
+    case "policies": return <PoliciesView tab={params.tab ?? "privacy"} />;
     case "dash": return <DashboardView />;
     default: return <HomeView />;
   }
@@ -271,8 +269,14 @@ export default function AlsApp() {
   return (
     <CatalogProvider>
       <div className="flex min-h-screen flex-col">
+        <a
+          href="#main-content"
+          className="no-print sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-amber-500 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-stone-900"
+        >
+          Skip to content
+        </a>
         <Header />
-        <main className="flex-1">
+        <main id="main-content" className="flex-1">
           <ViewSwitch />
         </main>
         <Footer />

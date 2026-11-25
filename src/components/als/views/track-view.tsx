@@ -17,8 +17,10 @@ import { cn } from "@/lib/utils";
 import { ClipboardList, Check, Truck, Store, ReceiptText, PackageOpen } from "lucide-react";
 
 const STAGE_META: Record<string, { label: string }> = {
-  RECEIVED: { label: "Order received" },
-  PAYMENT_CONFIRMED: { label: "Payment confirmed" },
+  RECEIVED: { label: "Request received" },
+  CONTACTED: { label: "Contacted by ALS" },
+  CONFIRMED: { label: "Confirmed" },
+  PAYMENT_CONFIRMED: { label: "Confirmed" },
   PREPARING: { label: "Being prepared" },
   READY_OUT: { label: "Ready for pickup" },
   OUT_FOR_DELIVERY: { label: "Out for delivery" },
@@ -36,7 +38,7 @@ function Timeline({ order }: { order: OrderDTO }) {
   return (
     <div>
       {order.status === "CANCELLED" ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        <div className="rounded border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           This order was cancelled. {order.notes ? `Note from ALS: ${order.notes}` : ""}
         </div>
       ) : (
@@ -113,7 +115,7 @@ export default function TrackView({ params }: { params: Record<string, string> }
             <div className="grid gap-3">
               <div><Label htmlFor="t-num">Order number</Label><Input id="t-num" value={number} onChange={(e) => setNumber(e.target.value)} placeholder="e.g. ALS-2026-0007" /></div>
               <div><Label htmlFor="t-phone">Your phone number</Label><Input id="t-phone" inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="The number you ordered with" /></div>
-              <Button onClick={() => void track(number, phone)} disabled={busy || !number || !phone} className="rounded-full">
+              <Button onClick={() => void track(number, phone)} disabled={busy || !number || !phone} className="rounded">
                 <ClipboardList className="h-4 w-4" aria-hidden="true" /> {busy ? "Checking…" : "Track order"}
               </Button>
               {error && <p className="text-sm text-red-600">{error}</p>}
@@ -165,17 +167,17 @@ export default function TrackView({ params }: { params: Record<string, string> }
                   {order.fulfilment === "PICKUP" ? <Store className="h-4 w-4 text-teal-700" aria-hidden="true" /> : <Truck className="h-4 w-4 text-teal-700" aria-hidden="true" />}
                   {order.fulfilment === "PICKUP" ? `Pickup on ${fmtDate(order.deliveryDate)}, ALS farm gate, Akuse` : `Delivery on ${fmtDate(order.deliveryDate)}, ${order.areaName}`}
                 </p>
-                {order.proofs.length > 0 && <p className="flex items-center gap-2"><PackageOpen className="h-4 w-4 text-teal-700" aria-hidden="true" /> Payment proof uploaded ({order.proofs.length} file{order.proofs.length > 1 ? "s" : ""}){order.paymentMethod ? ` · ${order.paymentMethod}` : ""}</p>}
+                {order.proofs.length > 0 && <p className="flex items-center gap-2"><PackageOpen className="h-4 w-4 text-teal-700" aria-hidden="true" /> Payment proof on file (kept for when ALS confirms) ({order.proofs.length} file{order.proofs.length > 1 ? "s" : ""}){order.paymentMethod ? ` · ${order.paymentMethod}` : ""}</p>}
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 {order.receiptCode ? (
-                  <Button className="rounded-full" onClick={() => navigate("receipt", { order: order.orderNumber, phone })}>
+                  <Button className="rounded" onClick={() => navigate("receipt", { order: order.orderNumber, phone })}>
                     <ReceiptText className="h-4 w-4" aria-hidden="true" /> View receipt
                   </Button>
                 ) : order.status !== "CANCELLED" ? (
-                  <p className="text-xs text-muted-foreground">Your branded receipt appears here once ALS confirms payment.</p>
+                  <p className="text-xs text-muted-foreground">Your branded receipt appears here once ALS confirms your request.</p>
                 ) : null}
-                <Button variant="ghost" className="rounded-full" onClick={() => { setOrder(null); toast({ title: "Track another order", description: "Enter the order number and phone number." }); }}>
+                <Button variant="ghost" className="rounded" onClick={() => { setOrder(null); toast({ title: "Track another order", description: "Enter the order number and phone number." }); }}>
                   Track another order
                 </Button>
               </div>

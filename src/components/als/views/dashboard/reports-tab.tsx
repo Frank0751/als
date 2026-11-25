@@ -96,11 +96,11 @@ export default function ReportsTab() {
             <h3 className="font-bold">Sales by period</h3>
             <div className="flex gap-1.5">
               {([7, 30, 90] as const).map((r) => (
-                <button key={r} onClick={() => setRange(r)} className={`rounded-full border px-3 py-1 text-xs font-semibold ${range === r ? "border-teal-700 bg-teal-700 text-white" : "bg-white text-stone-600"}`}>
+                <button key={r} onClick={() => setRange(r)} className={`rounded border px-3 py-1 text-xs font-semibold ${range === r ? "border-teal-700 bg-teal-700 text-white" : "bg-white text-stone-600"}`}>
                   Last {r} days
                 </button>
               ))}
-              <Button size="sm" variant="outline" className="rounded-full" onClick={exportDay}>
+              <Button size="sm" variant="outline" className="rounded" onClick={exportDay}>
                 <Download className="h-3.5 w-3.5" aria-hidden="true" /> Excel/CSV
               </Button>
             </div>
@@ -116,7 +116,7 @@ export default function ReportsTab() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <h3 className="font-bold">By payment method</h3>
-              <Button size="sm" variant="outline" className="rounded-full" onClick={exportMethods}><Download className="h-3.5 w-3.5" aria-hidden="true" /> CSV</Button>
+              <Button size="sm" variant="outline" className="rounded" onClick={exportMethods}><Download className="h-3.5 w-3.5" aria-hidden="true" /> CSV</Button>
             </div>
             {data.byMethod.length > 0 ? (
               <div className="mt-3 h-56">
@@ -138,7 +138,7 @@ export default function ReportsTab() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <h3 className="font-bold">Top products</h3>
-              <Button size="sm" variant="outline" className="rounded-full" onClick={exportProducts}><Download className="h-3.5 w-3.5" aria-hidden="true" /> CSV</Button>
+              <Button size="sm" variant="outline" className="rounded" onClick={exportProducts}><Download className="h-3.5 w-3.5" aria-hidden="true" /> CSV</Button>
             </div>
             <div className="mt-3 max-h-72 overflow-y-auto overflow-x-auto">
               <table className="w-full text-sm">

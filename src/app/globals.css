@@ -6,8 +6,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-ubuntu);
-  --font-mono: var(--font-ubuntu-mono);
+  --font-sans: var(--font-public);
+  --font-serif: var(--font-spectral);
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -37,84 +38,125 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: var(--radius);
+
+  /*
+   * ALS brand scales ("Volta at work", CLAUDE.md section 8).
+   * Existing utility classes keep their names so the whole app inherits
+   * the brand palette: teal-* = Volta Deep family, amber-* = Fingerling
+   * Gold family, stone-* = warm ink text and hairline borders.
+   */
+  --color-teal-50: #EAF1EE;
+  --color-teal-100: #D8E4E0;
+  --color-teal-200: #B9CFC9;
+  --color-teal-300: #93B3AC;
+  --color-teal-400: #4E7B76;
+  --color-teal-500: #2A5E5C;
+  --color-teal-600: #1C5453;
+  --color-teal-700: #145051;
+  --color-teal-800: #0F3D3E;
+  --color-teal-900: #0A2E2F;
+  --color-teal-950: #071F20;
+
+  --color-amber-50: #FBF3E3;
+  --color-amber-100: #F5E6C8;
+  --color-amber-200: #EFD9AC;
+  --color-amber-300: #E4C278;
+  --color-amber-400: #DCA94B;
+  --color-amber-500: #D4912A;
+  --color-amber-600: #B87B20;
+  --color-amber-700: #8F6318;
+  --color-amber-800: #6E4C12;
+  --color-amber-900: #523A0D;
+
+  --color-stone-50: #FAF8F3;
+  --color-stone-100: #F1EDE3;
+  --color-stone-200: #E1DBC9;
+  --color-stone-300: #CBC4B1;
+  --color-stone-400: #A3A697;
+  --color-stone-500: #757D74;
+  --color-stone-600: #55605B;
+  --color-stone-700: #39433F;
+  --color-stone-800: #1A1F1E;
+  --color-stone-900: #121615;
+  --color-stone-950: #0B0F0E;
 }
 
-/* Ubuntu is self-hosted via next/font/local (variables defined on <html>). */
+/* Public Sans is self-hosted via next/font/local (variables on <html>). */
 html {
-  font-family: var(--font-ubuntu), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-public), ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(0.988 0.004 95);
-  --foreground: oklch(0.22 0.02 165);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.02 165);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.02 165);
-  --primary: oklch(0.51 0.088 175);
-  --primary-foreground: oklch(0.99 0.003 95);
-  --secondary: oklch(0.955 0.012 175);
-  --secondary-foreground: oklch(0.36 0.06 172);
-  --muted: oklch(0.962 0.006 95);
-  --muted-foreground: oklch(0.48 0.02 160);
-  --accent: oklch(0.955 0.022 85);
-  --accent-foreground: oklch(0.35 0.06 60);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.912 0.01 120);
-  --input: oklch(0.912 0.01 120);
-  --ring: oklch(0.51 0.088 175);
-  --chart-1: oklch(0.51 0.088 175);
-  --chart-2: oklch(0.646 0.222 41.116);
-  --chart-3: oklch(0.769 0.188 84.429);
-  --chart-4: oklch(0.6 0.118 184.704);
-  --chart-5: oklch(0.44 0.05 165);
-  --sidebar: oklch(0.975 0.008 165);
-  --sidebar-foreground: oklch(0.22 0.02 165);
-  --sidebar-primary: oklch(0.51 0.088 175);
-  --sidebar-primary-foreground: oklch(0.99 0.003 95);
-  --sidebar-accent: oklch(0.955 0.012 175);
-  --sidebar-accent-foreground: oklch(0.36 0.06 172);
-  --sidebar-border: oklch(0.912 0.01 120);
-  --sidebar-ring: oklch(0.51 0.088 175);
+  --radius: 0.25rem;
+  --background: #F4F0E6;
+  --foreground: #1A1F1E;
+  --card: #FDFCF8;
+  --card-foreground: #1A1F1E;
+  --popover: #FDFCF8;
+  --popover-foreground: #1A1F1E;
+  --primary: #0F3D3E;
+  --primary-foreground: #F4F0E6;
+  --secondary: #E7E1D2;
+  --secondary-foreground: #0F3D3E;
+  --muted: #EDE9DC;
+  --muted-foreground: #55605B;
+  --accent: #FBF3E3;
+  --accent-foreground: #6E4C12;
+  --destructive: #B42318;
+  --border: #E1DBC9;
+  --input: #D5CEBB;
+  --ring: #D4912A;
+  --chart-1: #0F3D3E;
+  --chart-2: #D4912A;
+  --chart-3: #2A5E5C;
+  --chart-4: #8F6318;
+  --chart-5: #55605B;
+  --sidebar: #EDE9DC;
+  --sidebar-foreground: #1A1F1E;
+  --sidebar-primary: #0F3D3E;
+  --sidebar-primary-foreground: #F4F0E6;
+  --sidebar-accent: #E7E1D2;
+  --sidebar-accent-foreground: #0F3D3E;
+  --sidebar-border: #E1DBC9;
+  --sidebar-ring: #D4912A;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #0B0F0E;
+  --foreground: #F4F0E6;
+  --card: #121615;
+  --card-foreground: #F4F0E6;
+  --popover: #121615;
+  --popover-foreground: #F4F0E6;
+  --primary: #F4F0E6;
+  --primary-foreground: #0F3D3E;
+  --secondary: #1A1F1E;
+  --secondary-foreground: #F4F0E6;
+  --muted: #1A1F1E;
+  --muted-foreground: #A3A697;
+  --accent: #1A1F1E;
+  --accent-foreground: #E4C278;
+  --destructive: #F04438;
+  --border: #262E2B;
+  --input: #262E2B;
+  --ring: #D4912A;
+  --chart-1: #F4F0E6;
+  --chart-2: #D4912A;
+  --chart-3: #4E7B76;
+  --chart-4: #E4C278;
+  --chart-5: #A3A697;
+  --sidebar: #121615;
+  --sidebar-foreground: #F4F0E6;
+  --sidebar-primary: #0F3D3E;
+  --sidebar-primary-foreground: #F4F0E6;
+  --sidebar-accent: #1A1F1E;
+  --sidebar-accent-foreground: #F4F0E6;
+  --sidebar-border: #262E2B;
+  --sidebar-ring: #D4912A;
 }
 
 @layer base {
@@ -124,12 +166,38 @@ html {
   body {
     @apply bg-background text-foreground;
   }
-  h1, h2, h3, h4 {
+  /* Spectral carries every heading, Public Sans carries body and interface */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-spectral), Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     text-align: center;
+    overflow-wrap: anywhere;
+  }
+  /* Body copy stays left aligned for readability */
+  p, li {
+    text-align: left;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
 /* ---------- ALS platform styles ---------- */
+
+/* Tabular figures for impact numbers and admin tables */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

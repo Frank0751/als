@@ -139,7 +139,7 @@ export default function SettingsTab() {
   return (
     <div className="space-y-6">
       {GROUPS.map((g) => (
-        <div key={g.title} className="rounded-xl border bg-white p-4">
+        <div key={g.title} className="rounded border bg-white p-4">
           <h2 className="font-bold">{g.title}</h2>
           <div className="mt-3 grid gap-3">
             {g.keys.map((k) => (
@@ -157,13 +157,13 @@ export default function SettingsTab() {
         </div>
       ))}
 
-      <div className="rounded-xl border bg-white p-4">
+      <div className="rounded border bg-white p-4">
         <h2 className="font-bold">FAQs</h2>
         <p className="mt-1 text-xs text-muted-foreground">One FAQ per block: a line starting with “Q:” then a line starting with “A:”. Separate FAQs with a blank line.</p>
         <Textarea rows={10} className="mt-2 font-mono text-xs" value={faqs} onChange={(e) => setFaqs(e.target.value)} />
       </div>
 
-      <div className="rounded-xl border bg-white p-4">
+      <div className="rounded border bg-white p-4">
         <h2 className="font-bold">Delivery areas &amp; fees</h2>
         <div className="mt-3 space-y-2">
           {areas.map((a, i) => (
@@ -180,7 +180,7 @@ export default function SettingsTab() {
           <Button
             size="sm"
             variant="outline"
-            className="rounded-full"
+            className="rounded"
             onClick={() => {
               if (!newArea.name.trim()) return;
               setAreas((a) => [...a, { name: newArea.name.trim(), fee: newArea.fee || "0" }]);
@@ -192,7 +192,7 @@ export default function SettingsTab() {
         </div>
       </div>
 
-      <Button onClick={save} disabled={busy} size="lg" className="w-full rounded-full">{busy ? "Saving…" : "Save all content & areas"}</Button>
+      <Button onClick={save} disabled={busy} size="lg" className="w-full rounded">{busy ? "Saving…" : "Save all content & areas"}</Button>
     </div>
   );
 }

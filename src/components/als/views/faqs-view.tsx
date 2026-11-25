@@ -19,7 +19,6 @@ export default function FaqsView() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
       <SectionTitle
-        eyebrow="Help centre"
         title="Frequently asked questions"
         sub="Short, plain answers. Anything else, message ALS on WhatsApp from the button at the bottom of every page."
       />
@@ -31,7 +30,7 @@ export default function FaqsView() {
           </AccordionItem>
         ))}
       </Accordion>
-      <div className="mt-8 flex items-start gap-3 rounded-2xl border bg-teal-50 p-5">
+      <div className="mt-8 flex items-start gap-3 rounded border bg-teal-50 p-5">
         <LifeBuoy className="mt-0.5 h-6 w-6 shrink-0 text-teal-700" aria-hidden="true" />
         <div>
           <p className="font-bold">Still stuck?</p>

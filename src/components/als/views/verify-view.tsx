@@ -42,7 +42,7 @@ export default function VerifyView({ code: initialCode }: { code: string }) {
 
   return (
     <div className="mx-auto max-w-lg px-4 py-10 sm:py-16">
-      <div className="rounded-2xl border-2 border-teal-600 bg-white p-6 shadow-sm">
+      <div className="rounded border-2 border-teal-600 bg-white p-6 shadow-sm">
         <div className="flex items-center gap-3">
           <span className="flex h-11 w-11 items-center justify-center rounded-full bg-teal-700 text-white"><BadgeCheck className="h-6 w-6" aria-hidden="true" /></span>
           <div>
@@ -60,13 +60,13 @@ export default function VerifyView({ code: initialCode }: { code: string }) {
             aria-label="Receipt code"
             onKeyDown={(e) => e.key === "Enter" && void check(code)}
           />
-          <Button onClick={() => void check(code)} disabled={busy} className="rounded-full">{busy ? "Checking…" : "Verify"}</Button>
+          <Button onClick={() => void check(code)} disabled={busy} className="rounded">{busy ? "Checking…" : "Verify"}</Button>
         </div>
 
         {result && (
           <div className="mt-5">
             {result.valid ? (
-              <div className="rounded-xl border border-emerald-300 bg-emerald-50 p-4">
+              <div className="rounded border border-emerald-300 bg-emerald-50 p-4">
                 <p className="flex items-center gap-2 font-bold text-emerald-800"><BadgeCheck className="h-5 w-5" aria-hidden="true" /> This receipt is genuine</p>
                 <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                   <dt className="text-emerald-900/70">Receipt code</dt><dd className="text-right font-mono font-semibold">{code}</dd>
@@ -78,7 +78,7 @@ export default function VerifyView({ code: initialCode }: { code: string }) {
                 </dl>
               </div>
             ) : (
-              <div className="rounded-xl border border-red-300 bg-red-50 p-4">
+              <div className="rounded border border-red-300 bg-red-50 p-4">
                 <p className="flex items-center gap-2 font-bold text-red-800"><ShieldAlert className="h-5 w-5" aria-hidden="true" /> Not a valid receipt code</p>
                 <p className="mt-1 text-sm text-red-700">{result.message || "No receipt found with that code. Do not accept this receipt as proof of payment."}</p>
               </div>
@@ -90,7 +90,7 @@ export default function VerifyView({ code: initialCode }: { code: string }) {
           ALS issues receipts only after confirming payment in its dashboard. If someone shows you a receipt without a code, or a code that fails here, do not treat it as proof of payment, report it to ALS on WhatsApp.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
-          <Button variant="outline" className="rounded-full" onClick={() => navigate("contact")}>Report a fake receipt</Button>
+          <Button variant="outline" className="rounded" onClick={() => navigate("contact")}>Report a fake receipt</Button>
           <Badge variant="outline" className="self-center border-teal-200 bg-teal-50 text-teal-800">Protected by the ALS platform</Badge>
         </div>
       </div>

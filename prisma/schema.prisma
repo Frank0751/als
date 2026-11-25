@@ -21,6 +21,8 @@ model Product {
   price          Float // per unit price in GHS (per fingerling for fingerlings)
   unit           String // "fingerling" | "each" | "pack" | "set" ...
   stock          Int             @default(0)
+  availability   String          @default("AVAILABLE") // FINGERLINGS: AVAILABLE | LIMITED | FULLY_BOOKED | NEXT_CYCLE (set by ALS, CLAUDE.md section 4)
+  availabilityNote String?       // e.g. fully booked until date, next production cycle month
   imageUrl       String?
   priceTiers     String? // JSON: [{ "minQty": 1000, "price": 1.10, "label": "1,000+" }]
   featured       Boolean         @default(false)
@@ -221,4 +223,25 @@ model EmailLog {
   body      String
   kind      String // ORDER_STAGE | RECEIPT | BOOKING | ONLINE_COURSE
   createdAt DateTime @default(now())
+}
+
+// Free training programme applications (CLAUDE.md section 5)
+model TrainingApplication {
+  id         String   @id @default(cuid())
+  ref        String   @unique
+  fullName   String
+  phone      String
+  email      String?
+  gender     String
+  ageRange   String
+  region     String
+  town       String
+  experience String
+  format     String
+  source     String?
+  disability String?
+  consent    Boolean
+  status     String   @default("RECEIVED")
+  notes      String?
+  createdAt  DateTime @default(now())
 }

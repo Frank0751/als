@@ -44,7 +44,7 @@ export default function EmailsTab() {
         Every order stage sends an email to the customer and to ALS. In production these deliver through Resend; here you see exactly what customers receive.
       </p>
       {emails.map((e) => (
-        <div key={e.id} className="rounded-xl border bg-white">
+        <div key={e.id} className="rounded border bg-white">
           <button className="flex w-full flex-wrap items-center justify-between gap-2 p-3.5 text-left" onClick={() => setOpen(open === e.id ? null : e.id)} aria-expanded={open === e.id}>
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold">{e.subject}</p>

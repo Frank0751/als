@@ -53,15 +53,18 @@ export function tierLabelFor(tiers: PriceTier[] | null | undefined, qty: number)
 
 export function statusLabel(status: string): string {
   switch (status) {
-    case "RECEIVED": return "Order received";
-    case "PAYMENT_CONFIRMED": return "Payment confirmed";
+    // WhatsApp request statuses (CLAUDE.md section 6)
+    case "RECEIVED": return "New";
+    case "CONTACTED": return "Contacted";
+    case "CONFIRMED": return "Confirmed";
+    case "COMPLETED": return "Completed";
+    case "CANCELLED": return "Cancelled";
+    // legacy pipeline statuses from the earlier payment-flow prototype
+    case "PAYMENT_CONFIRMED": return "Confirmed";
     case "PREPARING": return "Being prepared";
     case "READY_OUT": return "Ready for pickup";
     case "OUT_FOR_DELIVERY": return "Out for delivery";
-    case "COMPLETED": return "Completed";
-    case "CANCELLED": return "Cancelled";
-    case "PENDING_PAYMENT": return "Pending payment";
-    case "CONFIRMED": return "Confirmed";
+    case "PENDING_PAYMENT": return "Awaiting ALS confirmation";
     default: return status;
   }
 }
@@ -69,19 +72,20 @@ export function statusLabel(status: string): string {
 export function statusColor(status: string): string {
   switch (status) {
     case "RECEIVED": return "bg-stone-100 text-stone-700 border-stone-200";
+    case "CONTACTED": return "bg-amber-50 text-amber-800 border-amber-200";
+    case "CONFIRMED": return "bg-teal-50 text-teal-800 border-teal-200";
     case "PAYMENT_CONFIRMED": return "bg-teal-50 text-teal-800 border-teal-200";
     case "PREPARING": return "bg-amber-50 text-amber-800 border-amber-200";
     case "READY_OUT": return "bg-orange-50 text-orange-800 border-orange-200";
     case "OUT_FOR_DELIVERY": return "bg-orange-50 text-orange-800 border-orange-200";
     case "COMPLETED": return "bg-emerald-50 text-emerald-800 border-emerald-200";
     case "CANCELLED": return "bg-red-50 text-red-700 border-red-200";
-    case "PENDING_PAYMENT": return "bg-amber-50 text-amber-800 border-amber-200";
-    case "CONFIRMED": return "bg-emerald-50 text-emerald-800 border-emerald-200";
+    case "PENDING_PAYMENT": return "bg-stone-100 text-stone-600 border-stone-200";
     default: return "bg-stone-100 text-stone-700 border-stone-200";
   }
 }
 
-export const ORDER_STAGES = ["RECEIVED", "PAYMENT_CONFIRMED", "PREPARING", "READY_OUT", "OUT_FOR_DELIVERY", "COMPLETED"] as const;
+export const ORDER_STAGES = ["RECEIVED", "CONTACTED", "CONFIRMED", "COMPLETED"] as const;
 
 export function waLink(number: string, text: string): string {
   const digits = (number || "").replace(/[^0-9]/g, "").replace(/^0+/, "233");

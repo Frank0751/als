@@ -12,6 +12,8 @@ export type ProductDTO = {
   price: number;
   unit: string;
   stock: number;
+  availability: string;
+  availabilityNote: string | null;
   imageUrl: string | null;
   priceTiers: PriceTier[] | null;
   featured: boolean;

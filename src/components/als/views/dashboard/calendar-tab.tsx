@@ -72,13 +72,13 @@ export default function CalendarTab() {
         Customers pick from these dates at checkout. A date with <b>{`booked = capacity`}</b> is full and closes automatically.
       </p>
 
-      <div className="mb-5 flex flex-wrap items-end gap-3 rounded-xl border bg-white p-4">
+      <div className="mb-5 flex flex-wrap items-end gap-3 rounded border bg-white p-4">
         <div><Label htmlFor="cd-date">Open a new date</Label><Input id="cd-date" type="date" value={newDate} onChange={(e) => setNewDate(e.target.value)} className="mt-1" /></div>
         <div><Label htmlFor="cd-cap">Capacity (orders)</Label><Input id="cd-cap" inputMode="numeric" value={capacity} onChange={(e) => setCapacity(e.target.value)} className="mt-1 w-28" /></div>
-        <Button onClick={add} disabled={!newDate} className="rounded-full">Open date</Button>
+        <Button onClick={add} disabled={!newDate} className="rounded">Open date</Button>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border bg-white">
+      <div className="overflow-x-auto rounded border bg-white">
         <table className="w-full min-w-[560px] text-sm">
           <thead>
             <tr className="border-b bg-stone-50 text-left text-xs uppercase tracking-wide text-muted-foreground">
@@ -107,8 +107,8 @@ export default function CalendarTab() {
                   </td>
                   <td className="px-3 py-2.5">
                     <div className="flex items-center gap-2">
-                      <div className="h-2 w-24 overflow-hidden rounded-full bg-stone-200">
-                        <div className="h-full rounded-full bg-teal-600" style={{ width: `${loadPct}%` }} />
+                      <div className="h-2 w-24 overflow-hidden rounded bg-stone-200">
+                        <div className="h-full rounded bg-teal-600" style={{ width: `${loadPct}%` }} />
                       </div>
                       <span className="text-xs text-muted-foreground">{d.booked}/{d.capacity}</span>
                       {d.booked >= d.capacity && <Badge className="bg-red-100 text-red-800 hover:bg-red-100">full</Badge>}

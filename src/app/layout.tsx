@@ -3,32 +3,31 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-// Self-hosted Ubuntu fonts: the build must not depend on fetching
-// from Google Fonts at build time (deployment environments may be offline).
-const ubuntuSans = localFont({
-  variable: "--font-ubuntu",
+// Self-hosted brand fonts (Spectral for headings, Public Sans for body and
+// interface): the build must not depend on fetching from Google Fonts at
+// build time, deployment environments may be offline.
+const spectral = localFont({
+  variable: "--font-spectral",
   src: [
-    { path: "../fonts/ubuntu-300.woff2", weight: "300", style: "normal" },
-    { path: "../fonts/ubuntu-400.woff2", weight: "400", style: "normal" },
-    { path: "../fonts/ubuntu-500.woff2", weight: "500", style: "normal" },
-    { path: "../fonts/ubuntu-700.woff2", weight: "700", style: "normal" },
+    { path: "../fonts/spectral-400.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/spectral-600.woff2", weight: "600", style: "normal" },
+    { path: "../fonts/spectral-700.woff2", weight: "700", style: "normal" },
   ],
   display: "swap",
 });
 
-const ubuntuMono = localFont({
-  variable: "--font-ubuntu-mono",
+const publicSans = localFont({
+  variable: "--font-public",
   src: [
-    { path: "../fonts/ubuntu-mono-400.woff2", weight: "400", style: "normal" },
-    { path: "../fonts/ubuntu-mono-700.woff2", weight: "700", style: "normal" },
+    { path: "../fonts/public-sans-var.woff2", weight: "100 900", style: "normal" },
   ],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Aquatic Link Solutions, Tilapia Fingerlings, Equipment & Training | Akuse, Ghana",
+  title: "Aquatic Link Solutions, Tilapia Fingerlings, Aquaculture Training | Akuse, Ghana",
   description:
-    "Order quality tilapia fingerlings, fish farming equipment and training from ALS in Akuse, Ghana. Browse live availability, send your order on WhatsApp, get a branded receipt and track every order.",
+    "Aquatic Link Solutions produces quality tilapia fingerlings in Akuse, Eastern Region, and raises market-size tilapia in cages on the Volta River. Free fish farming training, equipment marketplace, partnership and investment enquiries.",
   keywords: [
     "tilapia fingerlings Ghana",
     "fish farming Ghana",
@@ -36,12 +35,13 @@ export const metadata: Metadata = {
     "ALS fingerlings",
     "Volta River cage farming",
     "fish farm training Ghana",
+    "aquaculture investment Ghana",
   ],
   icons: { icon: "/logo.svg" },
   openGraph: {
-    title: "Aquatic Link Solutions, order fingerlings, equipment and training",
+    title: "Aquatic Link Solutions, quality tilapia fingerlings from Akuse, Ghana",
     description:
-      "Quality tilapia fingerlings from our hatchery in Akuse, Eastern Region. 17+ years of aquaculture. Order online, pay by MoMo or bank, track every order.",
+      "Quality tilapia fingerlings from our hatchery in Akuse, Eastern Region, cage grow-out on the Volta River and free fish farming training for women, persons with disabilities and farmers.",
     siteName: "Aquatic Link Solutions",
     type: "website",
   },
@@ -51,7 +51,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#0f766e",
+  themeColor: "#0F3D3E",
 };
 
 export default function RootLayout({
@@ -63,7 +63,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${ubuntuSans.variable} ${ubuntuMono.variable}`}
+      className={`${spectral.variable} ${publicSans.variable}`}
     >
       <body className="antialiased bg-background text-foreground">
         {children}

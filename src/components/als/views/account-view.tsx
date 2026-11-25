@@ -81,7 +81,7 @@ export default function AccountView() {
     }
     toast({
       title: "Reorder started",
-      description: added > 0 ? `${added} item(s) added to your cart, check quantities, then send the order on WhatsApp.` : "No reorderable items in that order.",
+      description: added > 0 ? `${added} item(s) added to your request list, check quantities, then send the request on WhatsApp.` : "No reorderable items in that order.",
     });
     if (added > 0) navigate("cart");
   };
@@ -89,7 +89,7 @@ export default function AccountView() {
   if (!customer) {
     return (
       <div className="mx-auto max-w-md px-4 py-10 sm:py-16">
-        <div className="rounded-2xl border bg-white p-6">
+        <div className="rounded border bg-white p-6">
           <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-full bg-teal-700 text-white"><UserRound className="h-6 w-6" aria-hidden="true" /></span>
             <div>
@@ -114,7 +114,7 @@ export default function AccountView() {
                 <div><Label htmlFor="a-addr">Saved delivery address (optional)</Label><Input id="a-addr" value={form.address} onChange={(e) => set("address", e.target.value)} placeholder="e.g. Near the market, Somanya" /></div>
               </>
             )}
-            <Button onClick={submit} disabled={busy} className="rounded-full">{busy ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"}</Button>
+            <Button onClick={submit} disabled={busy} className="rounded">{busy ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"}</Button>
             <button
               onClick={() => setMode(mode === "login" ? "register" : "login")}
               className="text-center text-sm font-medium text-teal-700 hover:underline"
@@ -135,7 +135,7 @@ export default function AccountView() {
           <h1 className="text-2xl font-bold">{customer.name}</h1>
           <p className="text-sm text-muted-foreground">{customer.phone}{customer.city ? ` · ${customer.city}` : ""}{customer.address ? ` · ${customer.address}` : ""}</p>
         </div>
-        <Button variant="outline" className="rounded-full" onClick={signOut}><LogOut className="h-4 w-4" aria-hidden="true" /> Sign out</Button>
+        <Button variant="outline" className="rounded" onClick={signOut}><LogOut className="h-4 w-4" aria-hidden="true" /> Sign out</Button>
       </div>
 
       <h2 className="mt-8 text-lg font-bold">Order history &amp; receipts</h2>
@@ -160,15 +160,15 @@ export default function AccountView() {
                 </div>
                 <Separator className="my-3" />
                 <div className="flex flex-wrap items-center gap-2">
-                  <Button size="sm" variant="outline" className="rounded-full" onClick={() => navigate("track", { order: o.orderNumber, phone: customer.phone })}>
+                  <Button size="sm" variant="outline" className="rounded" onClick={() => navigate("track", { order: o.orderNumber, phone: customer.phone })}>
                     <ClipboardList className="h-3.5 w-3.5" aria-hidden="true" /> Track
                   </Button>
                   {o.receiptCode && (
-                    <Button size="sm" variant="outline" className="rounded-full" onClick={() => navigate("receipt", { order: o.orderNumber, phone: customer.phone })}>
+                    <Button size="sm" variant="outline" className="rounded" onClick={() => navigate("receipt", { order: o.orderNumber, phone: customer.phone })}>
                       <ReceiptText className="h-3.5 w-3.5" aria-hidden="true" /> Receipt
                     </Button>
                   )}
-                  <Button size="sm" variant="ghost" className="rounded-full" onClick={() => reorder(o)}>
+                  <Button size="sm" variant="ghost" className="rounded" onClick={() => reorder(o)}>
                     <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> Reorder
                   </Button>
                 </div>

@@ -43,7 +43,7 @@ export default function CheckoutView() {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <p className="text-lg font-bold">Your cart is empty</p>
-        <Button className="mt-4 rounded-full" onClick={() => navigate("fingerlings")}>Browse fingerlings</Button>
+        <Button className="mt-4 rounded" onClick={() => navigate("fingerlings")}>Browse fingerlings</Button>
       </div>
     );
   }
@@ -79,7 +79,7 @@ export default function CheckoutView() {
       cart.clear();
       navigate("confirm", { order: res.orderNumber, phone: draft.phone.trim() });
     } catch (e) {
-      toast({ title: "Could not place order", description: e instanceof Error ? e.message : "Try again.", variant: "destructive" });
+      toast({ title: "Could not save request", description: e instanceof Error ? e.message : "Try again.", variant: "destructive" });
     } finally {
       setBusy(false);
     }
@@ -87,7 +87,7 @@ export default function CheckoutView() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
-      <h1 className="text-2xl font-bold">Checkout</h1>
+      <h1 className="text-2xl font-bold">Request details</h1>
       <p className="mt-1 text-sm text-muted-foreground">One order, one WhatsApp message, every detail filled in for ALS.</p>
 
       {/* 1. contact */}
@@ -110,7 +110,7 @@ export default function CheckoutView() {
           <RadioGroup value={draft.fulfilment} onValueChange={(v) => pick(v as "PICKUP" | "DELIVERY")} className="mt-3 grid gap-3 sm:grid-cols-2">
             <Label
               htmlFor="pick-pickup"
-              className={cn("flex cursor-pointer items-start gap-3 rounded-xl border p-4", draft.fulfilment === "PICKUP" && "border-teal-600 bg-teal-50")}
+              className={cn("flex cursor-pointer items-start gap-3 rounded border p-4", draft.fulfilment === "PICKUP" && "border-teal-600 bg-teal-50")}
             >
               <RadioGroupItem value="PICKUP" id="pick-pickup" />
               <span>
@@ -120,7 +120,7 @@ export default function CheckoutView() {
             </Label>
             <Label
               htmlFor="pick-delivery"
-              className={cn("flex cursor-pointer items-start gap-3 rounded-xl border p-4", draft.fulfilment === "DELIVERY" && "border-teal-600 bg-teal-50")}
+              className={cn("flex cursor-pointer items-start gap-3 rounded border p-4", draft.fulfilment === "DELIVERY" && "border-teal-600 bg-teal-50")}
             >
               <RadioGroupItem value="DELIVERY" id="pick-delivery" />
               <span>
@@ -154,7 +154,7 @@ export default function CheckoutView() {
                   onClick={() => set({ deliveryDate: d.date })}
                   aria-pressed={draft.deliveryDate === d.date}
                   className={cn(
-                    "rounded-full border px-4 py-2.5 text-sm font-medium",
+                    "rounded border px-4 py-2.5 text-sm font-medium",
                     draft.deliveryDate === d.date ? "border-teal-700 bg-teal-700 text-white" : "bg-white text-stone-700 hover:border-teal-600"
                   )}
                 >
@@ -171,7 +171,7 @@ export default function CheckoutView() {
       {/* 3. review */}
       <Card className="mt-4">
         <CardContent className="p-5">
-          <h2 className="font-bold">3. Review your order</h2>
+          <h2 className="font-bold">3. Review your request</h2>
           <div className="mt-3 divide-y">
             {items.map((i) => (
               <div key={`${i.refId}-${i.sessionId ?? ""}`} className="flex items-start justify-between gap-3 py-2.5 text-sm">
@@ -199,12 +199,12 @@ export default function CheckoutView() {
         </CardContent>
       </Card>
 
-      <div className="mt-6 rounded-2xl border-2 border-teal-600 bg-teal-50 p-5">
+      <div className="mt-6 rounded border-2 border-teal-600 bg-teal-50 p-5">
         <p className="flex items-center gap-2 font-bold"><Send className="h-5 w-5 text-teal-700" aria-hidden="true" /> Send this order to ALS on WhatsApp</p>
         <p className="mt-1 text-sm text-muted-foreground">
           Tapping the button saves your order, then opens WhatsApp with the full order typed in, order number, items, sizes, quantities, prices, total, date, and your name and phone. One tap and ALS has it.
         </p>
-        <Button size="lg" className="mt-4 w-full rounded-full" disabled={!valid || busy} onClick={sendOrder}>
+        <Button size="lg" className="mt-4 w-full rounded" disabled={!valid || busy} onClick={sendOrder}>
           {busy ? "Placing your order…" : `Send order on WhatsApp, ${ghs(total)}`}
         </Button>
         {!valid && <p className="mt-2 text-xs text-red-600">Fill in your name, phone, area (if delivery) and an open date above.</p>}

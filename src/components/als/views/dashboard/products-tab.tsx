@@ -76,7 +76,7 @@ export default function ProductsTab() {
       {groups.map((g) => (
         <div key={g.key}>
           <h2 className="mb-2 font-bold">{g.label}</h2>
-          <div className="overflow-x-auto rounded-xl border bg-white">
+          <div className="overflow-x-auto rounded border bg-white">
             <table className="w-full min-w-[760px] text-sm">
               <thead>
                 <tr className="border-b bg-stone-50 text-left text-xs uppercase tracking-wide text-muted-foreground">
@@ -126,7 +126,7 @@ export default function ProductsTab() {
                         <button
                           onClick={() => save(p.id)}
                           disabled={!dirty}
-                          className="rounded-full bg-teal-700 px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-40"
+                          className="rounded bg-teal-700 px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-40"
                         >
                           Save
                         </button>

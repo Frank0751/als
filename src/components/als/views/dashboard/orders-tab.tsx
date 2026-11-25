@@ -23,15 +23,13 @@ import {
   Lightbulb, FileQuestion, Inbox, Eye, EyeOff,
 } from "lucide-react";
 
-const FILTERS = ["ALL", "RECEIVED", "PAYMENT_CONFIRMED", "PREPARING", "READY_OUT", "OUT_FOR_DELIVERY", "COMPLETED", "CANCELLED"] as const;
+const FILTERS = ["ALL", "RECEIVED", "CONTACTED", "CONFIRMED", "COMPLETED", "CANCELLED"] as const;
 
 function nextStage(order: OrderDTO): { status: string; label: string; icon: typeof CheckCircle2 } | null {
-  if (order.status === "RECEIVED" || order.status === "PAYMENT_CONFIRMED") return { status: "PREPARING", label: "Start preparing", icon: PackageCheck };
-  if (order.status === "PREPARING")
-    return order.fulfilment === "PICKUP"
-      ? { status: "READY_OUT", label: "Ready for pickup", icon: Store }
-      : { status: "OUT_FOR_DELIVERY", label: "Out for delivery", icon: Truck };
-  if (order.status === "READY_OUT" || order.status === "OUT_FOR_DELIVERY") return { status: "COMPLETED", label: "Mark completed", icon: CheckCircle2 };
+  // WhatsApp request pipeline (CLAUDE.md section 6): New, Contacted, Confirmed, Completed
+  if (order.status === "RECEIVED") return { status: "CONTACTED", label: "Mark contacted", icon: MessageCircle };
+  if (order.status === "CONTACTED") return { status: "CONFIRMED", label: "Confirm request", icon: BadgeCheck };
+  if (order.status === "CONFIRMED" || order.status === "PAYMENT_CONFIRMED" || order.status === "PREPARING" || order.status === "READY_OUT" || order.status === "OUT_FOR_DELIVERY") return { status: "COMPLETED", label: "Mark completed", icon: CheckCircle2 };
   return null;
 }
 
@@ -50,12 +48,12 @@ function ProofImage({ proofId, token }: { proofId: string; token: string }) {
   };
   return (
     <div>
-      <Button size="sm" variant="outline" className="rounded-full" onClick={load}>
+      <Button size="sm" variant="outline" className="rounded" onClick={load}>
         <Eye className="h-3.5 w-3.5" aria-hidden="true" /> View payment proof
       </Button>
       {show && src && (
          
-        <img src={src} alt="Uploaded payment proof" className="mt-2 max-h-72 rounded-lg border" />
+        <img src={src} alt="Uploaded payment proof" className="mt-2 max-h-72 rounded border" />
       )}
     </div>
   );
@@ -94,7 +92,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
       </DialogHeader>
 
       <div className="space-y-4 text-sm">
-        <div className="grid gap-2 rounded-lg border bg-stone-50 p-3 sm:grid-cols-2">
+        <div className="grid gap-2 rounded border bg-stone-50 p-3 sm:grid-cols-2">
           <p><span className="text-muted-foreground">Fulfilment:</span> <b>{order.fulfilment === "PICKUP" ? "Farm pickup" : `Delivery, ${order.areaName}`}</b></p>
           <p><span className="text-muted-foreground">Date:</span> <b>{fmtDate(order.deliveryDate)}</b></p>
           <p><span className="text-muted-foreground">Subtotal:</span> <b>{ghs(order.subtotal)}</b> <span className="text-muted-foreground">+ fee {ghs(order.areaFee)}</span></p>
@@ -105,7 +103,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
 
         <div>
           <p className="font-semibold">Items</p>
-          <div className="mt-1.5 divide-y rounded-lg border">
+          <div className="mt-1.5 divide-y rounded border">
             {items.map((i, n) => (
               <div key={n} className="flex items-start justify-between gap-2 p-2.5">
                 <div>
@@ -120,7 +118,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
 
         <div className="flex flex-wrap gap-2">
           <a href={waLink(order.customerPhone, `Hello ${order.customerName}, this is Aquatic Link Solutions about your order ${order.orderNumber} (${ghs(order.total)}).`)} target="_blank" rel="noreferrer">
-            <Button size="sm" variant="outline" className="rounded-full"><MessageCircle className="h-3.5 w-3.5" aria-hidden="true" /> WhatsApp customer</Button>
+            <Button size="sm" variant="outline" className="rounded"><MessageCircle className="h-3.5 w-3.5" aria-hidden="true" /> WhatsApp customer</Button>
           </a>
           {order.receiptCode && <Badge variant="outline" className="self-center border-teal-200 bg-teal-50 text-teal-800">Receipt {order.receiptCode}</Badge>}
         </div>
@@ -128,12 +126,12 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
         {order.proofs.length > 0 ? (
           <ProofImage proofId={order.proofs[0]!.id} token={token} />
         ) : order.status === "RECEIVED" ? (
-          <p className="flex items-center gap-2 rounded-lg bg-amber-50 p-2.5 text-xs text-amber-800"><FileQuestion className="h-4 w-4 shrink-0" aria-hidden="true" /> No payment proof uploaded yet, ask the customer to upload it on their order page.</p>
+          <p className="flex items-center gap-2 rounded bg-amber-50 p-2.5 text-xs text-amber-800"><FileQuestion className="h-4 w-4 shrink-0" aria-hidden="true" /> No payment proof on file yet. ALS shares payment details directly when the request is confirmed.</p>
         ) : null}
 
         {/* payment confirmation */}
         {!order.receiptCode && order.status !== "CANCELLED" && (
-          <div className="rounded-lg border-2 border-teal-600 bg-teal-50 p-3">
+          <div className="rounded border-2 border-teal-600 bg-teal-50 p-3">
             <p className="flex items-center gap-2 font-semibold"><BadgeCheck className="h-4 w-4 text-teal-700" aria-hidden="true" /> Confirm payment against the proof above</p>
             <div className="mt-2 grid gap-2 sm:grid-cols-2">
               <div>
@@ -152,7 +150,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
                 <Input id="pref" value={ref} onChange={(e) => setRef(e.target.value)} placeholder="Transaction ref" className="mt-1" />
               </div>
             </div>
-            <Button className="mt-3 w-full rounded-full" disabled={busy} onClick={() => act("confirm_payment", { paymentMethod: method, paymentRef: ref })}>
+            <Button className="mt-3 w-full rounded" disabled={busy} onClick={() => act("confirm_payment", { paymentMethod: method, paymentRef: ref })}>
               {busy ? "Working…" : `Confirm payment & issue receipt, ${ghs(order.total)}`}
             </Button>
             <p className="mt-1 text-[11px] text-muted-foreground">Only ALS staff can mark an order as paid. This issues the branded receipt and emails the customer.</p>
@@ -161,7 +159,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
 
         {/* stage buttons */}
         {next && (
-          <Button className="w-full rounded-full" disabled={busy} onClick={() => act("set_status", { status: next.status })}>
+          <Button className="w-full rounded" disabled={busy} onClick={() => act("set_status", { status: next.status })}>
             <next.icon className="h-4 w-4" aria-hidden="true" /> {next.label}, notify customer
           </Button>
         )}
@@ -171,7 +169,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
           <p className="font-semibold">History</p>
           <ol className="mt-1.5 space-y-1.5">
             {order.events.map((e) => (
-              <li key={e.id} className="rounded-lg border bg-stone-50 p-2.5 text-xs">
+              <li key={e.id} className="rounded border bg-stone-50 p-2.5 text-xs">
                 <p><b>{statusLabel(e.status)}</b>{e.actor ? `, ${e.actor}` : ""} <span className="text-muted-foreground">· {fmtDateTime(e.createdAt)}</span></p>
                 {e.note && <p className="mt-0.5 text-muted-foreground">{e.note}</p>}
               </li>
@@ -182,7 +180,7 @@ function OrderDialog({ order, token, role, onDone }: { order: OrderDTO; token: s
 
       <DialogFooter>
         {role !== "STAFF" && order.status !== "CANCELLED" && order.status !== "COMPLETED" && (
-          <Button variant="destructive" disabled={busy} onClick={() => act("cancel")} className="rounded-full">
+          <Button variant="destructive" disabled={busy} onClick={() => act("cancel")} className="rounded">
             <XCircle className="h-4 w-4" aria-hidden="true" /> Cancel order (restores stock)
           </Button>
         )}
@@ -228,10 +226,10 @@ export default function OrdersTab() {
   return (
     <div>
       {attention.length > 0 && (
-        <div className="mb-4 flex flex-wrap items-center gap-3 rounded-xl border-2 border-amber-300 bg-amber-50 p-3.5">
+        <div className="mb-4 flex flex-wrap items-center gap-3 rounded border-2 border-amber-300 bg-amber-50 p-3.5">
           <BadgeCheck className="h-5 w-5 shrink-0 text-amber-700" aria-hidden="true" />
           <p className="text-sm text-amber-900"><b>{attention.length}</b> order(s) have payment proof waiting for your confirmation.</p>
-          <Button size="sm" className="rounded-full" onClick={() => setFilter("RECEIVED")}>Review now</Button>
+          <Button size="sm" className="rounded" onClick={() => setFilter("RECEIVED")}>Review now</Button>
         </div>
       )}
 
@@ -249,13 +247,13 @@ export default function OrdersTab() {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={cn("shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold", filter === f ? "border-teal-700 bg-teal-700 text-white" : "bg-white text-stone-600 hover:border-teal-600")}
+                className={cn("shrink-0 rounded border px-3 py-1.5 text-xs font-semibold", filter === f ? "border-teal-700 bg-teal-700 text-white" : "bg-white text-stone-600 hover:border-teal-600")}
               >
                 {f === "ALL" ? "All" : statusLabel(f)} {counts[f] ? `(${counts[f]})` : ""}
               </button>
             ))}
           </div>
-          <div className="overflow-x-auto rounded-xl border bg-white">
+          <div className="overflow-x-auto rounded border bg-white">
             <table className="w-full min-w-[720px] text-sm">
               <thead>
                 <tr className="border-b bg-stone-50 text-left text-xs uppercase tracking-wide text-muted-foreground">
@@ -281,7 +279,7 @@ export default function OrdersTab() {
                     <td className="px-3 py-2.5 font-bold">{ghs(o.total)}</td>
                     <td className="px-3 py-2.5"><StatusBadge status={o.status} /></td>
                     <td className="px-3 py-2.5 text-right">
-                      <Button size="sm" variant="outline" className="rounded-full" onClick={() => setSelected(o)}>Open</Button>
+                      <Button size="sm" variant="outline" className="rounded" onClick={() => setSelected(o)}>Open</Button>
                     </td>
                   </tr>
                 ))}

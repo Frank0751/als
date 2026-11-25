@@ -19,7 +19,7 @@ import { Download, Share2, ShieldCheck, BadgeCheck } from "lucide-react";
 function ReceiptDoc({ order, qrDataUrl }: { order: OrderDTO; qrDataUrl: string | null }) {
   const { content } = useCatalog();
   return (
-    <div className="print-area rounded-2xl border-2 border-teal-700 bg-white">
+    <div className="print-area rounded border-2 border-teal-700 bg-white">
       <div className="rounded-t-2xl bg-teal-800 px-6 py-5 text-white">
         <div className="flex items-center justify-between">
           <Logo light />
@@ -92,7 +92,7 @@ function ReceiptDoc({ order, qrDataUrl }: { order: OrderDTO; qrDataUrl: string |
         </table>
         </div>
 
-        <div className="mt-4 rounded-lg bg-teal-50 p-3 text-xs leading-relaxed text-teal-900">
+        <div className="mt-4 rounded bg-teal-50 p-3 text-xs leading-relaxed text-teal-900">
           <p className="flex items-center gap-1.5 font-bold"><ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" /> Verify this receipt</p>
           <p className="mt-1">
             Anyone can check this receipt on our website using the “Verify receipt” page and the code <b className="font-mono">{order.receiptCode}</b>, so a receipt cannot be faked.
@@ -100,7 +100,7 @@ function ReceiptDoc({ order, qrDataUrl }: { order: OrderDTO; qrDataUrl: string |
         </div>
 
         {order.items.some((i) => i.kind === "TRAINING") && (
-          <p className="mt-3 rounded-lg bg-amber-50 p-3 text-xs text-amber-900">
+          <p className="mt-3 rounded bg-amber-50 p-3 text-xs text-amber-900">
             <b>Admission slip:</b> this receipt admits you to the training on it. Show the code at the gate.
           </p>
         )}
@@ -151,12 +151,12 @@ export default function ReceiptView({ orderNumber, initialPhone = "" }: { orderN
   if (needPhone && !order) {
     return (
       <div className="mx-auto max-w-md px-4 py-12">
-        <div className="rounded-2xl border bg-white p-6">
+        <div className="rounded border bg-white p-6">
           <h1 className="text-lg font-bold">Open your receipt</h1>
           <p className="mt-1 text-sm text-muted-foreground">Enter the phone number used on order {orderNumber}.</p>
           <div className="mt-4 flex gap-2">
             <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone number" inputMode="tel" />
-            <Button onClick={() => void load(phone)} className="rounded-full">Open</Button>
+            <Button onClick={() => void load(phone)} className="rounded">Open</Button>
           </div>
           {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
         </div>
@@ -176,7 +176,7 @@ export default function ReceiptView({ orderNumber, initialPhone = "" }: { orderN
         <p className="mt-1 text-sm text-muted-foreground">
           ALS issues your branded receipt as soon as your payment is confirmed. Upload your payment proof on the order page and it usually takes one working day.
         </p>
-        <Button className="mt-4 rounded-full" onClick={() => navigate("track", { order: order.orderNumber, phone })}>Track the order</Button>
+        <Button className="mt-4 rounded" onClick={() => navigate("track", { order: order.orderNumber, phone })}>Track the order</Button>
       </div>
     );
   }
@@ -188,13 +188,13 @@ export default function ReceiptView({ orderNumber, initialPhone = "" }: { orderN
       <div className="no-print mb-4 flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-xl font-bold">Your receipt</h1>
         <div className="flex flex-wrap gap-2">
-          <Button className="rounded-full" onClick={() => window.print()}>
+          <Button className="rounded" onClick={() => window.print()}>
             <Download className="h-4 w-4" aria-hidden="true" /> Print / save as PDF
           </Button>
-          <Button variant="outline" className="rounded-full" onClick={() => { window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, "_blank"); toast({ title: "Opening WhatsApp", description: "Share your receipt with anyone in one tap." }); }}>
+          <Button variant="outline" className="rounded" onClick={() => { window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, "_blank"); toast({ title: "Opening WhatsApp", description: "Share your receipt with anyone in one tap." }); }}>
             <Share2 className="h-4 w-4" aria-hidden="true" /> Share on WhatsApp
           </Button>
-          <Button variant="outline" className="rounded-full" onClick={() => { window.location.href = `mailto:?subject=${encodeURIComponent(`ALS Receipt ${order.orderNumber}`)}&body=${encodeURIComponent(shareText)}`; }}>
+          <Button variant="outline" className="rounded" onClick={() => { window.location.href = `mailto:?subject=${encodeURIComponent(`ALS Receipt ${order.orderNumber}`)}&body=${encodeURIComponent(shareText)}`; }}>
             Share by email
           </Button>
         </div>

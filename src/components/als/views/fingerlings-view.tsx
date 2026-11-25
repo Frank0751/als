@@ -6,7 +6,27 @@ import { useMemo, useState } from "react";
 import { useCatalog } from "../catalog-context";
 import { useCart, navigate } from "@/lib/als/store";
 import type { ProductDTO } from "@/lib/als/types";
-import { ProductImage, SectionTitle, StockPill } from "../ui-bits";
+import { ProductImage, SectionTitle } from "../ui-bits";
+
+// Availability is a status ALS sets in the admin portal (CLAUDE.md section 4)
+function availabilityMeta(a: string): { label: string; cls: string } {
+  switch (a) {
+    case "LIMITED": return { label: "Limited", cls: "bg-amber-50 border-amber-200 text-amber-800" };
+    case "FULLY_BOOKED": return { label: "Fully booked", cls: "bg-orange-50 border-orange-200 text-orange-800" };
+    case "NEXT_CYCLE": return { label: "Next production cycle", cls: "bg-stone-100 border-stone-200 text-stone-600" };
+    default: return { label: "Available", cls: "bg-emerald-50 border-emerald-200 text-emerald-800" };
+  }
+}
+
+function AvailabilityBadge({ availability, note }: { availability: string; note?: string | null }) {
+  const meta = availabilityMeta(availability);
+  return (
+    <span className={`shrink-0 rounded border px-2.5 py-0.5 text-right text-xs font-semibold whitespace-nowrap ${meta.cls}`}>
+      {meta.label}
+      {note ? <span className="block font-normal">{note}</span> : null}
+    </span>
+  );
+}
 import { fmtDate, ghs, unitPriceFor } from "@/lib/als/format";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -62,7 +82,7 @@ function FingerlingCard({ p, nextDate }: { p: ProductDTO; nextDate?: string }) {
       maxQty: p.stock,
       date: nextDate ?? null,
     });
-    toast({ title: "Added to cart", description: `${qty.toLocaleString()} × ${p.name}` });
+    toast({ title: "Added to request list", description: `${qty.toLocaleString()} × ${p.name}` });
   };
 
   return (
@@ -74,7 +94,7 @@ function FingerlingCard({ p, nextDate }: { p: ProductDTO; nextDate?: string }) {
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-3">
           <h3 className="font-bold leading-snug">{p.name}</h3>
-          <StockPill stock={p.stock} unit={p.unit} />
+          <AvailabilityBadge availability={p.availability} note={p.availabilityNote} />
         </div>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.spec}</p>
         <div className="mt-4">
@@ -82,7 +102,7 @@ function FingerlingCard({ p, nextDate }: { p: ProductDTO; nextDate?: string }) {
           <TierTable tiers={p.priceTiers} base={p.price} />
         </div>
 
-        <div className="mt-4 rounded-xl border bg-stone-50 p-3">
+        <div className="mt-4 rounded border bg-stone-50 p-3">
           <Label htmlFor={`qty-${p.id}`} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">How many fingerlings?</Label>
           <div className="mt-1.5 flex flex-wrap gap-2">
             <Input
@@ -95,7 +115,7 @@ function FingerlingCard({ p, nextDate }: { p: ProductDTO; nextDate?: string }) {
               className="w-32"
             />
             {[500, 1000, 5000, 10000].map((q) => (
-              <Button key={q} type="button" size="sm" variant="outline" className="rounded-full" onClick={() => setQty(q)}>
+              <Button key={q} type="button" size="sm" variant="outline" className="rounded" onClick={() => setQty(q)}>
                 {q.toLocaleString()}
               </Button>
             ))}
@@ -107,14 +127,14 @@ function FingerlingCard({ p, nextDate }: { p: ProductDTO; nextDate?: string }) {
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          <Button className="flex-1 rounded-full" onClick={addNow} disabled={p.stock <= 0}>
-            {p.stock <= 0 ? "Out of stock" : "Add to cart"}
+          <Button className="flex-1 rounded" onClick={addNow} disabled={p.availability === "NEXT_CYCLE"}>
+            {p.availability === "NEXT_CYCLE" ? "Request for next cycle" : "Add to request list"}
           </Button>
           {p.stock > 0 && p.stock < qty && (
-            <Button variant="outline" className="rounded-full" onClick={addNow}>Add what&rsquo;s in stock</Button>
+            <Button variant="outline" className="rounded" onClick={addNow}>Add what&rsquo;s in stock</Button>
           )}
         </div>
-        {inCart && <p className="mt-2 text-center text-xs font-medium text-teal-700">In your cart, review at checkout</p>}
+        {inCart && <p className="mt-2 text-center text-xs font-medium text-teal-700">In your request list, review and send</p>}
       </CardContent>
     </Card>
   );
@@ -144,7 +164,7 @@ function QuoteDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="rounded-full"><FileText className="h-4 w-4" aria-hidden="true" /> Request a quote for a very large order</Button>
+        <Button variant="outline" className="rounded"><FileText className="h-4 w-4" aria-hidden="true" /> Request a quote for a very large order</Button>
       </DialogTrigger>
       <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-md">
         <DialogHeader>
@@ -160,7 +180,7 @@ function QuoteDialog() {
           <input type="text" name="website" value="" readOnly hidden aria-hidden="true" tabIndex={-1} autoComplete="off" />
         </div>
         <DialogFooter>
-          <Button onClick={submit} disabled={busy} className="w-full rounded-full sm:w-auto">{busy ? "Sending…" : "Send quote request"}</Button>
+          <Button onClick={submit} disabled={busy} className="w-full rounded sm:w-auto">{busy ? "Sending…" : "Send quote request"}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -176,18 +196,17 @@ export default function FingerlingsView() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
       <SectionTitle
-        eyebrow="From the ALS hatchery · Akuse"
         title="Tilapia fingerlings"
         sub="Tilapia fingerlings are young fish that have developed beyond the fry stage, ready to stock into fish ponds and cage farming systems, and raised by farmers until they reach market size. All sizes are graded at our hatchery and sold in oxygen-bagged lots."
       />
 
       <div className="mb-6 grid gap-3 sm:grid-cols-2">
-        <div className="flex items-start gap-3 rounded-xl border bg-white p-4">
+        <div className="flex items-start gap-3 rounded border bg-white p-4">
           <CalendarDays className="mt-0.5 h-5 w-5 shrink-0 text-teal-700" aria-hidden="true" />
           <div className="text-sm">
             <p className="font-semibold">Collection &amp; delivery dates ALS has opened</p>
             <p className="mt-1 text-muted-foreground">
-              Live fish are never sold before they are ready. You will pick one of these dates at checkout:
+              Live fish are never sold before they are ready. You will pick one of these dates on the next step:
             </p>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {nextDates.map((d) => (
@@ -198,7 +217,7 @@ export default function FingerlingsView() {
             </div>
           </div>
         </div>
-        <div className="flex items-start gap-3 rounded-xl border bg-white p-4">
+        <div className="flex items-start gap-3 rounded border bg-white p-4">
           <Info className="mt-0.5 h-5 w-5 shrink-0 text-teal-700" aria-hidden="true" />
           <div className="text-sm">
             <p className="font-semibold">Every order travels with our care guide</p>
@@ -215,7 +234,7 @@ export default function FingerlingsView() {
         ))}
       </div>
 
-      <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border bg-teal-50 p-6 sm:flex-row">
+      <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded border bg-teal-50 p-6 sm:flex-row">
         <div className="flex items-start gap-3">
           <Fish className="mt-0.5 h-6 w-6 shrink-0 text-teal-700" aria-hidden="true" />
           <div>
