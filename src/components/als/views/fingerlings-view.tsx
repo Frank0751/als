@@ -146,7 +146,7 @@ function QuoteDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" className="rounded-full"><FileText className="h-4 w-4" aria-hidden="true" /> Request a quote for a very large order</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Request a quote</DialogTitle>
           <DialogDescription>For very large farm orders, stocking a new pond block or cage battery. ALS replies within one working day.</DialogDescription>

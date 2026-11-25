@@ -38,7 +38,7 @@ function NotifyDialog({ product, open, setOpen }: { product: ProductDTO; open: b
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-sm">
+      <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>Notify me, {product.name}</DialogTitle>
           <DialogDescription>ALS will message you on WhatsApp the moment this item is back in stock.</DialogDescription>
@@ -192,7 +192,7 @@ export default function MarketplaceView() {
           <button
             key={c}
             onClick={() => setCategory(c)}
-            className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${category === c ? "border-teal-700 bg-teal-700 text-white" : "bg-white text-stone-700 hover:border-teal-600"}`}
+            className={`shrink-0 rounded-full border px-4 py-2.5 text-sm font-medium transition-colors ${category === c ? "border-teal-700 bg-teal-700 text-white" : "bg-white text-stone-700 hover:border-teal-600"}`}
           >
             {c}
           </button>

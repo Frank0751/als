@@ -154,7 +154,7 @@ export default function CheckoutView() {
                   onClick={() => set({ deliveryDate: d.date })}
                   aria-pressed={draft.deliveryDate === d.date}
                   className={cn(
-                    "rounded-full border px-3.5 py-2 text-sm font-medium",
+                    "rounded-full border px-4 py-2.5 text-sm font-medium",
                     draft.deliveryDate === d.date ? "border-teal-700 bg-teal-700 text-white" : "bg-white text-stone-700 hover:border-teal-600"
                   )}
                 >

@@ -140,7 +140,7 @@ export default function ReportsTab() {
               <h3 className="font-bold">Top products</h3>
               <Button size="sm" variant="outline" className="rounded-full" onClick={exportProducts}><Download className="h-3.5 w-3.5" aria-hidden="true" /> CSV</Button>
             </div>
-            <div className="mt-3 max-h-72 overflow-y-auto">
+            <div className="mt-3 max-h-72 overflow-y-auto overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-left text-xs uppercase text-muted-foreground">

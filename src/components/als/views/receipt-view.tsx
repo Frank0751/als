@@ -52,7 +52,8 @@ function ReceiptDoc({ order, qrDataUrl }: { order: OrderDTO; qrDataUrl: string |
           <p><span className="text-muted-foreground">Status:</span> <b>{statusLabel(order.status)}</b></p>
         </div>
 
-        <table className="mt-5 w-full text-sm">
+        <div className="mt-5 overflow-x-auto">
+        <table className="w-full min-w-[480px] text-sm">
           <thead>
             <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
               <th className="py-2">Item</th>
@@ -89,6 +90,7 @@ function ReceiptDoc({ order, qrDataUrl }: { order: OrderDTO; qrDataUrl: string |
             </tr>
           </tfoot>
         </table>
+        </div>
 
         <div className="mt-4 rounded-lg bg-teal-50 p-3 text-xs leading-relaxed text-teal-900">
           <p className="flex items-center gap-1.5 font-bold"><ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" /> Verify this receipt</p>

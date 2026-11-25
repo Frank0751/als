@@ -137,6 +137,21 @@ html {
 .wa-green { background-color: #25d366; }
 .wa-green:hover { background-color: #1fbe5a; }
 
+/* Cross-device compatibility: never allow a sideways page pan */
+html,
+body {
+  overflow-x: clip;
+}
+
+/* On touch devices, keep inputs at 16px so iOS Safari does not auto-zoom on focus */
+@media (hover: none) and (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
 /* print: only the marked area prints (receipts, trainee lists) */
 @media print {
   body * { visibility: hidden !important; }

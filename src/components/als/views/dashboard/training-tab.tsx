@@ -30,7 +30,8 @@ function TraineeList({ courseTitle, session, bookings }: { courseTitle: string; 
       </div>
       <h2 className="text-lg font-bold">{courseTitle}</h2>
       <p className="text-sm text-muted-foreground">{session.location} · {bookings.length} booking(s) · {paid} paid</p>
-      <table className="mt-4 w-full text-sm">
+      <div className="overflow-x-auto">
+      <table className="mt-4 w-full min-w-[600px] text-sm">
         <thead>
           <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
             <th className="py-2">#</th>
@@ -57,6 +58,7 @@ function TraineeList({ courseTitle, session, bookings }: { courseTitle: string; 
           )}
         </tbody>
       </table>
+      </div>
       <p className="mt-4 text-xs text-muted-foreground">Check admission codes against receipts at the gate. Printed from the ALS platform.</p>
     </div>
   );
@@ -210,7 +212,7 @@ export default function TrainingTab() {
 
       {/* add session dialog */}
       <Dialog open={!!addFor} onOpenChange={(v) => !v && setAddFor(null)}>
-        <DialogContent className="sm:max-w-sm">
+        <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-sm">
           <DialogHeader><DialogTitle>Add session, {addFor?.title}</DialogTitle></DialogHeader>
           <div className="grid gap-3">
             <div><Label htmlFor="s-date">Date</Label><Input id="s-date" type="date" value={form.date} onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))} /></div>

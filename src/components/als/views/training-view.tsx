@@ -114,7 +114,7 @@ function CourseCard({ course }: { course: CourseDTO }) {
       </CardContent>
 
       <Dialog open={!!session} onOpenChange={(v) => !v && setSession(null)}>
-        <DialogContent className="sm:max-w-sm">
+        <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-sm">
           <DialogHeader>
             <DialogTitle>Book your seat</DialogTitle>
             <DialogDescription>{course.title}</DialogDescription>

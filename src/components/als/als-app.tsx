@@ -64,7 +64,7 @@ function Header() {
               key={n.view}
               onClick={() => navigate(n.view)}
               className={cn(
-                "rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
+                "rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap transition-colors",
                 view === n.view ? "bg-teal-700 text-white" : "text-stone-600 hover:bg-teal-50 hover:text-teal-800"
               )}
             >
@@ -77,7 +77,7 @@ function Header() {
           <button
             onClick={() => navigate("track")}
             className={cn(
-              "hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium sm:inline-flex",
+              "hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap sm:inline-flex",
               view === "track" ? "bg-teal-700 text-white" : "text-stone-600 hover:bg-teal-50 hover:text-teal-800"
             )}
           >
@@ -86,7 +86,7 @@ function Header() {
           <button
             onClick={() => navigate("verify")}
             className={cn(
-              "hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium md:inline-flex",
+              "hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap md:inline-flex",
               view === "verify" ? "bg-teal-700 text-white" : "text-stone-600 hover:bg-teal-50 hover:text-teal-800"
             )}
           >
@@ -215,7 +215,7 @@ function WhatsAppFloat() {
       href={waLink(wa1, "Hello Aquatic Link Solutions! I have a question.")}
       target="_blank"
       rel="noreferrer"
-      className="no-print fixed bottom-4 right-4 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full shadow-lg wa-green text-white"
+      className="no-print fixed bottom-[calc(1rem_+_env(safe-area-inset-bottom))] right-[calc(1rem_+_env(safe-area-inset-right))] z-40 inline-flex h-14 w-14 items-center justify-center rounded-full shadow-lg wa-green text-white"
       aria-label="Chat with ALS on WhatsApp"
     >
       <svg viewBox="0 0 32 32" className="h-7 w-7 fill-current" aria-hidden="true">
