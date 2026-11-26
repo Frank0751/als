@@ -3,11 +3,12 @@
 // ALS app shell: header, footer, WhatsApp button, view switching.
 // Navigation follows CLAUDE.md section 3: short top menu, secondary pages in the footer.
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRoute, useCart, useCustomer } from "@/lib/als/store";
 import { useCatalog } from "./catalog-context";
 import { CatalogProvider } from "./catalog-context";
-import { Logo, Spinner } from "./ui-bits";
+import { Logo } from "./ui-bits";
+import { CatalogSkeleton } from "./ui-bits";
 import { waLink } from "@/lib/als/format";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -44,11 +45,54 @@ const NAV = [
   { view: "contact", label: "Contact" },
 ];
 
+// Document titles per view so browser tabs and history read clearly
+const TITLES: Record<string, string> = {
+  home: "Aquatic Link Solutions, tilapia fingerlings and free training in Akuse",
+  about: "About ALS | Aquatic Link Solutions",
+  operations: "Our operations | Aquatic Link Solutions",
+  farm: "Our operations | Aquatic Link Solutions",
+  fingerlings: "Tilapia fingerlings | Aquatic Link Solutions",
+  market: "Marketplace | Aquatic Link Solutions",
+  training: "Training programme | Aquatic Link Solutions",
+  apply: "Apply to train, free | Aquatic Link Solutions",
+  impact: "Impact | Aquatic Link Solutions",
+  partner: "Partner and invest | Aquatic Link Solutions",
+  cart: "Your request list | Aquatic Link Solutions",
+  checkout: "Request details | Aquatic Link Solutions",
+  confirm: "Request received | Aquatic Link Solutions",
+  track: "Track a request | Aquatic Link Solutions",
+  receipt: "Your receipt | Aquatic Link Solutions",
+  verify: "Verify a receipt | Aquatic Link Solutions",
+  account: "My account | Aquatic Link Solutions",
+  faqs: "FAQs | Aquatic Link Solutions",
+  contact: "Contact | Aquatic Link Solutions",
+  policies: "Policies | Aquatic Link Solutions",
+  dash: "Staff portal | Aquatic Link Solutions",
+};
+
 function Header() {
   const { view, navigate } = useRoute();
   const cart = useCart();
   const [open, setOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const count = cart.items.reduce((s, i) => s + i.qty, 0);
+
+  // While the mobile menu is open, lock page scroll behind it
+  useEffect(() => {
+    if (!open) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   return (
     <header className="no-print sticky top-0 z-40 border-b bg-[#F4F0E6]/95 backdrop-blur supports-[backdrop-filter]:bg-[#F4F0E6]/85">
@@ -61,13 +105,14 @@ function Header() {
           <Logo />
         </button>
 
-        <nav className="ml-4 hidden items-center gap-0.5 lg:flex" aria-label="Main">
+        <nav className="ml-2 hidden items-center gap-0.5 lg:flex" aria-label="Main">
           {NAV.map((n) => (
             <button
               key={n.view}
               onClick={() => navigate(n.view)}
+              aria-current={view === n.view ? "page" : undefined}
               className={cn(
-                "rounded px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors",
+                "rounded px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-colors xl:px-3",
                 view === n.view ? "bg-teal-800 text-white" : "text-stone-600 hover:bg-teal-50 hover:text-teal-800"
               )}
             >
@@ -80,7 +125,7 @@ function Header() {
           <Button
             onClick={() => navigate("cart")}
             variant="outline"
-            className="relative h-10 rounded border-teal-800 px-3 text-teal-800 hover:bg-teal-50"
+            className="relative h-10 rounded border-teal-800 px-2.5 text-teal-800 hover:bg-teal-50"
             aria-label={`Request list, ${count} item(s)`}
           >
             <ShoppingBag className="h-4 w-4" aria-hidden="true" />
@@ -92,6 +137,7 @@ function Header() {
             )}
           </Button>
           <button
+            ref={menuButtonRef}
             className="inline-flex h-10 w-10 items-center justify-center rounded text-stone-700 hover:bg-teal-50 lg:hidden"
             onClick={() => setOpen(!open)}
             aria-expanded={open}
@@ -108,6 +154,7 @@ function Header() {
             <button
               key={n.view}
               onClick={() => { navigate(n.view); setOpen(false); }}
+              aria-current={view === n.view ? "page" : undefined}
               className={cn(
                 "flex min-h-11 w-full items-center rounded px-3 py-3 text-left text-sm font-medium",
                 view === n.view ? "bg-teal-800 text-white" : "text-stone-700"
@@ -222,13 +269,16 @@ function ViewSwitch() {
   const { view, params } = useRoute();
   const { catalog, error } = useCatalog();
 
-  if (!catalog && !error) return <Spinner label="Loading Aquatic Link Solutions…" />;
+  if (!catalog && !error) return <CatalogSkeleton />;
   if (error && !catalog)
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <PackageSearch className="mx-auto h-10 w-10 text-teal-800" aria-hidden="true" />
         <p className="mt-4 font-semibold">The site could not load.</p>
         <p className="mt-1 text-sm text-muted-foreground">{error}</p>
+        <Button variant="outline" className="mt-6 rounded border-teal-800 text-teal-800 hover:bg-teal-50" onClick={() => window.location.reload()}>
+          Reload the page
+        </Button>
       </div>
     );
 
@@ -260,9 +310,19 @@ function ViewSwitch() {
 
 export default function AlsApp() {
   const syncFromHash = useRoute((s) => s.syncFromHash);
+  const view = useRoute((s) => s.view);
+  const mainRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
     syncFromHash();
   }, [syncFromHash]);
+
+  // Announce each page change: update the tab title and move focus to the
+  // content landmark so screen readers and keyboard users re-orient.
+  useEffect(() => {
+    document.title = TITLES[view] ?? "Aquatic Link Solutions";
+    mainRef.current?.focus({ preventScroll: true });
+  }, [view]);
 
   const customer = useCustomer((s) => s.customer);
 
@@ -276,7 +336,7 @@ export default function AlsApp() {
           Skip to content
         </a>
         <Header />
-        <main id="main-content" className="flex-1">
+        <main id="main-content" ref={mainRef} tabIndex={-1} className="flex-1 outline-none">
           <ViewSwitch />
         </main>
         <Footer />

@@ -64,11 +64,11 @@ export function ProductImage({
     );
   }
   return (
-     
     <img
       src={src}
       alt={alt}
       loading="lazy"
+      decoding="async"
       className={cn("object-cover", className)}
       onError={(e) => {
         (e.target as HTMLImageElement).style.display = "none";
@@ -93,9 +93,43 @@ export function StatusBadge({ status, className }: { status: string; className?:
 
 export function SectionTitle({ title, sub }: { title: string; sub?: string }) {
   return (
-    <div className="mb-6 text-center">
+    <div className="mb-8 text-center sm:mb-10">
       <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{title}</h2>
       {sub && <p className="mx-auto mt-2 max-w-2xl text-sm sm:text-base text-muted-foreground">{sub}</p>}
+    </div>
+  );
+}
+
+// Shown while the catalog loads: mirrors the home page shape so the first
+// paint feels like the page is arriving, not that it is missing.
+export function CatalogSkeleton() {
+  return (
+    <div aria-hidden="true">
+      <div className="relative">
+        <div className="skeleton h-64 w-full sm:h-80" />
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
+          <div className="skeleton h-9 w-3/4 max-w-xl rounded" />
+          <div className="skeleton mt-3 h-4 w-2/3 max-w-lg rounded" />
+          <div className="mt-6 flex gap-3">
+            <div className="skeleton h-12 w-44 rounded" />
+            <div className="skeleton h-12 w-44 rounded" />
+          </div>
+        </div>
+      </div>
+      <div className="mx-auto max-w-6xl px-4 pb-16">
+        <div className="skeleton mx-auto h-7 w-64 rounded" />
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="rounded border bg-[#FDFCF8] p-4">
+              <div className="skeleton h-40 w-full rounded" />
+              <div className="skeleton mt-4 h-4 w-3/4 rounded" />
+              <div className="skeleton mt-2 h-4 w-1/2 rounded" />
+              <div className="skeleton mt-4 h-10 w-full rounded" />
+            </div>
+          ))}
+        </div>
+      </div>
+      <span className="sr-only" role="status">Loading Aquatic Link Solutions, one moment.</span>
     </div>
   );
 }

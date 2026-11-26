@@ -115,7 +115,7 @@ export default function StaffTab() {
       </div>
 
       <div className="rounded border bg-white p-4">
-        <h2 className="font-bold">Add a staff login</h2>
+        <h2 className="text-left font-bold">Add a staff login</h2>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <div><Label htmlFor="st-user">Username</Label><Input id="st-user" value={form.username} onChange={(e) => setForm((f) => ({ ...f, username: e.target.value }))} /></div>
           <div><Label htmlFor="st-name">Full name</Label><Input id="st-name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} /></div>

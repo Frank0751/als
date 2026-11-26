@@ -166,12 +166,21 @@ html {
   body {
     @apply bg-background text-foreground;
   }
-  /* Spectral carries every heading, Public Sans carries body and interface */
-  h1, h2, h3, h4, h5, h6 {
+  /* Spectral carries every heading, Public Sans carries body and interface.
+     Only page and section titles (h1, h2) sit centered; card, panel and step
+     headings stay left aligned with the body copy that follows them. */
+  h1, h2 {
     font-family: var(--font-spectral), Georgia, serif;
     font-weight: 600;
     letter-spacing: -0.01em;
     text-align: center;
+    overflow-wrap: anywhere;
+  }
+  h3, h4, h5, h6 {
+    font-family: var(--font-spectral), Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-align: left;
     overflow-wrap: anywhere;
   }
   /* Body copy stays left aligned for readability */
@@ -204,6 +213,27 @@ html {
 
 .wa-green { background-color: #25d366; }
 .wa-green:hover { background-color: #1fbe5a; }
+
+/* Loading skeleton blocks: quiet shimmer on the River Sand base */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: #E7E1D2;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: skeleton-sweep 1.4s ease-in-out infinite;
+}
+@keyframes skeleton-sweep {
+  100% { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after { animation: none; }
+}
 
 /* Cross-device compatibility: never allow a sideways page pan */
 html,

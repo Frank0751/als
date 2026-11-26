@@ -3,6 +3,7 @@
 // Cart, fingerlings, marketplace items and training bookings in one basket
 
 import { useCart, navigate, useCheckout, useCustomer } from "@/lib/als/store";
+import { useCatalog } from "../catalog-context";
 import { ProductImage } from "../ui-bits";
 import { ghs } from "@/lib/als/format";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,8 @@ export default function CartView() {
   const { items, setQty, remove, subtotal } = useCart();
   const { draft } = useCheckout();
   const customer = useCustomer((s) => s.customer);
+  const { catalog } = useCatalog();
+  const imageFor = (refId: string) => catalog?.products.find((p) => p.id === refId)?.imageUrl ?? null;
 
   if (items.length === 0) {
     return (
@@ -37,13 +40,13 @@ export default function CartView() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
       <h1 className="text-2xl font-bold">Your request list</h1>
-      <p className="mt-1 text-sm text-muted-foreground">{count.toLocaleString()} item(s). Prices are calculated by the platform, so every request carries the correct amount.</p>
+      <p className="mt-1 text-sm text-muted-foreground">{count.toLocaleString()} {count === 1 ? "item" : "items"}. Prices are calculated by the platform, so every request carries the correct amount.</p>
 
       <div className="mt-6 space-y-3">
         {items.map((i) => (
           <Card key={`${i.refId}-${i.sessionId ?? ""}`} className="p-3">
             <CardContent className="flex items-center gap-3 p-1">
-              <ProductImage src={null} alt="" kind={i.kind} className="h-16 w-16 shrink-0 rounded border" />
+              <ProductImage src={imageFor(i.refId)} alt={i.name} kind={i.kind} className="h-16 w-16 shrink-0 rounded border" />
               <div className="min-w-0 flex-1">
                 <p className="flex items-center gap-1.5 text-sm font-bold leading-snug">
                   {i.kind === "TRAINING" && <GraduationCap className="h-3.5 w-3.5 shrink-0 text-teal-700" aria-hidden="true" />}

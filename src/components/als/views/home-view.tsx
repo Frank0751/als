@@ -38,7 +38,15 @@ export default function HomeView() {
       {/* hero */}
       <section className="relative">
         <div className="absolute inset-0">
-          <img src="/images/hero-women.png" alt="Women fish farmers harvesting tilapia at the ALS farm in Akuse" className="h-full w-full object-cover" />
+          <img
+            src="/images/hero-women.png"
+            alt="Women fish farmers harvesting tilapia at the ALS farm in Akuse"
+            width={1344}
+            height={768}
+            fetchPriority="high"
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-teal-950/90 via-teal-950/70 to-teal-900/30" />
         </div>
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
@@ -65,7 +73,7 @@ export default function HomeView() {
       </section>
 
       {/* how it works */}
-      <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+      <section className="mx-auto max-w-6xl px-4 py-16 lg:py-24">
         <SectionTitle
           title="How ordering works"
           sub="No account is needed, and nothing is charged on this site. Every request is saved with ALS and confirmed by our team on WhatsApp or by phone."
@@ -85,7 +93,7 @@ export default function HomeView() {
 
       {/* fingerlings */}
       <section className="border-y bg-teal-50/60">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+        <div className="mx-auto max-w-6xl px-4 py-16 lg:py-24">
           <SectionTitle
             title="Tilapia fingerlings, our primary business"
             sub="Young fish raised past the fry stage, graded at our hatchery in Akuse and ready for stocking in ponds and cage systems. Demand runs ahead of supply, so orders are scheduled by production cycle."
@@ -124,7 +132,7 @@ export default function HomeView() {
       </section>
 
       {/* marketplace categories */}
-      <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+      <section className="mx-auto max-w-6xl px-4 py-16 lg:py-24">
         <SectionTitle
           title="The marketplace, equipment fish farmers actually need"
           sub="Nets, harvesting gear, feed accessories, aeration and safety kit, tested on our own ponds and cages. Ordered the same way: request list, then WhatsApp."
@@ -159,7 +167,7 @@ export default function HomeView() {
 
       {/* story */}
       <section className="border-y bg-[#FDFCF8]">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-12 sm:py-16 lg:grid-cols-2">
+        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-16 lg:grid-cols-2 lg:py-24">
           <div>
             <SectionTitle title="From the hatchery in Akuse to cages on the Volta" />
             <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">{content("home.about_intro")}</p>
@@ -177,14 +185,14 @@ export default function HomeView() {
             </div>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
-            <img src="/images/farm-ponds.png" alt="ALS fish ponds at the farm in Akuse" className="h-56 w-full rounded object-cover sm:h-full" />
-            <img src="/images/harvest.png" alt="Tilapia harvested from the cages on the Volta River" className="h-56 w-full rounded object-cover sm:mt-8 sm:h-full" />
+            <img src="/images/farm-ponds.png" alt="ALS fish ponds at the farm in Akuse" width={1344} height={768} loading="lazy" decoding="async" className="h-56 w-full rounded object-cover sm:h-full" />
+            <img src="/images/harvest.png" alt="Tilapia harvested from the cages on the Volta River" width={1344} height={768} loading="lazy" decoding="async" className="h-56 w-full rounded object-cover sm:mt-8 sm:h-full" />
           </div>
         </div>
       </section>
 
       {/* training */}
-      <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+      <section className="mx-auto max-w-6xl px-4 py-16 lg:py-24">
         <SectionTitle
           title="Free training, on the farm and online"
           sub="Anyone can apply. Women and persons with disabilities are prioritised. On-farm sessions happen at Akuse, and people who cannot travel learn through structured video modules on this site."
@@ -211,7 +219,7 @@ export default function HomeView() {
 
       {/* impact + partner CTA */}
       <section className="bg-teal-950">
-        <div className="mx-auto max-w-6xl px-4 py-14 text-center">
+        <div className="mx-auto max-w-6xl px-4 py-16 text-center lg:py-24">
           <h2 className="text-2xl font-bold text-white sm:text-3xl">One target: over 1,000 people trained in four years</h2>
           <p className="mx-auto mt-3 max-w-2xl text-teal-100/85">
             ALS has committed to training more than 1,000 people in fish farming within four years, with a focus on women and persons with disabilities. Applications from this platform count toward that target, and partners can follow the progress on our Impact page.

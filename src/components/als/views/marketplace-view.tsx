@@ -10,7 +10,6 @@ import { ProductImage, SectionTitle, Stars, StockPill } from "../ui-bits";
 import { ghs, ghsShort } from "@/lib/als/format";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -70,7 +69,7 @@ function ProductDialog({ product, reviews, open, setOpen }: { product: ProductDT
       toast({ title: "Not enough stock", description: `Only ${product.stock} left right now.`, variant: "destructive" });
       return;
     }
-    add({ kind: "MARKET", refId: product.id, name: product.name, variant: ", ", qty, unit: product.unit, unitPrice: product.price, maxQty: product.stock });
+    add({ kind: "MARKET", refId: product.id, name: product.name, variant: product.unit, qty, unit: product.unit, unitPrice: product.price, maxQty: product.stock });
     toast({ title: "Added to request list", description: `${qty} × ${product.name}` });
     setOpen(false);
   };
@@ -199,20 +198,35 @@ export default function MarketplaceView() {
       </div>
 
       {filtered.length === 0 ? (
-        <p className="py-16 text-center text-muted-foreground">No products match. Try another search.</p>
+        <div className="py-16 text-center">
+          <p className="text-muted-foreground">No products match your search or filters.</p>
+          <Button
+            variant="outline"
+            className="mt-4 rounded border-teal-800 text-teal-800 hover:bg-teal-50"
+            onClick={() => { setQuery(""); setCategory("All"); setMaxPrice("all"); }}
+          >
+            Clear search and filters
+          </Button>
+        </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.map((p) => {
             const rs = reviewsFor(p.id);
             const avg = rs.length ? Math.round(rs.reduce((s, r) => s + r.rating, 0) / rs.length) : 0;
             return (
-              <Card key={p.id} className="group flex cursor-pointer flex-col overflow-hidden pt-0 transition-shadow hover:shadow-md" onClick={() => setSelected(p)}>
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => setSelected(p)}
+                aria-label={`View details and price of ${p.name}`}
+                className="group flex w-full cursor-pointer flex-col overflow-hidden rounded-xl border bg-card text-left shadow transition-shadow hover:shadow-md"
+              >
                 <div className="relative">
                   <ProductImage src={p.imageUrl} alt={p.name} kind={p.kind} className="h-40 w-full" />
                   {p.featured && <span className="absolute left-2 top-2"><Badge className="bg-orange-600 text-white hover:bg-orange-600">Popular</Badge></span>}
                 </div>
-                <CardContent className="flex flex-1 flex-col p-4">
-                  <h3 className="text-sm font-bold leading-snug">{p.name}</h3>
+                <div className="flex flex-1 flex-col p-4">
+                  <h3 className="text-sm font-bold leading-snug group-hover:underline">{p.name}</h3>
                   <p className="mt-1 line-clamp-2 flex-1 text-xs text-muted-foreground">{p.description}</p>
                   {rs.length > 0 && (
                     <div className="mt-2 flex items-center gap-1.5">
@@ -224,8 +238,8 @@ export default function MarketplaceView() {
                     <p className="font-extrabold text-teal-800">{ghsShort(p.price)}</p>
                     <StockPill stock={p.stock} unit={p.unit} />
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </button>
             );
           })}
         </div>

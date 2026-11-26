@@ -93,11 +93,11 @@ export default function CheckoutView() {
       {/* 1. contact */}
       <Card className="mt-6">
         <CardContent className="p-5">
-          <h2 className="font-bold">1. Your details</h2>
+          <h2 className="text-left font-bold">1. Your details</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div><Label htmlFor="c-name">Full name</Label><Input id="c-name" value={draft.name} onChange={(e) => set({ name: e.target.value })} placeholder="e.g. Akosua Mensah" /></div>
-            <div><Label htmlFor="c-phone">Phone / WhatsApp</Label><Input id="c-phone" inputMode="tel" value={draft.phone} onChange={(e) => set({ phone: e.target.value })} placeholder="e.g. 020 123 4567" /></div>
-            <div><Label htmlFor="c-email">Email (optional, order updates are emailed here)</Label><Input id="c-email" type="email" value={draft.email} onChange={(e) => set({ email: e.target.value })} /></div>
+            <div><Label htmlFor="c-name">Full name</Label><Input id="c-name" value={draft.name} onChange={(e) => set({ name: e.target.value })} placeholder="e.g. Akosua Mensah" autoComplete="name" /></div>
+            <div><Label htmlFor="c-phone">Phone / WhatsApp</Label><Input id="c-phone" inputMode="tel" type="tel" value={draft.phone} onChange={(e) => set({ phone: e.target.value })} placeholder="e.g. 020 123 4567" autoComplete="tel" /></div>
+            <div><Label htmlFor="c-email">Email (optional, order updates are emailed here)</Label><Input id="c-email" type="email" value={draft.email} onChange={(e) => set({ email: e.target.value })} autoComplete="email" /></div>
             <div><Label htmlFor="c-city">Town / city (optional)</Label><Input id="c-city" value={draft.city} onChange={(e) => set({ city: e.target.value })} /></div>
           </div>
         </CardContent>
@@ -106,7 +106,7 @@ export default function CheckoutView() {
       {/* 2. fulfilment */}
       <Card className="mt-4">
         <CardContent className="p-5">
-          <h2 className="font-bold">2. Collection or delivery</h2>
+          <h2 className="text-left font-bold">2. Collection or delivery</h2>
           <RadioGroup value={draft.fulfilment} onValueChange={(v) => pick(v as "PICKUP" | "DELIVERY")} className="mt-3 grid gap-3 sm:grid-cols-2">
             <Label
               htmlFor="pick-pickup"
@@ -171,7 +171,7 @@ export default function CheckoutView() {
       {/* 3. review */}
       <Card className="mt-4">
         <CardContent className="p-5">
-          <h2 className="font-bold">3. Review your request</h2>
+          <h2 className="text-left font-bold">3. Review your request</h2>
           <div className="mt-3 divide-y">
             {items.map((i) => (
               <div key={`${i.refId}-${i.sessionId ?? ""}`} className="flex items-start justify-between gap-3 py-2.5 text-sm">

@@ -183,7 +183,7 @@ export default function ApplyView() {
           </Label>
         </div>
 
-        {err && <p className="rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{err}</p>}
+        {err && <p role="alert" className="rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{err}</p>}
 
         <Button type="submit" disabled={busy} className="min-h-11 w-full rounded bg-amber-500 font-semibold text-stone-900 hover:bg-amber-600 sm:w-auto sm:px-6">
           {busy ? <><Spinner /> Sending</> : "Submit application"}
