@@ -1,65 +1,47 @@
 "use client";
 
-// Client stores: hash routing, cart, customer + staff sessions
+// Client stores: routing, cart, customer + staff sessions
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { OrderItemDTO, StaffDTO } from "./types";
+import { stashPhone, viewToHref } from "./routes";
 
-// ---------- hash routing ----------
+// ---------- routing ----------
+// Real URLs through the Next.js App Router. RouteBridge (in the site shell)
+// keeps `view` and `params` in step with the address bar and hands this
+// store the router's push function.
 
 export type Route = { view: string; params: Record<string, string> };
 
-function parseHash(): Route {
-  if (typeof window === "undefined") return { view: "home", params: {} };
-  const h = window.location.hash.replace(/^#\/?/, "");
-  if (!h) return { view: "home", params: {} };
-  const [path, qs] = h.split("?");
-  const params: Record<string, string> = {};
-  if (qs) {
-    for (const pair of qs.split("&")) {
-      const [k, v] = pair.split("=");
-      if (k) params[decodeURIComponent(k)] = decodeURIComponent(v ?? "");
-    }
-  }
-  return { view: path || "home", params };
-}
+type Pusher = (href: string) => void;
+let push: Pusher | null = null;
 
-function toHash(view: string, params?: Record<string, string>): string {
-  const qs = params && Object.keys(params).length
-    ? "?" + Object.entries(params).map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join("&")
-    : "";
-  return `#/${view}${qs}`;
+export function setRouterPush(p: Pusher | null) {
+  push = p;
 }
 
 type RouteStore = {
   view: string;
   params: Record<string, string>;
   navigate: (view: string, params?: Record<string, string>) => void;
-  syncFromHash: () => void;
+  sync: (r: Route) => void;
 };
 
 export const useRoute = create<RouteStore>((set) => ({
   view: "home",
   params: {},
   navigate: (view, params) => {
-    window.location.hash = toHash(view, params);
-    // hashchange listener fires syncFromHash
-    set({ view, params: params ?? {} });
-    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    stashPhone(params?.phone);
+    const href = viewToHref(view, params);
+    if (push) push(href);
+    else window.location.assign(href);
   },
-  syncFromHash: () => {
-    const r = parseHash();
-    set({ view: r.view, params: r.params });
-  },
+  sync: (r) => set({ view: r.view, params: r.params }),
 }));
 
 export function navigate(view: string, params?: Record<string, string>) {
   useRoute.getState().navigate(view, params);
-}
-
-if (typeof window !== "undefined") {
-  window.addEventListener("hashchange", () => useRoute.getState().syncFromHash());
 }
 
 // ---------- cart ----------

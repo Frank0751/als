@@ -77,12 +77,38 @@
   --color-stone-200: #E1DBC9;
   --color-stone-300: #CBC4B1;
   --color-stone-400: #A3A697;
-  --color-stone-500: #757D74;
+  --color-stone-500: #646C64; /* darkened from #757D74: 4.77:1 on River Sand, was 3.73 */
   --color-stone-600: #55605B;
   --color-stone-700: #39433F;
   --color-stone-800: #1A1F1E;
   --color-stone-900: #121615;
   --color-stone-950: #0B0F0E;
+
+  /*
+   * Semantic brand tokens (CLAUDE.md section 8). New code uses these names;
+   * the teal/amber/stone scales above stay for the prototype views until
+   * each one is rebuilt.
+   *   volta      #0F3D3E  headings, header, footer, dark sections
+   *   volta-night #071F20 footer and deepest panels
+   *   sand       #F4F0E6  page background
+   *   paper      #FDFCF8  raised surfaces (forms, tables)
+   *   gold       #D4912A  CTA fills and highlights ONLY, never text on light
+   *   gold-ink   #6E4C12  gold-family text on light (6.8:1 on sand)
+   *   gold-soft  #E4C278  gold-family text and focus ring on dark (7:1 on volta)
+   *   ink        #1A1F1E  body text on light (14.7:1 on sand)
+   *   ink-muted  #55605B  secondary text on light (5.8:1 on sand)
+   *   line       #E1DBC9  hairline borders
+   */
+  --color-volta: #0F3D3E;
+  --color-volta-night: #071F20;
+  --color-sand: #F4F0E6;
+  --color-paper: #FDFCF8;
+  --color-gold: #D4912A;
+  --color-gold-ink: #6E4C12;
+  --color-gold-soft: #E4C278;
+  --color-ink: #1A1F1E;
+  --color-ink-muted: #55605B;
+  --color-line: #E1DBC9;
 }
 
 /* Public Sans is self-hosted via next/font/local (variables on <html>). */
@@ -109,7 +135,7 @@ html {
   --destructive: #B42318;
   --border: #E1DBC9;
   --input: #D5CEBB;
-  --ring: #D4912A;
+  --ring: #0F3D3E; /* Volta Deep focus ring on light surfaces: gold on sand is only 2.34:1 */
   --chart-1: #0F3D3E;
   --chart-2: #D4912A;
   --chart-3: #2A5E5C;
@@ -211,8 +237,8 @@ html {
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-.wa-green { background-color: #25d366; }
-.wa-green:hover { background-color: #1fbe5a; }
+.wa-green { background-color: #0E7A5A; } /* 5.3:1 with white; WhatsApp #25D366 is only 2:1 */
+.wa-green:hover { background-color: #0B6E50; }
 
 /* Loading skeleton blocks: quiet shimmer on the River Sand base */
 .skeleton {
@@ -234,6 +260,37 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .skeleton::after { animation: none; }
 }
+
+/* Page container and section rhythm: 64px between sections on mobile,
+   96px on tablet, 128px on wide screens (CLAUDE.md section 8). */
+@utility container-als {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+}
+@utility section-y {
+  padding-block: 4rem;
+  @media (width >= 48rem) {
+    padding-block: 6rem;
+  }
+  @media (width >= 80rem) {
+    padding-block: 8rem;
+  }
+}
+
+/* Dark surfaces switch the focus ring to gold so it stays visible (4.5:1+). */
+.surface-dark {
+  --ring: #E4C278;
+}
+
+/* Text size control (footer and mobile menu). Everything is sized in rem,
+   so scaling the root scales the whole interface. */
+html[data-text-size="large"] { font-size: 112.5%; }
+html[data-text-size="larger"] { font-size: 125%; }
 
 /* Cross-device compatibility: never allow a sideways page pan */
 html,

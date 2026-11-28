@@ -15,7 +15,7 @@ import { Spinner } from "../../ui-bits";
 
 export type ApplicationDTO = {
   id: string; ref: string; fullName: string; phone: string; email: string | null;
-  gender: string; ageRange: string; region: string; town: string; experience: string;
+  gender: string | null; ageRange: string; region: string; town: string; experience: string;
   format: string; source: string | null; disability: string | null; consent: boolean;
   status: string; notes: string | null; createdAt: string;
 };
@@ -43,6 +43,7 @@ export function applicationStatusColor(s: string): string {
 
 export default function ApplicationsTab() {
   const token = useStaff((s) => s.token);
+  const staff = useStaff((s) => s.staff);
   const [apps, setApps] = useState<ApplicationDTO[] | null>(null);
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [regionFilter, setRegionFilter] = useState("ALL");
@@ -87,7 +88,7 @@ export default function ApplicationsTab() {
   }
 
   function csv() {
-    const rows = [["ref", "name", "phone", "email", "gender", "age", "region", "town", "experience", "format", "status", "applied"], ...(apps ?? []).map((a) => [a.ref, a.fullName, a.phone, a.email ?? "", a.gender, a.ageRange, a.region, a.town, a.experience, a.format, a.status, a.createdAt.slice(0, 10)])];
+    const rows = [["ref", "name", "phone", "email", "gender", "age", "region", "town", "experience", "format", "status", "applied"], ...(apps ?? []).map((a) => [a.ref, a.fullName, a.phone, a.email ?? "", a.gender ?? "", a.ageRange, a.region, a.town, a.experience, a.format, a.status, a.createdAt.slice(0, 10)])];
     const text = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
     const url = URL.createObjectURL(new Blob([text], { type: "text/csv" }));
     const a = document.createElement("a");
@@ -169,16 +170,18 @@ export default function ApplicationsTab() {
                     <dl className="grid gap-x-6 gap-y-1.5 text-sm sm:grid-cols-2">
                       <div><dt className="inline font-medium">Phone: </dt><dd className="inline">{a.phone}</dd></div>
                       <div><dt className="inline font-medium">Email: </dt><dd className="inline">{a.email ?? "not given"}</dd></div>
-                      <div><dt className="inline font-medium">Gender: </dt><dd className="inline">{a.gender}</dd></div>
+                      {a.gender && <div><dt className="inline font-medium">Gender: </dt><dd className="inline">{a.gender}</dd></div>}
                       <div><dt className="inline font-medium">Age: </dt><dd className="inline">{a.ageRange}</dd></div>
                       <div><dt className="inline font-medium">Experience: </dt><dd className="inline">{a.experience}</dd></div>
                       <div><dt className="inline font-medium">Format: </dt><dd className="inline">{a.format}</dd></div>
                       <div><dt className="inline font-medium">Heard via: </dt><dd className="inline">{a.source ?? "not given"}</dd></div>
-                      <div className="sm:col-span-2">
-                        <dt className="inline font-medium">Access needs: </dt>
-                        <dd className="inline">{a.disability ?? "not shared"}</dd>
-                        <p className="mt-1 text-xs text-muted-foreground">Voluntary answers, visible only to owner and trainer roles.</p>
-                      </div>
+                      {staff?.role === "OWNER" && (
+                        <div className="sm:col-span-2">
+                          <dt className="inline font-medium">Access needs: </dt>
+                          <dd className="inline">{a.disability ?? "not shared"}</dd>
+                          <p className="mt-1 text-xs text-muted-foreground">Voluntary answer, visible only to the owner (and trainer role, once added).</p>
+                        </div>
+                      )}
                     </dl>
                     <div className="mt-3 grid gap-3 sm:grid-cols-2">
                       <div className="space-y-1">

@@ -2,7 +2,7 @@
 
 // Cart, fingerlings, marketplace items and training bookings in one basket
 
-import { useCart, navigate, useCheckout, useCustomer } from "@/lib/als/store";
+import { useCart, navigate, useCheckout } from "@/lib/als/store";
 import { useCatalog } from "../catalog-context";
 import { ProductImage } from "../ui-bits";
 import { ghs } from "@/lib/als/format";
@@ -15,7 +15,6 @@ import { ShoppingBag, Trash2, Fish, GraduationCap } from "lucide-react";
 export default function CartView() {
   const { items, setQty, remove, subtotal } = useCart();
   const { draft } = useCheckout();
-  const customer = useCustomer((s) => s.customer);
   const { catalog } = useCatalog();
   const imageFor = (refId: string) => catalog?.products.find((p) => p.id === refId)?.imageUrl ?? null;
 
@@ -101,10 +100,6 @@ export default function CartView() {
         </Button>
         <Button size="lg" variant="outline" className="rounded" onClick={() => navigate("fingerlings")}>Keep shopping</Button>
       </div>
-      {customer && (
-        <p className="mt-4 text-xs text-teal-700">Signed in as {customer.name}, your details will be filled in on the next step.</p>
-      )}
-      {draft.fulfilment === "DELIVERY" && <span className="hidden" />}
     </div>
   );
 }

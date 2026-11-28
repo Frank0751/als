@@ -2,8 +2,8 @@
 
 // Checkout, contact, delivery or farm pickup, ALS-open date, review, then "Send order on WhatsApp"
 
-import { useMemo, useState } from "react";
-import { useCart, useCheckout, useCustomer, navigate, itemsToOrderItems } from "@/lib/als/store";
+import { useState } from "react";
+import { useCart, useCheckout, navigate, itemsToOrderItems } from "@/lib/als/store";
 import { useCatalog } from "../catalog-context";
 import { ghs, fmtDate } from "@/lib/als/format";
 import { api } from "@/lib/als/api";
@@ -22,7 +22,6 @@ import { Store, Truck, CalendarDays, Send } from "lucide-react";
 export default function CheckoutView() {
   const cart = useCart();
   const { draft, set, reset } = useCheckout();
-  const customer = useCustomer((s) => s.customer);
   const { catalog } = useCatalog();
   const [busy, setBusy] = useState(false);
 
@@ -32,17 +31,11 @@ export default function CheckoutView() {
   const areaFee = draft.fulfilment === "DELIVERY" ? area?.fee ?? 0 : 0;
   const total = Math.round((subtotal + areaFee) * 100) / 100;
 
-  // prefill once from customer session
-  useMemo(() => {
-    if (customer && !draft.name) {
-      set({ name: customer.name, phone: customer.phone, email: customer.email ?? "", city: customer.city ?? "" });
-    }
-  }, [customer, draft.name, set]);
 
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
-        <p className="text-lg font-bold">Your cart is empty</p>
+        <p className="text-lg font-bold">Your request list is empty</p>
         <Button className="mt-4 rounded" onClick={() => navigate("fingerlings")}>Browse fingerlings</Button>
       </div>
     );
