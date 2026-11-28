@@ -79,8 +79,8 @@ function LoginScreen() {
           <div><Label htmlFor="d-user">Username</Label><Input id="d-user" value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" /></div>
           <div><Label htmlFor="d-pass">Password</Label><Input id="d-pass" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" onKeyDown={(e) => e.key === "Enter" && void submit()} /></div>
           <Button onClick={submit} disabled={busy || !username || !password} className="rounded">{busy ? "Signing in…" : "Sign in"}</Button>
-          <p className="rounded bg-stone-50 p-2.5 text-[11px] leading-relaxed text-muted-foreground">
-            Demo logins, owner: <b>abigail</b>, manager: <b>naa</b>, staff: <b>kojo</b> · password <b>als2026</b>. Every change is recorded against your name.
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Every change is recorded against your name.
           </p>
         </div>
       </div>

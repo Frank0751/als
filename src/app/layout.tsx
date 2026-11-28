@@ -24,8 +24,15 @@ const publicSans = localFont({
   display: "swap",
 });
 
+// Set NEXT_PUBLIC_SITE_URL to the live domain once ALS chooses it (CLAUDE.md section 14).
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "Aquatic Link Solutions, Tilapia Fingerlings, Aquaculture Training | Akuse, Ghana",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Aquatic Link Solutions, tilapia fingerlings and free fish farming training | Akuse, Ghana",
+    template: "%s | Aquatic Link Solutions",
+  },
   description:
     "Aquatic Link Solutions produces quality tilapia fingerlings in Akuse, Eastern Region, and raises market-size tilapia in cages on the Volta River. Free fish farming training, equipment marketplace, partnership and investment enquiries.",
   keywords: [
@@ -65,6 +72,14 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${spectral.variable} ${publicSans.variable}`}
     >
+      <head>
+        {/* Apply the saved text size before first paint so the page does not jump */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem("als-text-size");if(t&&t!=="normal")document.documentElement.dataset.textSize=t}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="antialiased bg-background text-foreground">
         {children}
         <Toaster />

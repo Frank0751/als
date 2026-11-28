@@ -16,12 +16,15 @@ export function Logo({ size = 34, withText = true, light = false }: { size?: num
         <path d="M47 17.5 54 12l-1.5 9" fill="#D4912A" />
         <path d="M47 46.5 54 52l-1.5-9" fill="#D4912A" />
       </svg>
+      {/* Placeholder mark and wordmark until ALS sends its logo files (CLAUDE.md section 14) */}
       {withText && (
-        <span className="whitespace-nowrap leading-tight">
-          <span className={cn("block font-bold tracking-tight", light ? "text-white" : "text-foreground")}>Aquatic Link</span>
-          <span className={cn("block text-[11px] font-medium uppercase tracking-widest", light ? "text-teal-100" : "text-teal-700")}>
-            Solutions · ALS
-          </span>
+        <span
+          className={cn(
+            "font-serif text-[1.05rem] font-semibold leading-tight tracking-tight sm:text-lg",
+            light ? "text-sand" : "text-volta"
+          )}
+        >
+          Aquatic Link Solutions
         </span>
       )}
     </span>

@@ -64,3 +64,12 @@ db/*.db-journal
 /mini-services/
 # credentials (push token) - never commit
 /.secrets/
+
+# client documents: invoices, receipts, bank details, tracker (KB brief README step 2)
+/docs/client/
+/docs/tracker/
+/docs/reference/*.pdf
+# project status holds payment and bank details; keep local while the repo is public
+/PROJECT_STATUS.md
+# client messages (names, amounts paid); keep local while the repo is public
+/docs/messages/

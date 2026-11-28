@@ -1,23 +1,21 @@
 "use client";
 
-// Marketplace, categories, search, filters, product pages, verified reviews, "Notify me"
+// Marketplace: categories, search, filters, product details, "Notify me". No reviews until ALS has real ones.
 
 import { useMemo, useState } from "react";
 import { useCatalog } from "../catalog-context";
 import { useCart, navigate, useRoute } from "@/lib/als/store";
-import type { ProductDTO, ReviewDTO } from "@/lib/als/types";
-import { ProductImage, SectionTitle, Stars, StockPill } from "../ui-bits";
+import type { ProductDTO } from "@/lib/als/types";
+import { ProductImage, SectionTitle, StockPill } from "../ui-bits";
 import { ghs, ghsShort } from "@/lib/als/format";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
 import { api, throttle } from "@/lib/als/api";
-import { Search, Bell, MessageSquareText, Share2 } from "lucide-react";
+import { Search, Bell, Share2 } from "lucide-react";
 
 function NotifyDialog({ product, open, setOpen }: { product: ProductDTO; open: boolean; setOpen: (v: boolean) => void }) {
   const [form, setForm] = useState({ name: "", phone: "" });
@@ -53,7 +51,7 @@ function NotifyDialog({ product, open, setOpen }: { product: ProductDTO; open: b
   );
 }
 
-function ProductDialog({ product, reviews, open, setOpen }: { product: ProductDTO; reviews: ReviewDTO[]; open: boolean; setOpen: (v: boolean) => void }) {
+function ProductDialog({ product, open, setOpen }: { product: ProductDTO; open: boolean; setOpen: (v: boolean) => void }) {
   const add = useCart((s) => s.add);
   const [qty, setQty] = useState(1);
   const [notifyOpen, setNotifyOpen] = useState(false);
@@ -112,23 +110,6 @@ function ProductDialog({ product, reviews, open, setOpen }: { product: ProductDT
                   <Bell className="h-4 w-4" aria-hidden="true" /> Notify me when back in stock
                 </Button>
               )}
-              <Separator className="my-4" />
-              <div>
-                <p className="flex items-center gap-1.5 text-sm font-semibold"><MessageSquareText className="h-4 w-4 text-teal-700" aria-hidden="true" /> Verified buyer reviews</p>
-                {reviews.length === 0 && <p className="mt-2 text-sm text-muted-foreground">No reviews yet for this item.</p>}
-                <div className="mt-3 space-y-3">
-                  {reviews.slice(0, 4).map((r) => (
-                    <div key={r.id} className="rounded border bg-stone-50 p-3">
-                      <div className="flex items-center justify-between">
-                        <Stars rating={r.rating} />
-                        <span className="text-[11px] font-semibold text-emerald-700">✓ Verified buyer</span>
-                      </div>
-                      <p className="mt-1.5 text-sm leading-relaxed">{r.comment}</p>
-                      <p className="mt-1 text-xs font-semibold text-muted-foreground">{r.name}, {r.location}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         </DialogContent>
@@ -157,8 +138,6 @@ export default function MarketplaceView() {
     if (maxPrice === "over600" && p.price <= 600) return false;
     return true;
   });
-
-  const reviewsFor = (productId: string) => catalog?.reviews.filter((r) => r.productId === productId) ?? [];
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
@@ -211,29 +190,20 @@ export default function MarketplaceView() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.map((p) => {
-            const rs = reviewsFor(p.id);
-            const avg = rs.length ? Math.round(rs.reduce((s, r) => s + r.rating, 0) / rs.length) : 0;
             return (
               <button
                 key={p.id}
                 type="button"
                 onClick={() => setSelected(p)}
                 aria-label={`View details and price of ${p.name}`}
-                className="group flex w-full cursor-pointer flex-col overflow-hidden rounded-xl border bg-card text-left shadow transition-shadow hover:shadow-md"
+                className="group flex w-full cursor-pointer flex-col overflow-hidden rounded border bg-card text-left transition-colors hover:border-teal-700"
               >
                 <div className="relative">
                   <ProductImage src={p.imageUrl} alt={p.name} kind={p.kind} className="h-40 w-full" />
-                  {p.featured && <span className="absolute left-2 top-2"><Badge className="bg-orange-600 text-white hover:bg-orange-600">Popular</Badge></span>}
                 </div>
                 <div className="flex flex-1 flex-col p-4">
                   <h3 className="text-sm font-bold leading-snug group-hover:underline">{p.name}</h3>
                   <p className="mt-1 line-clamp-2 flex-1 text-xs text-muted-foreground">{p.description}</p>
-                  {rs.length > 0 && (
-                    <div className="mt-2 flex items-center gap-1.5">
-                      <Stars rating={avg} size={12} />
-                      <span className="text-[11px] text-muted-foreground">({rs.length})</span>
-                    </div>
-                  )}
                   <div className="mt-2 flex items-center justify-between">
                     <p className="font-extrabold text-teal-800">{ghsShort(p.price)}</p>
                     <StockPill stock={p.stock} unit={p.unit} />
@@ -246,7 +216,7 @@ export default function MarketplaceView() {
       )}
 
       {selected && (
-        <ProductDialog product={selected} reviews={reviewsFor(selected.id)} open={!!selected} setOpen={(v) => !v && setSelected(null)} />
+        <ProductDialog product={selected} open={!!selected} setOpen={(v) => !v && setSelected(null)} />
       )}
 
       <div className="mt-10 rounded border bg-teal-50 p-6 text-center">

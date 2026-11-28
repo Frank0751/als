@@ -16,11 +16,21 @@ export async function GET(req: NextRequest) {
   const staffToken = req.headers.get("x-staff-token");
   if (staffToken) {
     try {
-      await requireStaff(req.headers.get("x-staff-token"), "STAFF");
+      const staff = await requireStaff(req.headers.get("x-staff-token"), "STAFF");
       const apps = await db.trainingApplication.findMany({ orderBy: { createdAt: "desc" } });
+      // Gender and disability answers are sensitive (CLAUDE.md section 9): only
+      // the owner role receives them. The Supabase schema adds a trainer role
+      // that will also see them; until then other roles get null.
+      const seesSensitive = staff.role === "OWNER";
       return NextResponse.json({
         count: apps.length,
-        applications: apps.map((a) => ({ ...a, createdAt: a.createdAt.toISOString() })),
+        applications: apps.map((a) => ({
+          ...a,
+          gender: seesSensitive ? a.gender : null,
+          disability: seesSensitive ? a.disability : null,
+          createdAt: a.createdAt.toISOString(),
+        })),
+        seesSensitive,
       });
     } catch {
       /* fall through to public count */

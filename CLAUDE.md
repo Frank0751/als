@@ -2,17 +2,19 @@
 
 Build brief for Claude Code. Read this file in full before writing or changing any code. Built by KoomBei Digital for Aquatic Link Solutions. Project reference KB-2026-012.
 
+Also read `PROJECT_STATUS.md` (timeline, payments, decisions, open items) before starting a session. Client documents are in `docs/`.
+
 ---
 
 ## 1. Who ALS is
 
-Aquatic Link Solutions (ALS) is a tilapia aquaculture business in Akuse, Eastern Region, Ghana. Postal address: P.O. Box Akosombo.
+Aquatic Link Solutions (ALS) is a tilapia aquaculture business in Akuse, Eastern Region, Ghana. Postal address: P.O. Box 434, Akosombo, Eastern Region.
 
 - **Main business:** producing and selling high-quality tilapia fingerlings to fish farmers. Fingerlings are young fish past the fry stage, ready to stock in ponds and cages and raise to market size.
 - **Grow-out:** ALS also raises tilapia from fingerling to market size in cages on the Volta River.
 - **Training:** ALS trains people in fish farming, with a focus on women and persons with disabilities. Target: train over 1,000 people in 4 years.
 - **Mission:** supply quality stocking materials, promote sustainable fish farming, and contribute to the growth of Ghana's aquaculture industry.
-- **Market position:** demand for ALS fingerlings is already higher than supply. The website is NOT mainly a sales tool for fingerlings.
+- **Market position:** demand for ALS fingerlings is already higher than supply. The website is NOT mainly a sales tool for fingerlings. ALS has been in the business for over 17 years and grows mainly by recommendation. About 70% of its clients are women.
 - **Contacts:** +233 54 649 3694 (phone and WhatsApp), a Norway number +47 (confirm the full number with ALS), aquaticlinksolutions@gmail.com.
 
 ## 2. What the website is for
@@ -25,7 +27,7 @@ In order of priority:
 4. **Run a marketplace** for aquaculture equipment and accessories, ordered through WhatsApp.
 5. **Rank on Google** through a blog of useful aquaculture content.
 
-Reference for tone and ambition: malekafarms.com. We are building something more polished, faster and more accessible than that.
+Reference for tone and ambition: malekafarms.com. We are building something more polished, faster and more accessible than that. Never name reference sites in anything client-facing.
 
 ## 3. Pages and structure
 
@@ -36,7 +38,7 @@ Reference for tone and ambition: malekafarms.com. We are building something more
 | Our Operations | Hatchery and fingerling production, cage grow-out on the Volta River, quality and biosecurity practices, farm photo gallery |
 | Fingerlings | What a fingerling is, sizes and specifications, stocking guidance for ponds and cages, availability status set by ALS, order request through WhatsApp. Honest about demand: "Orders are scheduled by production cycle" style wording, never fake scarcity |
 | Marketplace | Equipment and accessories (nets, harvesting equipment, accessories) in categories, product pages with photos, description, price and stock status, "Order on WhatsApp" button |
-| Training | The programme, who it is for (women and persons with disabilities first, open to everyone), on-farm and online formats, how it works step by step, apply button, FAQs |
+| Training | The programme, who it is for (women and persons with disabilities first, open to everyone), on-farm and online formats, upcoming on-farm session dates (calendar set by ALS), how it works step by step, apply button, FAQs |
 | Apply to Train | Application form (see section 5) |
 | Learning Portal | For accepted online trainees: video modules in order, progress tracking (see section 5) |
 | Impact | Who ALS serves, the 1,000-trainees-in-4-years goal shown as a TARGET with live progress from real data, jobs, community work, contribution to Ghana aquaculture |
@@ -46,13 +48,14 @@ Reference for tone and ambition: malekafarms.com. We are building something more
 | Accessibility statement | What the site does for accessibility and how to report a problem |
 | Privacy policy, Terms | Drafted for ALS to review |
 
-Navigation: About, Operations, Fingerlings, Marketplace, Training, Impact, Partner with Us, Contact. Keep the top menu short on mobile; group secondary pages in the footer.
+Navigation: About, Operations, Fingerlings, Marketplace, Training, Impact, Partner with Us, Blog, Contact. Keep the top menu short on mobile; group secondary pages in the footer.
 
 ## 4. Marketplace and fingerlings (WhatsApp ordering, no online payment)
 
 - Customers browse, pick item, size and quantity, and add to a request list.
 - One "Send order on WhatsApp" button opens WhatsApp (wa.me link) with a pre-filled message: order reference number, each item with size, quantity and unit price, total, delivery or pickup preference, preferred date, customer name and phone.
 - Every request is saved to the database when the button is pressed, so ALS has a record in the admin portal even if the chat is lost.
+- Show the order reference on screen before WhatsApp opens. If WhatsApp does not open (for example a laptop abroad), offer "Copy order" and a call button. The order is already saved.
 - Fingerling availability is a status ALS sets in the admin portal: Available, Limited, Fully booked until [date], Taking requests for next cycle.
 - No cart payment, no Paystack in this phase. Structure the code so online payment can be added later without a rebuild.
 
@@ -60,10 +63,14 @@ Navigation: About, Operations, Fingerlings, Marketplace, Training, Impact, Partn
 
 ### Application flow
 1. Visitor opens Apply to Train. Training is free; no prices anywhere in training.
-2. Form fields: full name, phone (WhatsApp), email (optional), gender, age range, region and town, current fish farming experience (none, beginner, practising farmer), preferred format (on-farm, online videos, either), how they heard about ALS, and an optional, clearly voluntary question on disability with a short note on why ALS asks and how the answer is protected. Consent checkbox for data use.
+2. Form fields: full name, phone (WhatsApp), email (optional), gender, age range, region and town, current fish farming experience (none, beginner, practising farmer), preferred format (on-farm, online videos, either), preferred on-farm session (from the dates ALS has opened, if on-farm), how they heard about ALS, and an optional, clearly voluntary question on disability with a short note on why ALS asks and how the answer is protected. Consent checkbox for data use.
 3. On submit: confirmation screen and email or WhatsApp-ready message with an application reference.
 4. ALS reviews in the admin portal. Status values: Received, Under review, Accepted (on-farm), Accepted (online), Waitlisted, Not accepted. Each change can notify the applicant by email, and the admin can open a pre-filled WhatsApp message to the applicant in one click.
 5. Accepted online trainees receive a sign-in link (Supabase magic link or phone OTP) to the Learning Portal.
+
+### On-farm session calendar
+- ALS opens on-farm training dates in the admin portal (date, location, seats).
+- The Training page shows upcoming dates; applicants choose a preferred date in the form. Full sessions show as full.
 
 ### Learning Portal
 - Courses made of modules made of lessons. Lessons are videos with a short written summary, optional downloadable notes (PDF) and captions.
@@ -86,6 +93,7 @@ One portal at /admin, protected by Supabase Auth with roles (owner, editor, trai
 
 - **Dashboard:** new applications, new order requests, enquiries, training progress at a glance. All numbers come from real data.
 - **Applications:** list, filter (status, gender, region, format, disability flag where consented), view, change status, notes, export to Excel/CSV.
+- **Training sessions:** on-farm dates, location, seats, who has chosen each date.
 - **Learning content:** courses, modules, lessons, video upload with preview (section 5), captions, notes, reorder, draft and publish.
 - **Trainees:** progress per trainee and per course, export.
 - **Marketplace:** products, categories, photos, prices, stock status.
@@ -104,15 +112,15 @@ One portal at /admin, protected by Supabase Auth with roles (owner, editor, trai
 | Framework | Next.js (App Router), TypeScript | Server rendering for SEO |
 | Styling | Tailwind CSS | Custom tokens from section 8 only |
 | Hosting | Cloudflare (Workers via OpenNext) | Domain on Cloudflare Registrar, in ALS's own account |
-| Database and auth | Supabase (Postgres, Auth, Row Level Security) | Under an ALS email. Free plan to start with nightly backup job (GitHub Action pg_dump to R2) |
+| Database and auth | Supabase (Postgres, Auth, Row Level Security) | Under an ALS email. Free plan to start (it pauses after a week of inactivity; keep-alive or upgrade to Pro if needed) with nightly backup job (GitHub Action pg_dump to R2) |
 | Video and file storage | Cloudflare R2 | Presigned uploads from the browser, no egress fees |
 | Images | Cloudinary or Next image optimisation | WebP/AVIF, lazy loading |
 | Email | Resend | Application confirmations and status changes |
 | Spam protection | Cloudflare Turnstile | On every public form |
 | Analytics | Cloudflare Web Analytics, plus Google Search Console | GA4 optional |
-| Mailboxes | Zoho Mail | Separate from the build |
+| Mailboxes | Zoho Mail | Separate from the build. Cloudflare Email Routing only forwards |
 
-Keep heavy work off the edge request path. Video uploads go browser to R2 directly. Admin data uses Supabase from the client with Row Level Security. Server routes stay small (presign URL, form submit, email send).
+Keep heavy work off the edge request path (Workers free plan has a 10 ms CPU limit per request; paid plan is about $5/month if needed). Video uploads go browser to R2 directly. Admin data uses Supabase from the client with Row Level Security. Server routes stay small (presign URL, form submit, email send).
 
 Do not use Vercel or Vercel integrations (Prisma Postgres etc.) for this project.
 
@@ -127,6 +135,7 @@ Do not use Vercel or Vercel integrations (Prisma Postgres etc.) for this project
 - No glowing shadows, no pill-shaped badges everywhere, no gradient text.
 - No em dashes anywhere in copy or code comments.
 - Banned words in copy: delve, seamless, revolutionary, game-changer, cutting-edge, unlock, empower (as filler), world-class, leverage.
+- The site must be user friendly, equitable, accessible, enjoyable, responsive and interactive.
 
 ### Visual direction
 "Volta at work": a serious, grounded aquaculture business. Real water, real fish, real people. Photography carries the energy; the interface stays calm and confident so investors trust it.
@@ -172,15 +181,13 @@ A prototype was started with another AI model and pushed to the repository. Befo
 
 ## 12. Build order
 
-1. Audit the prototype (section 11). Set up design tokens, fonts, layout, header and footer.
-2. Public pages: Home, About, Operations, Impact, Partner and Invest, Contact, with `[TO CONFIRM]` placeholders for unknown facts.
-3. Supabase schema and Row Level Security: applications, trainees, courses, modules, lessons, progress, products, categories, fingerling_sizes, order_requests, posts, enquiries, page_content, staff roles, activity_log.
-4. Training: Apply to Train form, application emails, admin applications screen.
-5. Learning Portal and admin video upload with preview, R2 presigned uploads, captions, draft and publish.
-6. Marketplace and Fingerlings with WhatsApp order requests and the admin screens.
-7. Blog with admin editor and SEO.
-8. Impact reporting and exports.
-9. Accessibility, performance and SEO pass. Then run the section 11 audit again on the whole codebase and list every change.
+Matches the milestones in `PROJECT_STATUS.md`.
+
+1. (M1) Audit the prototype (section 11). Set up design tokens, fonts, layout, header and footer. Supabase schema and Row Level Security: applications, trainees, training_sessions, courses, modules, lessons, progress, products, categories, fingerling_sizes, order_requests, posts, enquiries, page_content, staff roles, activity_log.
+2. (M2) Public pages: Home, About, Operations, Fingerlings, Impact, Partner and Invest, Contact, Accessibility, Privacy, Terms, with `[TO CONFIRM]` placeholders for unknown facts.
+3. (M3) Training: Apply to Train form, session calendar, application emails, admin applications screen. Then Learning Portal and admin video upload with preview, R2 presigned uploads, captions, draft and publish.
+4. (M4) Marketplace and Fingerlings with WhatsApp order requests and the admin screens. Blog with admin editor and SEO. Impact reporting and exports.
+5. (M5) Accessibility, performance and SEO pass. Then run the section 11 audit again on the whole codebase and list every change.
 
 ## 13. Definition of done for each feature
 
@@ -192,13 +199,17 @@ A prototype was started with another AI model and pushed to the repository. Befo
 
 ## 14. Still to confirm with ALS
 
+Requested from Abigail on 28 November 2026 (see `docs/messages/content_list_whatsapp.txt` and the "Content from ALS" tab in the tracker):
+
 - Logo files and brand colours
 - Photos and video of the hatchery, cages on the Volta, staff and training
 - Leadership names, roles and photos
-- Fingerling sizes and specifications
+- Fingerling sizes and specifications, how ordering and delivery work
 - Marketplace products, prices and photos
-- Training course outline for the first online course
-- The full +47 number and who it belongs to
+- Training details, on-farm session dates, and the first online course outline
+- The full +47 number and who it belongs to, and which number receives WhatsApp orders
 - Exact farm location for the map
 - Any real figures for the Impact page
 - Company profile PDF for the Partner page
+- Domain name choice and the ALS email for accounts
+- Admin users and roles
